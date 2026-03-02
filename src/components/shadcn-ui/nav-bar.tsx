@@ -1,6 +1,6 @@
 import { Jura } from "next/font/google";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { DropdownMenuSemester } from "../ui/dropdown";
 
 const jura = Jura({
