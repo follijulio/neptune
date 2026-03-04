@@ -1,11 +1,13 @@
 import { CourseProgressCard } from "./course-progress-card";
 import { YieldCoefficientCard } from "./yield-coefficient-card";
 import AttentionRequiredCard from "./attention-required-card";
-import CourseStatusCard from "./course-status-card";
+import AverageRatingCard from "./average-rating-card";
+import DistributionWorkCard from "./distribution-work-card";
 const Cards = {
   YieldCoefficient: YieldCoefficientCard,
   CourseProgress: CourseProgressCard,
   AttentionRequired: AttentionRequiredCard,
-  CourseStatus: CourseStatusCard,
+  AverageRating: AverageRatingCard,
+  DistributionWork: DistributionWorkCard,
 };
 export default Cards;

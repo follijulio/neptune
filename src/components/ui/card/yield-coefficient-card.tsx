@@ -36,9 +36,9 @@ export const YieldCoefficientCard: React.FC<YieldCoefficientCardProps> = ({
   return (
     <Card className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
       <section className="gap-2 flex flex-col h-1/3 w-full">
-        <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
-          <IoMdTrendingUp className="inline" /> Coeficiente de Rendimiento
-        </h1>
+          <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
+            <IoMdTrendingUp className="inline" /> Coeficiente de Rendimiento
+          </h1>
 
         <div className="flex items-end gap-2">
           <span className="text-6xl font-light">{percentage}</span>

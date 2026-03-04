@@ -15,11 +15,11 @@ import {
 import * as React from "react";
 import { cn } from "@/src/lib/utils";
 
-import { GoPlus } from "react-icons/go";
 import { Progress } from "../../shadcn-ui/chart";
 import { FaCircle } from "react-icons/fa";
+import DrawerAction from "./drawer-action-table";
 
-interface CourseStatusCardProps {
+export interface CourseStatusCardProps {
   subject_name: string;
   code: string;
   status: string;
@@ -57,7 +57,7 @@ const shiftSemester = (semester: string, direction: "next" | "previous") => {
   return `${year}.${part}`;
 };
 
-const CourseStatusCard: React.FC<{ courses: CourseStatusCardProps[] }> = ({
+const CourseStatusTable: React.FC<{ courses: CourseStatusCardProps[] }> = ({
   courses,
 }) => {
   const searchParams = useSearchParams();
@@ -88,7 +88,7 @@ const CourseStatusCard: React.FC<{ courses: CourseStatusCardProps[] }> = ({
       <div className="flex items-center gap-2 mb-4">
         <button
           onClick={() => updateSemester("previous")}
-          className="p-1 hover:bg-gray-100 rounded-full cursor-pointer"
+          className="p-1 bg-black hover:invert rounded-full cursor-pointer h-8 w-8 flex items-center justify-center"
           aria-label="Semestre anterior"
         >
           <GrFormPrevious className="inline" />
@@ -98,7 +98,7 @@ const CourseStatusCard: React.FC<{ courses: CourseStatusCardProps[] }> = ({
 
         <button
           onClick={() => updateSemester("next")}
-          className="p-1 hover:bg-gray-100 rounded-full cursor-pointer"
+          className="p-1 bg-black hover:invert rounded-full cursor-pointer h-8 w-8 flex items-center justify-center"
           aria-label="Próximo semestre"
         >
           <GrFormNext className="inline" />
@@ -164,8 +164,8 @@ const ItemOfTable: React.FC<{ course: CourseStatusCardProps }> = ({
   const indicatorClassName = getIndicationn(percentage);
 
   return (
-    <TableRow className="hover:none" >
-      <TableCell >
+    <TableRow className="h-full transition-colors duration-200 hover:bg-white/30">
+      <TableCell>
         <div className="flex items-center">
           <LuBookMarked className="text-lg text-[#888888]" />
           <div className="ml-4">
@@ -174,7 +174,6 @@ const ItemOfTable: React.FC<{ course: CourseStatusCardProps }> = ({
           </div>
         </div>
       </TableCell>
-
       <TableCell>
         <p
           className={cn(
@@ -186,8 +185,7 @@ const ItemOfTable: React.FC<{ course: CourseStatusCardProps }> = ({
           {course.status}
         </p>
       </TableCell>
-
-      <TableCell className="flex items-center gap-4">
+      <TableCell className="flex items-center h-full gap-4">
         <Progress
           value={percentageAbsences(course.absences, course.maxAbsences)}
           className="w-24"
@@ -197,12 +195,10 @@ const ItemOfTable: React.FC<{ course: CourseStatusCardProps }> = ({
       </TableCell>
       <TableCell>{course.partial_grade}</TableCell>
       <TableCell className="text-right">
-        <button className="p-1 rounded-full cursor-pointer">
-          <GoPlus className="text-lg" />
-        </button>
+        <DrawerAction course={course} />
       </TableCell>
     </TableRow>
   );
 };
 
-export default CourseStatusCard;
+export default CourseStatusTable;

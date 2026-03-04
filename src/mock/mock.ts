@@ -1,0 +1,50 @@
+export const mockUser = {
+  data: [
+    { semester: "2026.1", yield_coefficient: 8.2 },
+    { semester: "2026.2", yield_coefficient: 8.3 },
+    { semester: "2027.1", yield_coefficient: 8.4 },
+    { semester: "2027.2", yield_coefficient: 8.1 },
+    { semester: "2028.1", yield_coefficient: 8.4 },
+    { semester: "2028.2", yield_coefficient: 8.2 },
+    { semester: "2029.1", yield_coefficient: 8.2 },
+    { semester: "2029.2", yield_coefficient: 8.1 },
+  ],
+
+  perfilImageUrl: "https://github.com/follijulio.png",
+  hoursCompleted: 2020,
+  hoursTotal: 3600,
+  courses: [
+    {
+      subject_name: "Cálculo 1",
+      code: "MAT101",
+      status: "Cursando",
+      absences: 8,
+      maxAbsences: 10,
+      partial_grade: 8.5,
+    },
+    {
+      subject_name: "Introdução à Programação",
+      code: "CS101",
+      status: "Cursando",
+      absences: 1,
+      maxAbsences: 20,
+      partial_grade: 4.0,
+    },
+    {
+      subject_name: "Física 1",
+      code: "PHY101",
+      status: "Aprovado",
+      absences: 1,
+      maxAbsences: 10,
+      partial_grade: 9.0,
+    },
+    {
+      subject_name: "Química Geral",
+      code: "CHE101",
+      status: "Reprovado",
+      absences: 1,
+      maxAbsences: 8,
+      partial_grade: 9.5,
+    },
+  ],
+};
