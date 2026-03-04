@@ -90,10 +90,9 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
           <YAxis
             domain={[
               (dataMin: number) => Math.floor((dataMin - 0.2) * 2) / 2,
-              (dataMax: number) => Math.ceil((dataMax + 0.2) * 2) / 2,
+              10,
             ]}
-            
-            tickCount={6}
+            tickCount={8}
             allowDecimals
             tickFormatter={(value) =>
               value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })

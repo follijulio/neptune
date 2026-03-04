@@ -12,64 +12,90 @@ import {
   ChartTooltipContent,
 } from "../../shadcn-ui/chart";
 
-const DistributionWorkCard: React.FC = () => {
-  return (
-    <Card className="w-full h-full p-4 rounded-3xl border border-white/50 text-white bg-transparent">
-      <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
-        <FaRegClock className="inline" /> Distribuição de Carga Horária
-      </h1>
-      <section className="flex-1 min-h-0 w-full">
-        <ChartPieDonut />
-      </section>
-    </Card>
-  );
-};
+export interface ChartDataEntry {
+  hours_name: string;
+  hours: number;
+}
+
+interface ChartPieDonutProps {
+  ChartData: ChartDataEntry[];
+}
 
 export const description = "A donut chart";
 
-const chartData = [
-  { hours_name: "obrigatorias", hours: 2600, fill: "#007AFF" },
-  { hours_name: "complementares", hours: 500, fill: "#00FF88 " },
-  { hours_name: "optativas", hours: 200, fill: "#FF3B30" },
-];
+function getColor(hours_name: string): string {
+  const normalized = hours_name
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-const chartConfig = {
-  Horas: {
+  switch (normalized) {
+    case "obrigatorias":
+      return "#2D5BFF";
+    case "complementares":
+      return "#20C997";
+    case "optativas":
+      return "#AF52DE";
+    case "tcc":
+    case "trabalho de conclusao de curso":
+      return "#FF9500";
+    case "estagio":
+      return "#FF2D55";
+    default:
+      return "#A2A2A6";
+  }
+}
+
+const chartConfigBase = {
+  hours: {
     label: "Horas",
-  },
-  obrigatorias: {
-    label: "obrigatorias",
-    color: "var(--chart-1)",
-  },
-  complementares: {
-    label: "complementares",
-    color: "var(--chart-2)",
-  },
-  optativas: {
-    label: "optativas",
-    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
-export function ChartPieDonut() {
+export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
+  const chartDataWithColors = ChartData.map((entry) => ({
+    ...entry,
+    fill: getColor(entry.hours_name),
+  }));
+
+  const dynamicConfig = ChartData.reduce((config, entry) => {
+    config[entry.hours_name] = {
+      label:
+        entry.hours_name.charAt(0).toUpperCase() + entry.hours_name.slice(1), // Capitaliza a primeira letra
+      color: getColor(entry.hours_name),
+    };
+    return config;
+  }, {} as ChartConfig);
+
+  const finalChartConfig = {
+    ...chartConfigBase,
+    ...dynamicConfig,
+  } satisfies ChartConfig;
+
   return (
     <CardContent className="flex-1 pb-0 text-white">
       <ChartContainer
-        config={chartConfig}
-        className="mx-auto aspect-square max-h-62.5"
+        config={finalChartConfig}
+        className="mx-auto aspect-square max-h-[250px]"
       >
         <PieChart>
           <ChartTooltip
             cursor={false}
+            active
             content={
-              <ChartTooltipContent hideLabel className="bg-black text-white" />
+              <ChartTooltipContent
+                hideLabel
+                className="bg-black text-white border-white/20 flex flex-row gap-2"
+              />
             }
           />
           <Pie
-            data={chartData}
+            data={chartDataWithColors}
             dataKey="hours"
             nameKey="hours_name"
             innerRadius={60}
+            stroke="none"
           />
           <ChartLegend
             className="text-white text-sm"
@@ -79,6 +105,19 @@ export function ChartPieDonut() {
       </ChartContainer>
     </CardContent>
   );
-}
+};
+
+const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
+  return (
+    <Card className="w-full h-full p-4 rounded-3xl border border-white/50 text-white bg-transparent">
+      <h1 className="flex items-center gap-2 font-semibold text-[#888888] mb-4">
+        <FaRegClock className="inline" /> Distribuição de Carga Horária
+      </h1>
+      <section className="flex-1 min-h-0 w-full">
+        <ChartPieDonut ChartData={ChartData} />
+      </section>
+    </Card>
+  );
+};
 
 export default DistributionWorkCard;

@@ -16,14 +16,20 @@ export default function Home() {
           }
         />
         <Cards.CourseProgress
-          hoursCompleted={mockUser.hoursCompleted}
-          hoursTotal={mockUser.hoursTotal}
+          hoursCompleted={mockUser.distributionWork.reduce(
+            (total, item) => total + item.completede,
+            0,
+          )}
+          hoursTotal={mockUser.distributionWork.reduce(
+            (total, item) => total + item.hours,
+            0,
+          )}
         />
         <Cards.AttentionRequired subjects={mockUser.courses} />
         <div className="w-full h-full col-span-2">
-          <Cards.AverageRating semesters_data={mockUser.data}/>
+          <Cards.AverageRating semesters_data={mockUser.data} />
         </div>
-        <Cards.DistributionWork />
+        <Cards.DistributionWork ChartData={mockUser.distributionWork} />
       </div>
       <div className="px-10">
         <Table.CourseStatus courses={mockUser.courses} />

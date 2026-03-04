@@ -9,10 +9,14 @@ export const mockUser = {
     { semester: "2029.1", yield_coefficient: 8.2 },
     { semester: "2029.2", yield_coefficient: 8.1 },
   ],
-
+  distributionWork: [
+    { hours_name: "obrigatorias", hours: 2000, completede: 1000 },
+    { hours_name: "complementares", hours: 800, completede: 100 },
+    { hours_name: "optativas", hours: 100, completede: 40 },
+    { hours_name: "TCC", hours: 40, completede: 30 },
+    { hours_name: "estágio", hours: 100, completede: 80 },
+  ],
   perfilImageUrl: "https://github.com/follijulio.png",
-  hoursCompleted: 2020,
-  hoursTotal: 3600,
   courses: [
     {
       subject_name: "Cálculo 1",
