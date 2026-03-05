@@ -1,29 +1,35 @@
 import { cn } from "@/src/lib/utils";
 import { RiErrorWarningLine } from "react-icons/ri";
 
-// Types
 interface Subject {
   subject_name: string;
   absences: number;
   maxAbsences: number;
 }
 
+// {
+//       name: "Introdução a cálculo",
+//       code: "MAT101",
+//       status: "Aprovado",
+//       absences: 8,
+//       maxAbsences: 10,
+//       grade: 8.5,
+//     },
+
 interface AttentionRequiredCardProps {
   subjects: Subject[];
 }
 
-// Constants
 const CRITICAL_ATTENDANCE_THRESHOLD = 75;
 
-const INDICATION_COLORS = {
-  SAFE: "text-[#FFFFFF]", // Fixed syntax error
+const SEVERITY_COLORS = {
+  SAFE: "text-[#FFFFFF]",
   WARNING: "text-[#FFB020]",
   DANGER: "text-[#FF8C00]",
   CRITICAL: "text-[#FF3B30]",
 } as const;
 
-// Utilities
-const calculateAttendanceRate = (
+const calculateAttendancePercentage = (
   absences: number,
   maxAbsences: number,
 ): number => {
@@ -31,41 +37,33 @@ const calculateAttendanceRate = (
   return (absences / maxAbsences) * 100;
 };
 
-const isCriticalSubject = (subject: Subject): boolean => {
-  const attendanceRate = calculateAttendanceRate(
-    subject.absences,
-    subject.maxAbsences,
-  );
-  return attendanceRate >= CRITICAL_ATTENDANCE_THRESHOLD;
+const isSubjectCritical = (subject: Subject): boolean =>
+  calculateAttendancePercentage(subject.absences, subject.maxAbsences) >=
+  CRITICAL_ATTENDANCE_THRESHOLD;
+
+const countCriticalSubjects = (subjects: Subject[]): number =>
+  subjects.filter(isSubjectCritical).length;
+
+const getSeverityColor = (subjects: Subject[]): string => {
+  if (subjects.length === 0) return SEVERITY_COLORS.SAFE;
+
+  const criticalCount = countCriticalSubjects(subjects);
+  const criticalRatio = (criticalCount / subjects.length) * 100;
+
+  if (criticalRatio <= 25) return SEVERITY_COLORS.SAFE;
+  if (criticalRatio <= 50) return SEVERITY_COLORS.WARNING;
+  if (criticalRatio <= 75) return SEVERITY_COLORS.DANGER;
+  return SEVERITY_COLORS.CRITICAL;
 };
 
-const getCriticalSubjectsCount = (subjects: Subject[]): number => {
-  return subjects.filter(isCriticalSubject).length;
-};
+const pluralize = (count: number): string => (count !== 1 ? "s" : "");
 
-const getIndicationColor = (subjects: Subject[]): string => {
-  if (subjects.length === 0) return INDICATION_COLORS.SAFE;
-
-  const criticalCount = getCriticalSubjectsCount(subjects);
-  const criticalPercentage = (criticalCount / subjects.length) * 100;
-
-  if (criticalPercentage <= 25) return INDICATION_COLORS.SAFE;
-  if (criticalPercentage <= 50) return INDICATION_COLORS.WARNING;
-  if (criticalPercentage <= 75) return INDICATION_COLORS.DANGER;
-  return INDICATION_COLORS.CRITICAL;
-};
-
-const getPluralSuffix = (count: number): string => {
-  return count !== 1 ? "s" : "";
-};
-
-// Component
-const AttentionRequiredCard: React.FC<AttentionRequiredCardProps> = ({
+export const AttentionRequiredCard: React.FC<AttentionRequiredCardProps> = ({
   subjects,
 }) => {
-  const criticalCount = getCriticalSubjectsCount(subjects);
-  const pluralSuffix = getPluralSuffix(criticalCount);
-  const indicationColor = getIndicationColor(subjects);
+  const criticalSubjectsCount = countCriticalSubjects(subjects);
+  const suffix = pluralize(criticalSubjectsCount);
+  const severityColor = getSeverityColor(subjects);
 
   return (
     <div className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white flex flex-col gap-8">
@@ -74,16 +72,13 @@ const AttentionRequiredCard: React.FC<AttentionRequiredCardProps> = ({
         Atenção Requerida
       </header>
 
-      <div className={cn("text-6xl font-light", indicationColor)}>
-        {criticalCount}
+      <div className={cn("text-6xl font-light", severityColor)}>
+        {criticalSubjectsCount}
       </div>
 
       <footer className="text-[#888888]">
-        Disciplina{pluralSuffix} próxima{pluralSuffix} do limite de falta
-        {pluralSuffix}.
+        Disciplina{suffix} próxima{suffix} do limite de falta{suffix}.
       </footer>
     </div>
   );
 };
-
-export default AttentionRequiredCard;

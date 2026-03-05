@@ -1,13 +1,15 @@
+import { AttentionRequiredCard } from "./attention-required-card";
+import { AverageRatingCard } from "./average-rating-card";
 import { CourseProgressCard } from "./course-progress-card";
+import { DistributionWorkCard } from "./distribution-work-card";
 import { YieldCoefficientCard } from "./yield-coefficient-card";
-import AttentionRequiredCard from "./attention-required-card";
-import AverageRatingCard from "./average-rating-card";
-import DistributionWorkCard from "./distribution-work-card";
-const Cards = {
-  YieldCoefficient: YieldCoefficientCard,
-  CourseProgress: CourseProgressCard,
+
+export const Card = {
   AttentionRequired: AttentionRequiredCard,
   AverageRating: AverageRatingCard,
+  CourseProgress: CourseProgressCard,
   DistributionWork: DistributionWorkCard,
-};
-export default Cards;
+  YieldCoefficient: YieldCoefficientCard,
+} as const;
+
+export default Card;

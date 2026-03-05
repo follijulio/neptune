@@ -107,7 +107,9 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
   );
 };
 
-const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
+export const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({
+  ChartData,
+}) => {
   return (
     <Card className="w-full h-full p-4 rounded-3xl border border-white/50 text-white bg-transparent">
       <h1 className="flex items-center gap-2 font-semibold text-[#888888] mb-4">
@@ -119,5 +121,3 @@ const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
     </Card>
   );
 };
-
-export default DistributionWorkCard;

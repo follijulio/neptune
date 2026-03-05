@@ -1,43 +1,6 @@
 "use client";
 
 import { TbTargetArrow } from "react-icons/tb";
-interface CourseProgressCardProps {
-  hoursTotal: number;
-  hoursCompleted: number;
-}
-
-export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
-  hoursTotal,
-  hoursCompleted,
-}) => {
-  const percentage =
-    hoursTotal > 0 ? Math.round((hoursCompleted / hoursTotal) * 100) : 0;
-  return (
-    <div className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
-      <section className="w-full flex flex-row gap-4 h-full justify-between">
-        <div className="flex flex-col gap-8 w-2/3">
-          <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
-            <TbTargetArrow className="inline" /> Progresso do Curso
-          </h1>
-          <span className="text-6xl font-light">
-            {percentage}
-            {"%"}
-          </span>
-          <span className="flex gap-2 text-[#888888]">
-            <span>
-              {hoursCompleted}/{hoursTotal}
-            </span>
-            horas
-          </span>
-        </div>
-        <div className="w-1/3">
-          <ChartRadialText percentage={Math.round(percentage)} />
-        </div>
-      </section>
-    </div>
-  );
-};
-
 import {
   Label,
   PolarGrid,
@@ -47,49 +10,61 @@ import {
 } from "recharts";
 import { ChartConfig, ChartContainer } from "../../shadcn-ui/chart";
 
-export const description = "A radial chart with text";
+interface CourseProgressCardProps {
+  hoursTotal: number;
+  hoursCompleted: number;
+}
 
-const chartData = [{ browser: "safari", percentage: 68, fill: "#007AFF" }];
+interface RadialProgressChartProps {
+  progress: number;
+}
 
-const chartConfig = {
-  percentage: {
-    label: "Percentage",
+const CHART_CONFIG = {
+  progress: {
+    label: "Progress",
   },
-  safari: {
-    label: "Safari",
+  primary: {
+    label: "Primary",
     color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 
-interface RadialPercentageChartProps {
-  percentage: number;
-}
+const CHART_STYLE = {
+  startAngle: 90,
+  innerRadius: 80,
+  outerRadius: 110,
+  barSize: 30,
+  polarRadius: [86, 74] as [number, number],
+};
 
-const ChartRadialText: React.FC<RadialPercentageChartProps> = ({
-  percentage,
+const calculateProgress = (completed: number, total: number): number => {
+  return total > 0 ? Math.round((completed / total) * 100) : 0;
+};
+
+const RadialProgressChart: React.FC<RadialProgressChartProps> = ({
+  progress,
 }) => {
-  const dynamicEndAngle = 90 - (360 * percentage) / 100;
+  const chartData = [{ progress, fill: "#007AFF" }];
+  const endAngle = CHART_STYLE.startAngle - (360 * progress) / 100;
 
   return (
-    <ChartContainer config={chartConfig} className="mx-auto aspect-square ">
+    <ChartContainer config={CHART_CONFIG} className="mx-auto aspect-square">
       <RadialBarChart
         data={chartData}
-        startAngle={90}
-        endAngle={dynamicEndAngle}
-        innerRadius={80}
-        outerRadius={110}
-        barSize={30}
+        startAngle={CHART_STYLE.startAngle}
+        endAngle={endAngle}
+        innerRadius={CHART_STYLE.innerRadius}
+        outerRadius={CHART_STYLE.outerRadius}
+        barSize={CHART_STYLE.barSize}
       >
         <PolarGrid
           gridType="circle"
           radialLines={false}
           stroke="none"
           className="first:fill-white/20 last:fill-black"
-          polarRadius={[86, 74]}
+          polarRadius={CHART_STYLE.polarRadius}
         />
-
-        <RadialBar dataKey="percentage" background cornerRadius={10} />
-
+        <RadialBar dataKey="progress" background cornerRadius={10} />
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
           <Label
             content={({ viewBox }) => {
@@ -106,7 +81,7 @@ const ChartRadialText: React.FC<RadialPercentageChartProps> = ({
                       y={viewBox.cy}
                       className="fill-white text-4xl font-medium"
                     >
-                      {percentage.toLocaleString() + "%"}
+                      {progress}%
                     </tspan>
                   </text>
                 );
@@ -116,5 +91,34 @@ const ChartRadialText: React.FC<RadialPercentageChartProps> = ({
         </PolarRadiusAxis>
       </RadialBarChart>
     </ChartContainer>
+  );
+};
+
+export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
+  hoursTotal,
+  hoursCompleted,
+}) => {
+  const progress = calculateProgress(hoursCompleted, hoursTotal);
+
+  return (
+    <div className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
+      <section className="w-full flex flex-row gap-4 h-full justify-between">
+        <div className="flex flex-col gap-8 w-2/3">
+          <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
+            <TbTargetArrow className="inline" /> Progresso do Curso
+          </h1>
+          <span className="text-6xl font-light">{progress}%</span>
+          <span className="flex gap-2 text-[#888888]">
+            <span>
+              {hoursCompleted}/{hoursTotal}
+            </span>
+            horas
+          </span>
+        </div>
+        <div className="w-1/3">
+          <RadialProgressChart progress={progress} />
+        </div>
+      </section>
+    </div>
   );
 };

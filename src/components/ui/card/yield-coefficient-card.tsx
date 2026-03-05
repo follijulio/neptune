@@ -1,10 +1,10 @@
 "use client";
 
 import { IoMdTrendingUp } from "react-icons/io";
-import { Card } from "../../shadcn-ui/card";
 import { RiArrowRightDownLine, RiArrowRightUpLine } from "react-icons/ri";
 import { AreaChart, CartesianGrid, XAxis, Area } from "recharts";
 
+import { Card } from "../../shadcn-ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -12,68 +12,16 @@ import {
   ChartTooltipContent,
 } from "../../shadcn-ui/chart";
 
-interface YieldCoefficientCardProps {
-  percentage: number;
-  previousValue: number;
-  semesters: SemesterDataProps[];
-}
-
-interface SemesterDataProps {
+interface SemesterData {
   semester: string;
-  yield_coefficient: number;
+  yieldCoefficient: number;
 }
 
-export const YieldCoefficientCard: React.FC<YieldCoefficientCardProps> = ({
-  percentage,
-  previousValue,
-  semesters,
-}) => {
-  const difference = percentage - previousValue;
-  const improve = difference > 0;
-  const Icon = improve ? RiArrowRightUpLine : RiArrowRightDownLine;
-  const prefix = improve ? "+" : "";
-
-  return (
-    <Card className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
-      <section className="gap-2 flex flex-col h-1/3 w-full">
-          <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
-            <IoMdTrendingUp className="inline" /> Coeficiente de Rendimiento
-          </h1>
-
-        <div className="flex items-end gap-2">
-          <span className="text-6xl font-light">{percentage}</span>
-
-          <div className="flex flex-row items-center">
-            <Icon
-              className={`text-lg ${improve ? "text-[#00FF88]" : "text-[#FF3B30]"}`}
-            />
-
-            <span
-              className={`text-base font-semibold ${improve ? "text-[#00FF88]" : "text-[#FF3B30]"}`}
-            >
-              {difference !== 0 &&
-                (improve
-                  ? `${prefix}${difference.toFixed(1)}`
-                  : `${prefix}${difference.toFixed(1)}`)}
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="h-2/3 w-full">
-        {semesters.length > 1 ? (
-          <ChartAreaDefault semesters={semesters} />
-        ) : (
-          <div className="flex h-full items-center justify-center text-sm text-[#888888]">
-            Sem dados suficientes para gerar o gráfico...
-          </div>
-        )}
-      </section>
-    </Card>
-  );
-};
-
-export const description = "A simple area chart";
+interface YieldCoefficientCardProps {
+  currentValue: number;
+  previousValue: number;
+  semesters: SemesterData[];
+}
 
 const CHART_CONFIG = {
   yield_coefficient: {
@@ -82,21 +30,47 @@ const CHART_CONFIG = {
   },
 } satisfies ChartConfig;
 
-const ChartAreaDefault: React.FC<{ semesters: SemesterDataProps[] }> = ({
+const COLORS = {
+  positive: "#00FF88",
+  negative: "#FF3B30",
+  subtitle: "#888888",
+} as const;
+
+const calculateDifference = (current: number, previous: number) => {
+  const value = current - previous;
+  const isPositive = value > 0;
+  const prefix = value > 0 ? "+" : "";
+
+  return {
+    value,
+    isPositive,
+    formatted: value !== 0 ? `${prefix}${value.toFixed(1)}` : "",
+  };
+};
+
+const YieldCoefficientChart = ({
   semesters,
+}: {
+  semesters: SemesterData[];
 }) => {
+  if (semesters.length <= 1) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-[#888888]">
+        Sem dados suficientes para gerar o gráfico...
+      </div>
+    );
+  }
+
   return (
     <ChartContainer config={CHART_CONFIG} className="h-full w-full">
       <AreaChart accessibilityLayer data={semesters}>
         <CartesianGrid vertical={false} horizontal={false} />
-
         <XAxis
           dataKey="semester"
           tickLine={false}
           axisLine={false}
           tickMargin={8}
         />
-
         <ChartTooltip
           cursor={false}
           content={
@@ -106,7 +80,6 @@ const ChartAreaDefault: React.FC<{ semesters: SemesterDataProps[] }> = ({
             />
           }
         />
-
         <Area
           dataKey="yield_coefficient"
           type="linear"
@@ -116,5 +89,47 @@ const ChartAreaDefault: React.FC<{ semesters: SemesterDataProps[] }> = ({
         />
       </AreaChart>
     </ChartContainer>
+  );
+};
+
+export const YieldCoefficientCard = ({
+  currentValue,
+  previousValue,
+  semesters,
+}: YieldCoefficientCardProps) => {
+  const difference = calculateDifference(currentValue, previousValue);
+  const TrendIcon = difference.isPositive
+    ? RiArrowRightUpLine
+    : RiArrowRightDownLine;
+  const trendColor = difference.isPositive ? COLORS.positive : COLORS.negative;
+
+  return (
+    <Card className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
+      <section className="gap-2 flex flex-col h-1/3 w-full">
+        <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
+          <IoMdTrendingUp className="inline" /> Coeficiente de Rendimento
+        </h1>
+
+        <div className="flex items-end gap-2">
+          <span className="text-6xl font-light">{currentValue}</span>
+
+          {difference.formatted && (
+            <div className="flex flex-row items-center">
+              <TrendIcon className="text-lg" style={{ color: trendColor }} />
+              <span
+                className="text-base font-semibold"
+                style={{ color: trendColor }}
+              >
+                {difference.formatted}
+              </span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="h-2/3 w-full">
+        <YieldCoefficientChart semesters={semesters} />
+      </section>
+    </Card>
   );
 };

@@ -12,41 +12,43 @@ import {
 import jura from "@/src/assets/fonts/jura";
 
 interface NavBarProps {
-  perfilImageUrl?: string;
+  profileImageUrl?: string;
 }
 
-export const NavBar: React.FC<NavBarProps> = ({ perfilImageUrl }) => {
+interface UserMenuProps {
+  profileImageUrl?: string;
+}
+
+export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   return (
     <nav className="h-20 w-full flex flex-row items-center justify-between px-10 border-b border-[#888888]">
-      <div className={`text-4xl flex flex-row items-center gap-2 select-none`}>
-        <Link href="/">
-          <span className={`font-bold ${jura.className} `}>Folliro</span>
-        </Link>
-      </div>
-      <div className="flex items-center gap-20">
-        <DropdownMenuPerfil perfilImageUrl={perfilImageUrl} />
-      </div>
+      <Logo />
+      <UserMenu profileImageUrl={profileImageUrl} />
     </nav>
   );
 };
 
-export const DropdownMenuPerfil: React.FC<{ perfilImageUrl?: string }> = ({
-  perfilImageUrl,
-}) => {
+const Logo = () => (
+  <Link href="/" className="text-4xl select-none">
+    <span className={`font-bold ${jura.className}`}>Folliro</span>
+  </Link>
+);
+
+const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src={perfilImageUrl} />
+          <AvatarImage src={profileImageUrl} alt="Perfil do usuário" />
           <AvatarFallback>F</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 h-96" align="end">
+      <DropdownMenuContent className="w-40" align="end">
+        <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href={"/change_infos"}>Mudar informações</Link>
+          <DropdownMenuItem asChild>
+            <Link href="/change_infos">Mudar informações</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

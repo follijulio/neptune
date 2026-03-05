@@ -12,15 +12,15 @@ import {
   DropdownMenuSeparator,
 } from "../shadcn-ui/dropdown-menu";
 
-interface ElementoDropdown {
+interface DropdownOption {
   title: string;
   value: string;
 }
 
-interface DropdownMenuLogicProps {
+interface DropdownMenuSemesterProps {
   title?: string;
   param: string;
-  elements: ElementoDropdown[];
+  elements: DropdownOption[];
   className?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -29,46 +29,54 @@ interface DropdownMenuLogicProps {
 
 export function DropdownMenuSemester({
   elements,
-  className,
+  className = "",
   title = "Semestre",
   param,
   value,
   onChange,
   autoApply = true,
-}: DropdownMenuLogicProps) {
+}: DropdownMenuSemesterProps) {
   const searchParams = useSearchParams();
-  const pathName = usePathname();
+  const pathname = usePathname();
   const { replace } = useRouter();
 
-  function handleChange(valueSelected: string) {
+  const updateUrlParams = (selectedValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (!selectedValue || selectedValue === "geral") {
+      params.delete(param);
+    } else {
+      params.set(param, selectedValue);
+    }
+
+    replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleSelect = (selectedValue: string) => {
     if (onChange) {
-      onChange(valueSelected);
+      onChange(selectedValue);
       return;
     }
 
     if (autoApply) {
-      const params = new URLSearchParams(searchParams.toString());
-      if (!valueSelected || valueSelected === "geral") {
-        params.delete(param);
-      } else {
-        params.set(param, valueSelected);
-      }
-      replace(`${pathName}?${params.toString()}`, { scroll: false });
+      updateUrlParams(selectedValue);
     }
-  }
+  };
 
-  const valorAtual = value || searchParams.get(param);
-  const elementselecionado = elements.find((el) => el.value === valorAtual);
-  const titleBotao = elementselecionado ? elementselecionado.title : title;
+  const currentValue = value || searchParams.get(param);
+  const selectedOption = elements.find(
+    (option) => option.value === currentValue,
+  );
+  const buttonLabel = selectedOption?.title || title;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className={`bg-black border text-white max-w-20 min-w-20 ${className || ""}`}
+          className={`bg-black border text-white max-w-20 min-w-20 ${className}`}
         >
-          {titleBotao}
+          {buttonLabel}
         </Button>
       </DropdownMenuTrigger>
 
@@ -77,13 +85,13 @@ export function DropdownMenuSemester({
           <DropdownMenuLabel>{title}</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
-          {elements.map((item, i) => (
+          {elements.map((option) => (
             <DropdownMenuItem
-              key={item.value + i}
-              onClick={() => handleChange(item.value)}
+              key={option.value}
+              onClick={() => handleSelect(option.value)}
               className="cursor-pointer"
             >
-              {item.title}
+              {option.title}
             </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
