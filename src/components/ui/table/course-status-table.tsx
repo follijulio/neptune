@@ -18,6 +18,7 @@ import { cn } from "@/src/lib/utils";
 import { Progress } from "../../shadcn-ui/chart";
 import { FaCircle } from "react-icons/fa";
 import DrawerAction from "./drawer-action-table";
+import { useFilterParam } from "@/src/hooks/useFilterParam";
 
 export interface CourseStatusCardProps {
   subject_name: string;
@@ -28,63 +29,46 @@ export interface CourseStatusCardProps {
   partial_grade: number;
 }
 
-const getDefaultSemester = () => {
+export const getDefaultSemester = (): string => {
   const now = new Date();
-  return now.getMonth() < 6
-    ? `${now.getFullYear()}.1`
-    : `${now.getFullYear()}.2`;
+  const part = now.getMonth() < 6 ? 1 : 2;
+  return `${now.getFullYear()}.${part}`;
 };
 
-const shiftSemester = (semester: string, direction: "next" | "previous") => {
+export const shiftSemester = (
+  semester: string,
+  direction: "next" | "previous",
+): string => {
   const [yearString, partString] = semester.split(".");
-  let year = Number(yearString);
-  let part = Number(partString);
+  const year = Number(yearString);
+  const part = Number(partString);
 
-  if (direction === "next") {
-    if (part === 1) part = 2;
-    else {
-      part = 1;
-      year += 1;
-    }
+  const isNext = direction === "next";
+
+  if (isNext) {
+    return part === 1 ? `${year}.2` : `${year + 1}.1`;
   } else {
-    if (part === 2) part = 1;
-    else {
-      part = 2;
-      year -= 1;
-    }
+    return part === 2 ? `${year}.1` : `${year - 1}.2`;
   }
-
-  return `${year}.${part}`;
 };
 
 const CourseStatusTable: React.FC<{ courses: CourseStatusCardProps[] }> = ({
   courses,
 }) => {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const semesterParam = searchParams.get("semester");
-  const [currentSemester, setCurrentSemester] = useState(
-    semesterParam || getDefaultSemester(),
+  const { value: currentSemester, setParam: setSemester } = useFilterParam(
+    "semester",
+    {
+      defaultValue: getDefaultSemester(),
+      toggle: false,
+    },
   );
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (semesterParam) setCurrentSemester(semesterParam);
-  }, [semesterParam]);
-
   const updateSemester = (direction: "next" | "previous") => {
-    const newSemester = shiftSemester(currentSemester, direction);
-    setCurrentSemester(newSemester);
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("semester", newSemester);
-    router.push(`${pathname}?${params.toString()}`);
+    setSemester(shiftSemester(currentSemester ?? getDefaultSemester(), direction));
   };
 
   return (
-    <div className="rounded-lg p-6 w-full">
+    <div className="rounded-lg w-full">
       <div className="flex items-center gap-2 mb-4">
         <button
           onClick={() => updateSemester("previous")}
