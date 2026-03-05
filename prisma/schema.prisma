@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String       @id @default(uuid())
+  name            String?
+  profileImageUrl String?
+  semesters       Semester[]
+  workloads       Workload[]
+  enrollments     Enrollment[]
+}
+
+model Workload {
+  id             String @id @default(uuid())
+  category       String
+  totalHours     Int
+  completedHours Int
+  userId         String
+  user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Semester {
+  id               String         @id @default(uuid())
+  period           String
+  status           SemesterStatus
+  yieldCoefficient Float?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  enrollments Enrollment[]
+}
+
+model Subject {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  enrollments Enrollment[]
+}
+
+model Enrollment {
+  id          String        @id @default(uuid())
+  status      SubjectStatus
+  grade       Float?
+  absences    Int?
+  maxAbsences Int?
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId   String
+  subject     Subject       @relation(fields: [subjectId], references: [id])
+  semesterId  String?
+  semester    Semester?     @relation(fields: [semesterId], references: [id])
+}
+
+enum SemesterStatus {
+  CONCLUIDO
+  CURSANDO
+  PENDENTE
+}
+
+enum SubjectStatus {
+  APROVADO
+  REPROVADO
+  CURSANDO
+  PENDENTE
+}

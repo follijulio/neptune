@@ -3,7 +3,6 @@ import Cards from "../components/ui/card";
 import Table from "../components/ui/table";
 import { mockUser } from "../mock/mock";
 
-
 /**
  * TODO: Move to backend - Calculate total hours from workload
  * Future endpoint: GET /api/workload/total
@@ -92,7 +91,6 @@ const mapEnrolledCoursesToStatusFormat = () =>
     partial_grade: course.grade,
   }));
 
-
 export default function Home() {
   const completedHours = calculateTotalHours(
     mockUser.workloadDistribution,
@@ -102,6 +100,7 @@ export default function Home() {
     mockUser.workloadDistribution,
     "totalHours",
   );
+
   const currentYield = getCurrentYieldCoefficient();
   const previousYield = getPreviousYieldCoefficient();
   const semestersData = mapSemestersToTableFormat();
