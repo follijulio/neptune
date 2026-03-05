@@ -17,7 +17,7 @@ interface NavBarProps {
 
 export const NavBar: React.FC<NavBarProps> = ({ perfilImageUrl }) => {
   return (
-    <nav className="h-1/12 w-full flex flex-row items-center justify-between px-10 border-b border-[#888888]">
+    <nav className="h-20 w-full flex flex-row items-center justify-between px-10 border-b border-[#888888]">
       <div className={`text-4xl flex flex-row items-center gap-2 select-none`}>
         <Link href="/">
           <span className={`font-bold ${jura.className} `}>Folliro</span>
