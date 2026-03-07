@@ -14,7 +14,7 @@ function HomeContent() {
   useEffect(() => {
     const semester = searchParams.get("semester") || undefined;
     const filterCurriculum = searchParams.get("filterCurriculum") || undefined;
-    const userId = "coloque-o-id-do-usuario-aqui";
+    const userId = "bcddba79-ec7a-4ead-b419-8dfdf532d2d8";
 
     execute({ userId, semester, filterCurriculum });
   }, [searchParams, execute]);
