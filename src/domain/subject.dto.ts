@@ -12,3 +12,18 @@ export interface SubjectResponse {
   };
   error?: string;
 }
+
+export interface UpdateSubjectDto {
+  id: string;
+  code?: string;
+  name?: string;
+}
+
+export interface DeleteSubjectDto {
+  id: string;
+}
+
+export interface DeleteSubjectResponse {
+  success: boolean;
+  error?: string;
+}
