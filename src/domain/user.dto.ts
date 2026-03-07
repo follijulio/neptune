@@ -44,3 +44,12 @@ export interface UpdateUserResponse {
   };
   error?: string;
 }
+
+export interface DeleteUserDto {
+  id: string;
+}
+
+export interface DeleteUserResponse {
+  success: boolean;
+  error?: string;
+}

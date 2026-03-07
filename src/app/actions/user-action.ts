@@ -1,9 +1,12 @@
 "use server";
 
 import { CreateUserController } from "@/src/adapters/controllers/user/create-user-controller";
+import { DeleteUserController } from "@/src/adapters/controllers/user/delete-user-delete";
 import { UpdateUserController } from "@/src/adapters/controllers/user/update-user-controller";
 import {
   createUserDto,
+  DeleteUserDto,
+  DeleteUserResponse,
   RegisterUserResponse,
   UpdateUserDto,
   UpdateUserResponse,
@@ -35,5 +38,21 @@ export async function registerUserAction(
     const message =
       error instanceof Error ? error.message : "Erro desconhecido";
     return { success: false, error: message };
+  }
+}
+
+export async function deleteUserAction(
+  formData: DeleteUserDto,
+): Promise<DeleteUserResponse> {
+  try {
+    const controller = new DeleteUserController();
+    await controller.delete(formData);
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Erro desconhecido",
+    };
   }
 }

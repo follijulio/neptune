@@ -19,3 +19,7 @@ export const UpdateUserSchema = z.object({
   email: z.string().email("E-mail inválido").optional(),
   password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres").optional(),
 });
+
+export const DeleteUserSchema = z.object({
+  id: z.string().min(1, "O ID é obrigatório"),
+});
