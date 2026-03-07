@@ -1,37 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { prisma } from "@/prisma/lib/prisma";
 import { DashboardFiltersDto } from "@/src/domain/dashboard.dto";
 
-type WorkloadItem = {
-  category: string;
-  totalHours: number;
-  completedHours: number;
-};
-
-type EnrollmentWithSubject = {
-  status: string;
-  grade: number | null;
-  absences: number | null;
-  maxAbsences: number | null;
-  subject: {
-    name: string;
-    code: string;
-  };
-};
-
-type SemesterWithEnrollments = {
-  period: string;
-  status: string;
-  yieldCoefficient: number | null;
-  enrollments: EnrollmentWithSubject[];
-};
-
 export class GetDashboardDataService {
   async execute({ userId, semester, filterCurriculum }: DashboardFiltersDto) {
-    const [workloads, semesters, filteredEnrollments]: [
-      WorkloadItem[],
-      SemesterWithEnrollments[],
-      EnrollmentWithSubject[],
-    ] = await Promise.all([
+    const [workloads, semesters, filteredEnrollments] = await Promise.all([
       prisma.workload.findMany({ where: { userId } }),
 
       prisma.semester.findMany({
@@ -46,18 +20,17 @@ export class GetDashboardDataService {
         where: {
           userId,
           ...(semester ? { semester: { period: semester } } : {}),
-          ...(filterCurriculum === "pending" ? { status: "PENDENTE" } : {}),
         },
         include: { subject: true },
       }),
     ]);
 
     const totalHours = workloads.reduce(
-      (sum, item) => sum + item.totalHours,
+      (sum: number, item: any) => sum + item.totalHours,
       0,
     );
     const completedHours = workloads.reduce(
-      (sum, item) => sum + item.completedHours,
+      (sum: number, item: any) => sum + item.completedHours,
       0,
     );
 
@@ -66,34 +39,49 @@ export class GetDashboardDataService {
     const previousYieldCoefficient =
       semesters[semesters.length - 2]?.yieldCoefficient || 0;
 
-    const semestersTable = semesters.map((sem) => ({
-      semester: sem.period,
-      status: sem.status,
-      data: sem.enrollments.map((env) => ({
-        subject_name: env.subject.name,
-        code: env.subject.code,
-        status: env.status,
-        partial_grade: env.grade,
-      })),
-    }));
+    const semestersTable = semesters
+      .map((sem: any) => {
+        const filteredData = sem.enrollments.filter((env: any) => {
+          if (!filterCurriculum || filterCurriculum === "all") return true;
+          if (filterCurriculum === "completed")
+            return env.status === "APROVADO";
+          if (filterCurriculum === "pending")
+            return ["PENDENTE", "CURSANDO", "REPROVADO"].includes(env.status);
+          if (filterCurriculum === "blocked") return env.status === "BLOQUEADO";
+          return true;
+        });
 
-    const coursesAttention = filteredEnrollments.map((env) => ({
+        return {
+          semester: sem.period,
+          status: sem.status,
+          data: filteredData.map((env: any) => ({
+            subject_name: env.subject.name,
+            code: env.subject.code,
+            status: env.status,
+            partial_grade: env.grade,
+          })),
+        };
+      })
+      .filter((sem: any) => sem.data.length > 0);
+
+    const coursesAttention = filteredEnrollments.map((env: any) => ({
       subject_name: env.subject.name,
       absences: env.absences,
       maxAbsences: env.maxAbsences,
     }));
 
-    const performanceChart = semesters.map((sem) => ({
+    const performanceChart = semesters.map((sem: any) => ({
       semester: sem.period,
       yield_coefficient: sem.yieldCoefficient,
     }));
 
-    const workloadChart = workloads.map((item) => ({
+    const workloadChart = workloads.map((item: any) => ({
       hours_name: item.category,
       hours: item.completedHours,
     }));
 
     const enrolledCourses = filteredEnrollments.map((env) => ({
+      id: env.id,
       subject_name: env.subject.name,
       code: env.subject.code,
       status: env.status,

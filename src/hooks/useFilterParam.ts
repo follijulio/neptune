@@ -35,7 +35,7 @@ export function useFilterParam(
         params.delete(paramKey);
       }
 
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
     [toggle, value, paramKey, pathname, router, searchParams],
   );

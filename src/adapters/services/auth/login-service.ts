@@ -5,7 +5,6 @@ import { SignJWT } from "jose";
 
 export class LoginService {
   async execute(credentials: LoginUserDto): Promise<LoginUserResponse> {
-    // 1. Busca o usuário pelo email
     const user = await prisma.user.findUnique({
       where: { email: credentials.email },
     });
