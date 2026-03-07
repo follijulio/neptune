@@ -1,6 +1,6 @@
 import { createUserDto } from "@/src/domain/user.dto";
 import { RegisterSchema } from "@/src/schemas/user-schema";
-import { CreateUserService } from "../../services/user/create-user";
+import { CreateUserService } from "../../services/user/create-user-service";
 
 export class CreateUserController {
   async create(user: createUserDto) {

@@ -1,19 +1,35 @@
 "use server";
 
-import { CreateUserController } from "@/src/adapters/controllers/user/create-user";
+import { LoginController } from "@/src/adapters/controllers/auth/login-controller";
 
-import { createUserDto, RegisterUserResponse } from "@/src/domain/user.dto";
+import {
+  AuthResponse,
+  LoginUserDto,
+} from "@/src/domain/user.dto";
+import { cookies } from "next/headers";
 
-export async function registerUserAction(
-  formData: createUserDto,
-): Promise<RegisterUserResponse> {
+
+
+export async function loginAction(
+  formData: LoginUserDto,
+): Promise<AuthResponse> {
   try {
-    const controller = new CreateUserController();
-    const user = await controller.create(formData);
+    const controller = new LoginController();
+    const { token, user } = await controller.handle(formData);
+    const cookieStore = await cookies();
+    cookieStore.set("session-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24,
+      sameSite: "lax",
+    });
+
     return { success: true, data: user };
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Erro desconhecido";
-    return { success: false, error: message };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Falha na autenticação",
+    };
   }
 }

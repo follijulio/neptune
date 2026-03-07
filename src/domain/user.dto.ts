@@ -19,5 +19,28 @@ export interface LoginUserDto {
 
 export interface LoginUserResponse {
   token: string;
-  user: { id: string; email: string };
+  user: { id: string; name: string };
+}
+
+export interface AuthResponse {
+  success: boolean;
+  data?: { id: string; name: string };
+  error?: string;
+}
+
+export interface UpdateUserDto {
+  id: string;
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
+export interface UpdateUserResponse {
+  success: boolean;
+  data?: {
+    id: string;
+    email: string;
+    name: string | null;
+  };
+  error?: string;
 }
