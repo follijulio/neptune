@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { createUserDto } from "@/src/domain/user.dto";
 import bcrypt from "bcryptjs";
 
@@ -19,9 +19,10 @@ export class CreateUserService {
       data: {
         email: user.email,
         name: user.name,
+        username: user.userName,
         passwordHash: hashedPassword,
       },
       select: { id: true, email: true },
     });
   }
-} 
+}

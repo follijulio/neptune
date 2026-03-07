@@ -1,5 +1,5 @@
+import { registerUserAction } from "@/src/app/actions/user-action";
 import { useState } from "react";
-import { registerUserAction } from "../../app/actions/auth-action";
 import { createUserDto, RegisterUserResponse } from "../../domain/user.dto";
 
 export function useCreateUser() {
@@ -17,7 +17,5 @@ export function useCreateUser() {
     }
   };
 
-
-  
   return { execute, isLoading };
 }

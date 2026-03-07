@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { UpdateEnrollmentDto } from "@/src/domain/enrollment.dto";
 
 export class UpdateEnrollmentService {

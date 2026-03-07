@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { UpdateSubjectDto } from "@/src/domain/subject.dto";
 
 export class UpdateSubjectService {

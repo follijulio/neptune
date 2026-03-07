@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { UpdateWorkloadDto } from "@/src/domain/workload.dto";
 
 export class UpdateWorkloadService {

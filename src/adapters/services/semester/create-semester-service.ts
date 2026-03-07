@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { CreateSemesterDto } from "@/src/domain/semester.dto";
 
 export class CreateSemesterService {

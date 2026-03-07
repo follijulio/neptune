@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { DeleteSemesterDto } from "@/src/domain/semester.dto";
 
 export class DeleteSemesterService {

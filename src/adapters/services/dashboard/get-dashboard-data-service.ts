@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { DashboardFiltersDto } from "@/src/domain/dashboard.dto";
 
 type WorkloadItem = {

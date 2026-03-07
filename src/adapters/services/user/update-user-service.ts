@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/prisma/lib/prisma";
 import { UpdateUserDto } from "@/src/domain/user.dto";
 import bcrypt from "bcryptjs";
 

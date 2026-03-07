@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { NavBar } from "../components/ui/nav-bar";
 import Cards from "../components/ui/card";
 import Table from "../components/ui/table";
 import { useDashboardData } from "../hooks/dashboard/use-dashboard-data";
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const { data, isLoading, error, execute } = useDashboardData();
 
@@ -69,5 +69,19 @@ export default function Home() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-black text-white min-h-screen flex items-center justify-center">
+          <p>Carregando...</p>
+        </div>
+      }
+    >
+      <HomeContent />
+    </Suspense>
   );
 }
