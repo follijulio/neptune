@@ -11,3 +11,13 @@ export interface RegisterUserResponse {
   data?: { id: string; email: string };
   error?: string;
 }
+
+export interface LoginUserDto {
+  email: string;
+  password: string;
+}
+
+export interface LoginUserResponse {
+  token: string;
+  user: { id: string; email: string };
+}

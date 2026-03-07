@@ -1,6 +1,7 @@
 "use server";
 
 import { CreateUserController } from "@/src/adapters/controllers/user/create-user";
+
 import { createUserDto, RegisterUserResponse } from "@/src/domain/user.dto";
 
 export async function registerUserAction(

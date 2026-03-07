@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { registerUserAction } from "../app/actions/user-actions";
-import { createUserDto, RegisterUserResponse } from "../domain/user.dto";
+import { registerUserAction } from "../../app/actions/auth-action";
+import { createUserDto, RegisterUserResponse } from "../../domain/user.dto";
 
-export function useUserCreate() {
+export function useCreateUser() {
   const [isLoading, setIsLoading] = useState(false);
 
   const execute = async (
@@ -17,5 +17,7 @@ export function useUserCreate() {
     }
   };
 
+
+  
   return { execute, isLoading };
 }
