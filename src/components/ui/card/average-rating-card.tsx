@@ -18,7 +18,7 @@ interface ChartLineLabelProps {
 
 interface SemesterDataProps {
   semester: string;
-  yield_coefficient: number;
+  yield_coefficient: number | null;
 }
 
 export const AverageRatingCard: React.FC<ChartLineLabelProps> = ({

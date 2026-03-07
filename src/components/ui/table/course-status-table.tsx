@@ -21,9 +21,9 @@ export interface CourseStatusCardProps {
   subject_name: string;
   code: string;
   status: string;
-  absences: number;
-  maxAbsences: number;
-  partial_grade: number;
+  absences: number | null;
+  maxAbsences: number | null;
+  partial_grade: number | null;
 }
 
 const getCurrentSemester = (): string => {
@@ -45,8 +45,12 @@ const navigateSemester = (
   return period === 2 ? `${year}.1` : `${year - 1}.2`;
 };
 
-const calculateAbsencePercentage = (current: number, max: number): number => {
-  if (current === 0) return 0;
+const calculateAbsencePercentage = (
+  current: number | null,
+  max: number | null,
+): number => {
+  if (current === 0 || current === null) return 0;
+  if (max === 0 || max === null) return 100;
   return Math.min((current / max) * 100, 100);
 };
 

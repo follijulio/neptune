@@ -3,18 +3,9 @@ import { RiErrorWarningLine } from "react-icons/ri";
 
 interface Subject {
   subject_name: string;
-  absences: number;
-  maxAbsences: number;
+  absences: number | null;
+  maxAbsences: number | null;
 }
-
-// {
-//       name: "Introdução a cálculo",
-//       code: "MAT101",
-//       status: "Aprovado",
-//       absences: 8,
-//       maxAbsences: 10,
-//       grade: 8.5,
-//     },
 
 interface AttentionRequiredCardProps {
   subjects: Subject[];
@@ -30,11 +21,15 @@ const SEVERITY_COLORS = {
 } as const;
 
 const calculateAttendancePercentage = (
-  absences: number,
-  maxAbsences: number,
+  absences: number | null,
+  maxAbsences: number | null,
 ): number => {
-  if (maxAbsences === 0) return 0;
-  return (absences / maxAbsences) * 100;
+  if (maxAbsences === 0 || maxAbsences === null) return 0;
+  return (
+    ((absences !== null ? absences : 0) /
+      (maxAbsences !== null ? maxAbsences : 1)) *
+    100
+  );
 };
 
 const isSubjectCritical = (subject: Subject): boolean =>

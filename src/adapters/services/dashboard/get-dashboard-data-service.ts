@@ -10,8 +10,8 @@ type WorkloadItem = {
 type EnrollmentWithSubject = {
   status: string;
   grade: number | null;
-  absences: number;
-  maxAbsences: number;
+  absences: number | null;
+  maxAbsences: number | null;
   subject: {
     name: string;
     code: string;
@@ -21,7 +21,7 @@ type EnrollmentWithSubject = {
 type SemesterWithEnrollments = {
   period: string;
   status: string;
-  yieldCoefficient: number;
+  yieldCoefficient: number | null;
   enrollments: EnrollmentWithSubject[];
 };
 

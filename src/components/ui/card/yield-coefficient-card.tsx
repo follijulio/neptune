@@ -14,7 +14,7 @@ import {
 
 interface SemesterData {
   semester: string;
-  yieldCoefficient: number;
+  yield_coefficient: number | null;
 }
 
 interface YieldCoefficientCardProps {
