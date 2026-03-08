@@ -30,7 +30,7 @@ export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
 
 const Logo = () => (
   <Link href="/" className="text-4xl select-none">
-    <span className={`font-bold ${jura.className}`}>Folliro</span>
+    <span className={`font-bold ${jura.className}`}>Netuno</span>
   </Link>
 );
 

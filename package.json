@@ -1,5 +1,5 @@
 {
-  "name": "neptune",
+  "name": "Netuno",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -56,14 +56,14 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/follijulio/neptune.git"
+    "url": "git+https://github.com/follijulio/Netuno.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/follijulio/neptune/issues"
+    "url": "https://github.com/follijulio/Netuno/issues"
   },
-  "homepage": "https://github.com/follijulio/neptune#readme"
+  "homepage": "https://github.com/follijulio/Netuno#readme"
 }

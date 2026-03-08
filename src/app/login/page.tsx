@@ -66,7 +66,7 @@ export default function AuthPage() {
       <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full max-w-[400px]">
         <LuHexagon className="text-[#007AFF] text-7xl lg:text-8xl mb-6" />
         <h1 className="text-[#E0E0E0] text-5xl lg:text-6xl font-bold tracking-tight mb-4">
-          Neptune
+          Netuno
         </h1>
         <p className="text-[#888888] text-lg lg:text-xl leading-relaxed mb-12">
           Seu dashboard acadêmico inteligente. Domine as disciplinas da
