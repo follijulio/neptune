@@ -101,16 +101,26 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
           disabled={isLoading}
         />
       </section>
-      <section>
-        {isLoading ? (
-          <SemesterAccordionSkeleton />
-        ) : data.length === 0 ? (
-          <div className="py-10 text-center text-[#888888] border border-white/10 rounded-lg">
-            Nenhuma disciplina encontrada para este filtro.
-          </div>
-        ) : (
-          <SemesterAccordion semesters={data} />
-        )}
+
+      {/* A MÁGICA ACONTECE AQUI */}
+      <section className="relative">
+        <div
+          className={cn(
+            "transition-all duration-300",
+            // Se estiver carregando, diminui a opacidade, embaça um pouquinho e bloqueia o clique
+            isLoading
+              ? "opacity-40 blur-[1.5px] pointer-events-none saturate-50"
+              : "opacity-100 blur-0",
+          )}
+        >
+          {data.length === 0 && !isLoading ? (
+            <div className="py-10 text-center text-[#888888] border border-white/10 rounded-lg">
+              Nenhuma disciplina encontrada para este filtro.
+            </div>
+          ) : (
+            <SemesterAccordion semesters={data} />
+          )}
+        </div>
       </section>
     </Card>
   );
@@ -135,7 +145,8 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       isActive
         ? "bg-white text-black hover:bg-gray-200"
         : "bg-transparent text-white border border-gray-600 hover:bg-gray-800",
-      disabled && "opacity-50 cursor-not-allowed"
+      // Adicionamos opacidade e removemos os eventos de ponteiro no lugar do 'disabled' nativo
+      disabled && "opacity-50 pointer-events-none",
     );
 
   return (
@@ -143,9 +154,13 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       {filters.map((filter) => (
         <Button
           key={filter.id}
-          onClick={() => !disabled && onFilterChange(filter.id)}
+          // A lógica bloqueia o clique se estiver carregando, mas o botão HTML continua "vivo"
+          onClick={() => {
+            if (!disabled) onFilterChange(filter.id);
+          }}
           className={getButtonClassName(activeFilter === filter.id)}
-          disabled={disabled}
+          // ATENÇÃO: Removemos a propriedade disabled={disabled} daqui!
+          aria-disabled={disabled} // Mantemos só para acessibilidade
         >
           {filter.label}
         </Button>
@@ -204,7 +219,10 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
     <Card className="border border-white/10 bg-transparent rounded-[2px] flex flex-row justify-between p-4">
       <div className="text-white flex flex-col justify-between">
         <section>
-          <h3 className="text-lg font-semibold line-clamp-2" title={subject_name}>
+          <h3
+            className="text-lg font-semibold line-clamp-2"
+            title={subject_name}
+          >
             {subject_name}
           </h3>
           <p className="text-sm text-white/60">{code}</p>
@@ -225,7 +243,10 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
       <div>
         <Badge
           variant="default"
-          className={cn("text-sm gap-2 min-w-14 justify-center", gradeColorClass)}
+          className={cn(
+            "text-sm gap-2 min-w-14 justify-center",
+            gradeColorClass,
+          )}
         >
           <span className={cn("h-2 w-2 rounded-full", dotColorClass)} />
           <p>{partial_grade !== null ? partial_grade : "-"}</p>

@@ -263,7 +263,7 @@ const CourseStatusTable: React.FC<{
   };
 
   return (
-    <div className="rounded-lg w-full">
+    <div className="rounded-lg w-full min-h-[300px]">
       <SemesterNavigator
         currentSemester={currentSemester ?? getCurrentSemester()}
         onNavigate={handleSemesterNavigation}
