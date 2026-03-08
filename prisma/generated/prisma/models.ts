@@ -9,8 +9,13 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/VerificationToken'
+export type * from './models/Session'
 export type * from './models/Workload'
+export type * from './models/Account'
 export type * from './models/Semester'
 export type * from './models/Subject'
 export type * from './models/Enrollment'
+export type * from './models/TwoFactorToken'
+export type * from './models/TwoFactorConfirmation'
 export type * from './commonInputTypes'

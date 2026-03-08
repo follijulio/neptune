@@ -10,6 +10,9 @@ import {
   DropdownMenuSeparator,
 } from "../shadcn-ui/dropdown-menu";
 import jura from "@/src/assets/fonts/jura";
+import { LuLogOut } from "react-icons/lu";
+import { Button } from "../shadcn-ui/button";
+import { logoutAction } from "@/src/app/actions/auth-action";
 
 interface NavBarProps {
   profileImageUrl?: string;
@@ -17,6 +20,21 @@ interface NavBarProps {
 
 interface UserMenuProps {
   profileImageUrl?: string;
+}
+
+export function LogoutButton() {
+  return (
+    <form action={logoutAction}>
+      <Button
+        variant="ghost"
+        className="text-black hover:text-red-500 hover:bg-[#FF3B30]/10 transition-colors flex items-center gap-2"
+        type="submit"
+      >
+        <LuLogOut className="text-lg" />
+        Sair da conta
+      </Button>
+    </form>
+  );
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
@@ -53,7 +71,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Sair da conta</DropdownMenuItem>
+          <DropdownMenuItem>
+            <LogoutButton />
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

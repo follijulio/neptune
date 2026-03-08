@@ -7,7 +7,6 @@ import Cards from "../../components/ui/card";
 import Table from "../../components/ui/table";
 import { useDashboardData } from "../../hooks/dashboard/use-dashboard-data";
 
-// Recebemos o userId que veio do Servidor
 export default function DashboardClient({
   userId,
   userName,

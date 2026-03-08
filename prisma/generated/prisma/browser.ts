@@ -23,10 +23,25 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model VerificationToken
+ * 
+ */
+export type VerificationToken = Prisma.VerificationTokenModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
  * Model Workload
  * 
  */
 export type Workload = Prisma.WorkloadModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
 /**
  * Model Semester
  * 
@@ -42,3 +57,13 @@ export type Subject = Prisma.SubjectModel
  * 
  */
 export type Enrollment = Prisma.EnrollmentModel
+/**
+ * Model TwoFactorToken
+ * 
+ */
+export type TwoFactorToken = Prisma.TwoFactorTokenModel
+/**
+ * Model TwoFactorConfirmation
+ * 
+ */
+export type TwoFactorConfirmation = Prisma.TwoFactorConfirmationModel

@@ -102,12 +102,10 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
         />
       </section>
 
-      {/* A MÁGICA ACONTECE AQUI */}
       <section className="relative">
         <div
           className={cn(
             "transition-all duration-300",
-            // Se estiver carregando, diminui a opacidade, embaça um pouquinho e bloqueia o clique
             isLoading
               ? "opacity-40 blur-[1.5px] pointer-events-none saturate-50"
               : "opacity-100 blur-0",
@@ -145,7 +143,6 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       isActive
         ? "bg-white text-black hover:bg-gray-200"
         : "bg-transparent text-white border border-gray-600 hover:bg-gray-800",
-      // Adicionamos opacidade e removemos os eventos de ponteiro no lugar do 'disabled' nativo
       disabled && "opacity-50 pointer-events-none",
     );
 
@@ -154,13 +151,11 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
       {filters.map((filter) => (
         <Button
           key={filter.id}
-          // A lógica bloqueia o clique se estiver carregando, mas o botão HTML continua "vivo"
           onClick={() => {
             if (!disabled) onFilterChange(filter.id);
           }}
           className={getButtonClassName(activeFilter === filter.id)}
-          // ATENÇÃO: Removemos a propriedade disabled={disabled} daqui!
-          aria-disabled={disabled} // Mantemos só para acessibilidade
+          aria-disabled={disabled}
         >
           {filter.label}
         </Button>

@@ -573,14 +573,6 @@ export type EnumSubjectStatusFieldUpdateOperationsInput = {
   set?: $Enums.SubjectStatus
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnrollmentCreateWithoutUserInput = {
   id?: string
   status: $Enums.SubjectStatus

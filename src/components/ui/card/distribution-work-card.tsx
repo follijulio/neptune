@@ -62,7 +62,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
   const dynamicConfig = ChartData.reduce((config, entry) => {
     config[entry.hours_name] = {
       label:
-        entry.hours_name.charAt(0).toUpperCase() + entry.hours_name.slice(1), // Capitaliza a primeira letra
+        entry.hours_name.charAt(0).toUpperCase() + entry.hours_name.slice(1),
       color: getColor(entry.hours_name),
     };
     return config;

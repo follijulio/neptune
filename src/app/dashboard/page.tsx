@@ -6,7 +6,6 @@ import { Suspense } from "react";
 export default async function DashboardPage() {
   const session = await auth();
 
-  // Se não tiver logado ou não tiver ID, chuta pra tela de login
   if (!session?.user?.id) {
     redirect("/");
   }

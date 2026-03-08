@@ -9,7 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@prisma/client": "^7.4.2",
+    "@react-email/components": "^1.0.8",
+    "@react-email/render": "^2.0.4",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -24,6 +27,7 @@
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
     "recharts": "^2.15.4",
+    "resend": "^6.9.3",
     "tailwind-merge": "^3.5.0",
     "ts-node": "^10.9.2",
     "vaul": "^1.1.2",
