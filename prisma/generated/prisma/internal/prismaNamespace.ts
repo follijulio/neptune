@@ -1315,6 +1315,7 @@ export const NoteScalarFieldEnum = {
   title: 'title',
   content: 'content',
   color: 'color',
+  position: 'position',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',

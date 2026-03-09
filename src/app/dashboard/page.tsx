@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/src/auth";
-import DashboardClient from "./dashboard-client";
 import { prisma } from "@/prisma/lib/prisma";
+import DashboardClient from "@/src/components/ui/clients/dashboard-client";
 
 export default async function DashboardPage() {
   const session = await auth();

@@ -43,6 +43,7 @@ export async function parseAcademicHistoryAction(formData: FormData) {
       pdfParser.parseBuffer(buffer);
     });
 
+    //! dá pra tirar mais infos do histórico, mas precisa ser testado a posteriori.
     const prompt = `
       Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
       Analise o texto abaixo, que foi extraído de um PDF de histórico escolar, e encontre as disciplinas cursadas.
@@ -82,6 +83,7 @@ export async function parseAcademicHistoryAction(formData: FormData) {
   }
 }
 
+//todo: essa função realmente precisa ser otimizada - abrir uma issue depois
 export async function saveExtractedSubjectsAction(subjects: ParsedSubject[]) {
   try {
     const session = await auth();

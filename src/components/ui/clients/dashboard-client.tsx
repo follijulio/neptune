@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { NavBar } from "../../components/ui/nav-bar";
-import Cards from "../../components/ui/card";
-import Table from "../../components/ui/table";
-import { useDashboardData } from "../../hooks/dashboard/use-dashboard-data";
+import { NavBar } from "../nav-bar";
+import Cards from "../card";
+import Table from "../table";
+import { useDashboardData } from "../../../hooks/dashboard/use-dashboard-data";
 import PdfUploader from "@/src/components/ui/pdf-uploader";
 import {
   Dialog,

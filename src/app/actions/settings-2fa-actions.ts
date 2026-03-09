@@ -9,11 +9,13 @@ export async function sendSettings2FACodeAction() {
   if (!session?.user?.id || !session.user.email)
     return { error: "Não autorizado" };
 
+  // TODO: precisa ser implementado o envio real do código por email... (esqueci rsrs)
   try {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = new Date(new Date().getTime() + 15 * 60 * 1000); // Expira em 15 min
-    console.log(`CÓDIGO 2FA GERADO PARA ${session.user.email}: ${code}`); // Para testar no terminal
-
+    // TODO: alterar pra 5 minutos, mas por enquanto - até terminar o calendar - vou deixar 15 minutos pra facilitar os testes
+    const expiresIn = 15 * 60 * 1000; // 15 minutos
+    const expires = new Date(new Date().getTime() + expiresIn);
+    console.log(`CÓDIGO 2FA GERADO PARA ${session.user.email}: ${code}`);
     return { success: "Código enviado para o seu e-mail!" };
   } catch (error) {
     return { error: "Erro ao gerar o código 2FA." };
