@@ -98,7 +98,6 @@ const benefits = [
 export default function LandingPage() {
   return (
     <div className="min-h-screen w-full bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30 flex flex-col">
-      {/* Header */}
       <header className="w-full border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -125,7 +124,6 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1 flex flex-col items-center">
-        {/* Hero Section */}
         <section className="w-full max-w-7xl mx-auto px-6 py-24 lg:py-40 flex flex-col items-center text-center gap-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#007AFF]/10 border border-[#007AFF]/20 text-[#007AFF] text-sm font-medium">
             <LuGraduationCap className="text-base" />
@@ -150,8 +148,7 @@ export default function LandingPage() {
           </Link>
         </section>
 
-        {/* Import PDF Highlight Section */}
-        <section className="w-full bg-gradient-to-br from-[#007AFF]/10 via-[#000000] to-[#000000] border-y border-[#007AFF]/20 py-20">
+        <section className="w-full bg-linear-to-br from-[#007AFF]/10 via-[#000000] to-[#000000] border-y border-[#007AFF]/20 py-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="flex flex-col gap-6">
@@ -173,19 +170,19 @@ export default function LandingPage() {
 
                 <div className="flex flex-col gap-3 mt-4">
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl flex-shrink-0 mt-0.5" />
+                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
                     <p className="text-[#E0E0E0]">
                       Reconhecimento inteligente de dados do histórico
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl flex-shrink-0 mt-0.5" />
+                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
                     <p className="text-[#E0E0E0]">
                       Extração automática de notas, CR e carga horária
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl flex-shrink-0 mt-0.5" />
+                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
                     <p className="text-[#E0E0E0]">
                       Organização instantânea por período e status
                     </p>
@@ -212,7 +209,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="w-full bg-[#000000] py-24">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col items-center text-center mb-16 gap-4">
@@ -251,7 +247,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* How it Works Section */}
         <section className="w-full bg-[#121212] border-y border-[#1A1A1A] py-24">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col items-center text-center mb-16 gap-4">
@@ -288,7 +283,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Benefits Section */}
         <section className="w-full bg-[#000000] py-24">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -309,7 +303,7 @@ export default function LandingPage() {
                     key={index}
                     className="flex items-start gap-3 bg-[#0A0A0A] border border-[#1A1A1A] p-4 rounded-lg hover:border-[#222222] transition-colors"
                   >
-                    <FiCheckCircle className="text-[#00FF88] text-xl flex-shrink-0 mt-0.5" />
+                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
                     <p className="text-[#E0E0E0]">{benefit}</p>
                   </div>
                 ))}
@@ -318,7 +312,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="w-full bg-gradient-to-b from-[#000000] via-[#007AFF]/5 to-[#000000] border-y border-[#007AFF]/10 py-24">
           <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-8">
             <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
@@ -338,7 +331,6 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="w-full bg-[#000000] border-t border-[#1A1A1A] py-10 text-center">
         <p className="text-[#555555] text-sm">
           &copy; {new Date().getFullYear()} Netuno. Desenvolvido para facilitar
