@@ -55,6 +55,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Session: 'Session',
   Workload: 'Workload',
+  Note: 'Note',
   Account: 'Account',
   Semester: 'Semester',
   Subject: 'Subject',
@@ -120,6 +121,20 @@ export const WorkloadScalarFieldEnum = {
 } as const
 
 export type WorkloadScalarFieldEnum = (typeof WorkloadScalarFieldEnum)[keyof typeof WorkloadScalarFieldEnum]
+
+
+export const NoteScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  color: 'color',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  subjectId: 'subjectId'
+} as const
+
+export type NoteScalarFieldEnum = (typeof NoteScalarFieldEnum)[keyof typeof NoteScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {

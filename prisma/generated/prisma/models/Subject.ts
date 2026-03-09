@@ -167,6 +167,7 @@ export type SubjectWhereInput = {
   code?: Prisma.StringFilter<"Subject"> | string
   name?: Prisma.StringFilter<"Subject"> | string
   enrollments?: Prisma.EnrollmentListRelationFilter
+  notes?: Prisma.NoteListRelationFilter
 }
 
 export type SubjectOrderByWithRelationInput = {
@@ -174,6 +175,7 @@ export type SubjectOrderByWithRelationInput = {
   code?: Prisma.SortOrder
   name?: Prisma.SortOrder
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
+  notes?: Prisma.NoteOrderByRelationAggregateInput
 }
 
 export type SubjectWhereUniqueInput = Prisma.AtLeast<{
@@ -184,6 +186,7 @@ export type SubjectWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SubjectWhereInput | Prisma.SubjectWhereInput[]
   name?: Prisma.StringFilter<"Subject"> | string
   enrollments?: Prisma.EnrollmentListRelationFilter
+  notes?: Prisma.NoteListRelationFilter
 }, "id" | "code">
 
 export type SubjectOrderByWithAggregationInput = {
@@ -209,6 +212,7 @@ export type SubjectCreateInput = {
   code: string
   name: string
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutSubjectInput
+  notes?: Prisma.NoteCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateInput = {
@@ -216,6 +220,7 @@ export type SubjectUncheckedCreateInput = {
   code: string
   name: string
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutSubjectInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUpdateInput = {
@@ -223,6 +228,7 @@ export type SubjectUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   enrollments?: Prisma.EnrollmentUpdateManyWithoutSubjectNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateInput = {
@@ -230,6 +236,7 @@ export type SubjectUncheckedUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutSubjectNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectCreateManyInput = {
@@ -248,6 +255,11 @@ export type SubjectUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type SubjectNullableScalarRelationFilter = {
+  is?: Prisma.SubjectWhereInput | null
+  isNot?: Prisma.SubjectWhereInput | null
 }
 
 export type SubjectCountOrderByAggregateInput = {
@@ -273,6 +285,22 @@ export type SubjectScalarRelationFilter = {
   isNot?: Prisma.SubjectWhereInput
 }
 
+export type SubjectCreateNestedOneWithoutNotesInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutNotesInput, Prisma.SubjectUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutNotesInput
+  connect?: Prisma.SubjectWhereUniqueInput
+}
+
+export type SubjectUpdateOneWithoutNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.SubjectCreateWithoutNotesInput, Prisma.SubjectUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutNotesInput
+  upsert?: Prisma.SubjectUpsertWithoutNotesInput
+  disconnect?: Prisma.SubjectWhereInput | boolean
+  delete?: Prisma.SubjectWhereInput | boolean
+  connect?: Prisma.SubjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutNotesInput, Prisma.SubjectUpdateWithoutNotesInput>, Prisma.SubjectUncheckedUpdateWithoutNotesInput>
+}
+
 export type SubjectCreateNestedOneWithoutEnrollmentsInput = {
   create?: Prisma.XOR<Prisma.SubjectCreateWithoutEnrollmentsInput, Prisma.SubjectUncheckedCreateWithoutEnrollmentsInput>
   connectOrCreate?: Prisma.SubjectCreateOrConnectWithoutEnrollmentsInput
@@ -287,16 +315,62 @@ export type SubjectUpdateOneRequiredWithoutEnrollmentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SubjectUpdateToOneWithWhereWithoutEnrollmentsInput, Prisma.SubjectUpdateWithoutEnrollmentsInput>, Prisma.SubjectUncheckedUpdateWithoutEnrollmentsInput>
 }
 
+export type SubjectCreateWithoutNotesInput = {
+  id?: string
+  code: string
+  name: string
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectUncheckedCreateWithoutNotesInput = {
+  id?: string
+  code: string
+  name: string
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutSubjectInput
+}
+
+export type SubjectCreateOrConnectWithoutNotesInput = {
+  where: Prisma.SubjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutNotesInput, Prisma.SubjectUncheckedCreateWithoutNotesInput>
+}
+
+export type SubjectUpsertWithoutNotesInput = {
+  update: Prisma.XOR<Prisma.SubjectUpdateWithoutNotesInput, Prisma.SubjectUncheckedUpdateWithoutNotesInput>
+  create: Prisma.XOR<Prisma.SubjectCreateWithoutNotesInput, Prisma.SubjectUncheckedCreateWithoutNotesInput>
+  where?: Prisma.SubjectWhereInput
+}
+
+export type SubjectUpdateToOneWithWhereWithoutNotesInput = {
+  where?: Prisma.SubjectWhereInput
+  data: Prisma.XOR<Prisma.SubjectUpdateWithoutNotesInput, Prisma.SubjectUncheckedUpdateWithoutNotesInput>
+}
+
+export type SubjectUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutSubjectNestedInput
+}
+
+export type SubjectUncheckedUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutSubjectNestedInput
+}
+
 export type SubjectCreateWithoutEnrollmentsInput = {
   id?: string
   code: string
   name: string
+  notes?: Prisma.NoteCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectUncheckedCreateWithoutEnrollmentsInput = {
   id?: string
   code: string
   name: string
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutSubjectInput
 }
 
 export type SubjectCreateOrConnectWithoutEnrollmentsInput = {
@@ -319,12 +393,14 @@ export type SubjectUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUpdateManyWithoutSubjectNestedInput
 }
 
 export type SubjectUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutSubjectNestedInput
 }
 
 
@@ -334,10 +410,12 @@ export type SubjectUncheckedUpdateWithoutEnrollmentsInput = {
 
 export type SubjectCountOutputType = {
   enrollments: number
+  notes: number
 }
 
 export type SubjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | SubjectCountOutputTypeCountEnrollmentsArgs
+  notes?: boolean | SubjectCountOutputTypeCountNotesArgs
 }
 
 /**
@@ -357,12 +435,20 @@ export type SubjectCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.T
   where?: Prisma.EnrollmentWhereInput
 }
 
+/**
+ * SubjectCountOutputType without action
+ */
+export type SubjectCountOutputTypeCountNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NoteWhereInput
+}
+
 
 export type SubjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   code?: boolean
   name?: boolean
   enrollments?: boolean | Prisma.Subject$enrollmentsArgs<ExtArgs>
+  notes?: boolean | Prisma.Subject$notesArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subject"]>
 
@@ -387,6 +473,7 @@ export type SubjectSelectScalar = {
 export type SubjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "name", ExtArgs["result"]["subject"]>
 export type SubjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   enrollments?: boolean | Prisma.Subject$enrollmentsArgs<ExtArgs>
+  notes?: boolean | Prisma.Subject$notesArgs<ExtArgs>
   _count?: boolean | Prisma.SubjectCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubjectIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -396,6 +483,7 @@ export type $SubjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Subject"
   objects: {
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+    notes: Prisma.$NotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -796,6 +884,7 @@ readonly fields: SubjectFieldRefs;
 export interface Prisma__SubjectClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   enrollments<T extends Prisma.Subject$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notes<T extends Prisma.Subject$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subject$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1237,6 +1326,30 @@ export type Subject$enrollmentsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.EnrollmentScalarFieldEnum | Prisma.EnrollmentScalarFieldEnum[]
+}
+
+/**
+ * Subject.notes
+ */
+export type Subject$notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Note
+   */
+  select?: Prisma.NoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Note
+   */
+  omit?: Prisma.NoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoteInclude<ExtArgs> | null
+  where?: Prisma.NoteWhereInput
+  orderBy?: Prisma.NoteOrderByWithRelationInput | Prisma.NoteOrderByWithRelationInput[]
+  cursor?: Prisma.NoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NoteScalarFieldEnum | Prisma.NoteScalarFieldEnum[]
 }
 
 /**

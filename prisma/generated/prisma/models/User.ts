@@ -204,6 +204,7 @@ export type UserWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   twoFactorConfirmation?: Prisma.XOR<Prisma.TwoFactorConfirmationNullableScalarRelationFilter, Prisma.TwoFactorConfirmationWhereInput> | null
+  notes?: Prisma.NoteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -220,6 +221,7 @@ export type UserOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationOrderByWithRelationInput
+  notes?: Prisma.NoteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -239,6 +241,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   twoFactorConfirmation?: Prisma.XOR<Prisma.TwoFactorConfirmationNullableScalarRelationFilter, Prisma.TwoFactorConfirmationWhereInput> | null
+  notes?: Prisma.NoteListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -281,6 +284,7 @@ export type UserCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -297,6 +301,7 @@ export type UserUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -313,6 +318,7 @@ export type UserUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -329,6 +335,7 @@ export type UserUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -436,6 +443,20 @@ export type UserUpdateOneRequiredWithoutWorkloadsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkloadsInput, Prisma.UserUpdateWithoutWorkloadsInput>, Prisma.UserUncheckedUpdateWithoutWorkloadsInput>
 }
 
+export type UserCreateNestedOneWithoutNotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotesInput, Prisma.UserUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutNotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotesInput, Prisma.UserUncheckedCreateWithoutNotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotesInput
+  upsert?: Prisma.UserUpsertWithoutNotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotesInput, Prisma.UserUpdateWithoutNotesInput>, Prisma.UserUncheckedUpdateWithoutNotesInput>
+}
+
 export type UserCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
@@ -505,6 +526,7 @@ export type UserCreateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -520,6 +542,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -551,6 +574,7 @@ export type UserUpdateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -566,6 +590,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWorkloadsInput = {
@@ -581,6 +606,7 @@ export type UserCreateWithoutWorkloadsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkloadsInput = {
@@ -596,6 +622,7 @@ export type UserUncheckedCreateWithoutWorkloadsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkloadsInput = {
@@ -627,6 +654,7 @@ export type UserUpdateWithoutWorkloadsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkloadsInput = {
@@ -639,6 +667,87 @@ export type UserUncheckedUpdateWithoutWorkloadsInput = {
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutNotesInput = {
+  id?: string
+  name: string
+  username?: string | null
+  email: string
+  passwordHash?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
+  workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutNotesInput = {
+  id?: string
+  name: string
+  username?: string | null
+  email: string
+  passwordHash?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
+  workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutNotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotesInput, Prisma.UserUncheckedCreateWithoutNotesInput>
+}
+
+export type UserUpsertWithoutNotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotesInput, Prisma.UserUncheckedUpdateWithoutNotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotesInput, Prisma.UserUncheckedCreateWithoutNotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutNotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotesInput, Prisma.UserUncheckedUpdateWithoutNotesInput>
+}
+
+export type UserUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
+  workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutNotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
+  workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
@@ -657,6 +766,7 @@ export type UserCreateWithoutAccountsInput = {
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -672,6 +782,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -703,6 +814,7 @@ export type UserUpdateWithoutAccountsInput = {
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -718,6 +830,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSemestersInput = {
@@ -733,6 +846,7 @@ export type UserCreateWithoutSemestersInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSemestersInput = {
@@ -748,6 +862,7 @@ export type UserUncheckedCreateWithoutSemestersInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSemestersInput = {
@@ -779,6 +894,7 @@ export type UserUpdateWithoutSemestersInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSemestersInput = {
@@ -794,6 +910,7 @@ export type UserUncheckedUpdateWithoutSemestersInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
@@ -809,6 +926,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -824,6 +942,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -855,6 +974,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -870,6 +990,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTwoFactorConfirmationInput = {
@@ -885,6 +1006,7 @@ export type UserCreateWithoutTwoFactorConfirmationInput = {
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTwoFactorConfirmationInput = {
@@ -900,6 +1022,7 @@ export type UserUncheckedCreateWithoutTwoFactorConfirmationInput = {
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTwoFactorConfirmationInput = {
@@ -931,6 +1054,7 @@ export type UserUpdateWithoutTwoFactorConfirmationInput = {
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTwoFactorConfirmationInput = {
@@ -946,6 +1070,7 @@ export type UserUncheckedUpdateWithoutTwoFactorConfirmationInput = {
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -959,6 +1084,7 @@ export type UserCountOutputType = {
   workloads: number
   enrollments: number
   accounts: number
+  notes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -967,6 +1093,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   workloads?: boolean | UserCountOutputTypeCountWorkloadsArgs
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  notes?: boolean | UserCountOutputTypeCountNotesArgs
 }
 
 /**
@@ -1014,6 +1141,13 @@ export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.AccountWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NoteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1029,6 +1163,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   twoFactorConfirmation?: boolean | Prisma.User$twoFactorConfirmationArgs<ExtArgs>
+  notes?: boolean | Prisma.User$notesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1070,6 +1205,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   twoFactorConfirmation?: boolean | Prisma.User$twoFactorConfirmationArgs<ExtArgs>
+  notes?: boolean | Prisma.User$notesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1084,6 +1220,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     twoFactorConfirmation: Prisma.$TwoFactorConfirmationPayload<ExtArgs> | null
+    notes: Prisma.$NotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1493,6 +1630,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   twoFactorConfirmation<T extends Prisma.User$twoFactorConfirmationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$twoFactorConfirmationArgs<ExtArgs>>): Prisma.Prisma__TwoFactorConfirmationClient<runtime.Types.Result.GetResult<Prisma.$TwoFactorConfirmationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notes<T extends Prisma.User$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2053,6 +2191,30 @@ export type User$twoFactorConfirmationArgs<ExtArgs extends runtime.Types.Extensi
    */
   include?: Prisma.TwoFactorConfirmationInclude<ExtArgs> | null
   where?: Prisma.TwoFactorConfirmationWhereInput
+}
+
+/**
+ * User.notes
+ */
+export type User$notesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Note
+   */
+  select?: Prisma.NoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Note
+   */
+  omit?: Prisma.NoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NoteInclude<ExtArgs> | null
+  where?: Prisma.NoteWhereInput
+  orderBy?: Prisma.NoteOrderByWithRelationInput | Prisma.NoteOrderByWithRelationInput[]
+  cursor?: Prisma.NoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NoteScalarFieldEnum | Prisma.NoteScalarFieldEnum[]
 }
 
 /**

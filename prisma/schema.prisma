@@ -21,6 +21,7 @@ model User {
   enrollments           Enrollment[]
   accounts              Account[]
   twoFactorConfirmation TwoFactorConfirmation?
+  notes                 Note[]
 }
 
 model VerificationToken {
@@ -46,6 +47,19 @@ model Workload {
   completedHours Int
   userId         String
   user           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
 }
 
 model Account {
@@ -84,6 +98,7 @@ model Subject {
   code        String       @unique
   name        String
   enrollments Enrollment[]
+  notes       Note[]
 }
 
 model Enrollment {
@@ -100,19 +115,6 @@ model Enrollment {
   semester    Semester?     @relation(fields: [semesterId], references: [id])
 }
 
-enum SemesterStatus {
-  CONCLUIDO
-  CURSANDO
-  PENDENTE
-}
-
-enum SubjectStatus {
-  APROVADO
-  REPROVADO
-  CURSANDO
-  PENDENTE
-}
-
 model TwoFactorToken {
   id      String   @id @default(uuid())
   email   String
@@ -126,4 +128,17 @@ model TwoFactorConfirmation {
   id     String @id @default(uuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum SemesterStatus {
+  CONCLUIDO
+  CURSANDO
+  PENDENTE
+}
+
+enum SubjectStatus {
+  APROVADO
+  REPROVADO
+  CURSANDO
+  PENDENTE
 }

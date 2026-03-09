@@ -38,6 +38,11 @@ export type Session = Prisma.SessionModel
  */
 export type Workload = Prisma.WorkloadModel
 /**
+ * Model Note
+ * 
+ */
+export type Note = Prisma.NoteModel
+/**
  * Model Account
  * 
  */
