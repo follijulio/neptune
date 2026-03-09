@@ -6,6 +6,15 @@ import { NavBar } from "../../components/ui/nav-bar";
 import Cards from "../../components/ui/card";
 import Table from "../../components/ui/table";
 import { useDashboardData } from "../../hooks/dashboard/use-dashboard-data";
+import PdfUploader from "@/src/components/ui/pdf-uploader";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+} from "@/src/components/shadcn-ui/dialog";
+import { UploadCloud } from "lucide-react";
+import { Button } from "@/src/components/shadcn-ui/button";
 
 export default function DashboardClient({
   userId,
@@ -73,6 +82,23 @@ export default function DashboardClient({
       <NavBar profileImageUrl={"/placeholder-avatar.png"} />
 
       <section className="h-full w-full px-10 gap-10 flex flex-col">
+        <div className="flex items-center justify-between w-full">
+          <h2 className="text-2xl font-bold">Visão Geral</h2>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="gap-2 bg-[#121212] border-[#1A1A1A] hover:bg-[#1A1A1A] text-white hover:invert transition-all duration-300 hover:scale-105">
+                <UploadCloud className="h-4 w-4" />
+                <DialogTitle className="text-sm">
+                  Sincronizar Histórico
+                </DialogTitle>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-[#000000] border-[#1A1A1A] text-white max-w-3xl p-0 border-none">
+              <PdfUploader />
+            </DialogContent>
+          </Dialog>
+        </div>
         <div className="grid grid-cols-3 gap-10">
           <Cards.YieldCoefficient
             semesters={data.performanceChart}
@@ -105,6 +131,7 @@ export default function DashboardClient({
             isLoading={isLoading && loadingTarget === "curriculum"}
           />
         </div>
+        <PdfUploader />
       </section>
     </div>
   );

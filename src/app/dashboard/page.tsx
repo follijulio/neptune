@@ -1,24 +1,27 @@
-import { auth } from "@/src/auth";
 import { redirect } from "next/navigation";
+import { auth } from "@/src/auth";
 import DashboardClient from "./dashboard-client";
-import { Suspense } from "react";
+import { prisma } from "@/prisma/lib/prisma";
 
 export default async function DashboardPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/");
+    redirect("/auth");
+  }
+
+  const hasSemester = await prisma.semester.findFirst({
+    where: { userId: session.user.id },
+  });
+  const hasWorkload = await prisma.workload.findFirst({
+    where: { userId: session.user.id },
+  });
+
+  if (!hasSemester && !hasWorkload) {
+    redirect("/onboarding");
   }
 
   return (
-    <Suspense
-      fallback={
-        <div className="bg-black text-white min-h-screen flex items-center justify-center">
-          <p>Carregando dashboard seguro...</p>
-        </div>
-      }
-    >
-      <DashboardClient userId={session.user.id} userName={session.user.name} />
-    </Suspense>
+    <DashboardClient userId={session.user.id} userName={session.user.name} />
   );
 }

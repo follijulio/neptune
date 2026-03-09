@@ -40,8 +40,6 @@ export default function TwoFactorEmail({ token }: TwoFactorEmailProps) {
   );
 }
 
-// ⚠️ E-mails são chatos com CSS (alguns clientes bloqueiam Tailwind).
-// O padrão da indústria é usar objetos de estilo inline como estes:
 const main = {
   backgroundColor: "#000000",
   fontFamily:
@@ -59,7 +57,7 @@ const container = {
 };
 
 const h1 = {
-  color: "#007AFF", // Azul do Neptune
+  color: "#007AFF",
   fontSize: "28px",
   fontWeight: "bold",
   textAlign: "center" as const,

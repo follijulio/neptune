@@ -202,7 +202,7 @@ interface SubjectCardProps {
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
   const { subject_name, code, partial_grade } = subject;
-  const isFailing = partial_grade !== null && partial_grade <= PASSING_GRADE;
+  const isFailing = partial_grade !== null && partial_grade < PASSING_GRADE;
 
   const gradeColorClass = isFailing
     ? "bg-[#FF3B30]/20 text-[#FF3B30]"

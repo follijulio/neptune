@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "driver.js/dist/driver.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -123,4 +124,77 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+.driver-popover.driverjs-theme-dark {
+  background-color: #121212 !important;
+  border: 1px solid #1A1A1A !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.9) !important;
+  padding: 20px !important;
+}
+
+.driver-popover.driverjs-theme-dark * {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.driver-popover.driverjs-theme-dark .driver-popover-title {
+  color: #E0E0E0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.driver-popover.driverjs-theme-dark .driver-popover-description {
+  color: #888888 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+}
+
+.driver-popover.driverjs-theme-dark button {
+  background-color: #007AFF !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 8px 14px !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.driverjs-theme-dark button:hover {
+  background-color: #005bb5 !important;
+}
+
+.driver-popover.driverjs-theme-dark button.driver-popover-btn-disabled {
+  background-color: #1A1A1A !important;
+  color: #555555 !important;
+  cursor: not-allowed !important;
+}
+
+.driver-popover.driverjs-theme-dark .driver-popover-progress-text {
+  color: #555555 !important;
+  font-size: 0.85rem !important;
+}
+
+.driver-popover.driverjs-theme-dark .driver-popover-close-btn {
+  color: #888888 !important;
+  background: transparent !important; 
+  border: none !important;
+  font-size: 20px !important;
+  padding: 4px !important;
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.driver-popover.driverjs-theme-dark .driver-popover-close-btn:hover {
+  color: #FF3B30 !important;
+  background-color: transparent !important;
 }

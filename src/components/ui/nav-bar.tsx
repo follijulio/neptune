@@ -13,6 +13,7 @@ import jura from "@/src/assets/fonts/jura";
 import { LuLogOut } from "react-icons/lu";
 import { Button } from "../shadcn-ui/button";
 import { logoutAction } from "@/src/app/actions/auth-action";
+import PdfUploader from "./pdf-uploader";
 
 interface NavBarProps {
   profileImageUrl?: string;
@@ -41,6 +42,7 @@ export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   return (
     <nav className="h-20 w-full flex flex-row items-center justify-between px-10 border-b border-[#888888]">
       <Logo />
+
       <UserMenu profileImageUrl={profileImageUrl} />
     </nav>
   );
@@ -66,7 +68,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/change_infos">Mudar informações</Link>
+            <Link href="/settings">Mudar informações</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
