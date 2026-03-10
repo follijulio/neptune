@@ -57,7 +57,6 @@ export async function findNotesAction(userId: string) {
   return notes;
 }
 
-// todo: simplificar essa função, algo me diz que ela pode ser mais simples, por enquanto, ok. Mas quando for pra produção, é melhor otimizar isso
 export async function reorderNotesAction(orderedIds: string[]) {
   const session = await auth();
   if (!session?.user?.id) return { error: "sem autorização" };

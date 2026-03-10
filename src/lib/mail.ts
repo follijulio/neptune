@@ -9,9 +9,6 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerificationEmail(email: string, token: string) {
-  console.log("Enviando e-mail de verificação para:", email);
-  console.log("Token de verificação:", token);
-
   const mailOptions = {
     from: `"Netuno" <${process.env.EMAIL_USER}>`,
     to: email,

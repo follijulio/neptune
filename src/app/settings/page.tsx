@@ -27,7 +27,6 @@ import {
   DialogTitle,
 } from "@/src/components/shadcn-ui/dialog";
 import { Input } from "@/src/components/shadcn-ui/input";
-import MainLayout from "@/src/components/ui/main-layout";
 
 export default function SettingsClient({
   user,
@@ -124,7 +123,7 @@ export default function SettingsClient({
   }
 
   return (
-    <MainLayout>
+    <section>
       <main className="flex w-full justify-center">
         <div className="w-full max-w-3xl">
           <form onSubmit={handleUpdate} className="space-y-8">
@@ -345,6 +344,6 @@ export default function SettingsClient({
           </Dialog>
         </div>
       </main>
-    </MainLayout>
+    </section>
   );
 }

@@ -99,9 +99,9 @@ export async function registerAction(formData: FormData) {
         passwordHash: hashedPassword,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    
   } catch (dbError) {
-    return { error: "Erro ao salvar no banco de dados. Verifique o console." };
+    return { error: "Erro ao salvar no banco de dados. Verifique o console." + { dbError } };
   }
 
   try {

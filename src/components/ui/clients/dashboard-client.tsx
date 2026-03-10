@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useDashboardData } from "../../../hooks/dashboard/use-dashboard-data";
 import { Alert } from "../../shadcn-ui/alert";
 import Cards from "../card";
-import MainLayout from "../main-layout";
+import section from "../main-layout";
 import Table from "../table";
 
 import { Button } from "@/src/components/shadcn-ui/button";
@@ -40,7 +40,6 @@ export default function DashboardClient({
     if (count % 14 == 0) {
       alert("14 o melhor número de todos!");
     }
-    console.log("Easter Egg Count:", count);
     setCoount(count + 1);
   };
   useEffect(() => {
@@ -64,7 +63,7 @@ export default function DashboardClient({
 
   if (isLoading && !data) {
     return (
-      <MainLayout>
+      <section>
         <section className="flex h-full w-full animate-pulse flex-col gap-10 px-10">
           <div className="flex w-full items-center justify-between">
             <div className="h-8 w-48 rounded bg-zinc-800 bg-linear-to-l" />
@@ -84,13 +83,13 @@ export default function DashboardClient({
             <div className="h-64 rounded-lg border border-zinc-800 bg-zinc-900" />
           </div>
         </section>
-      </MainLayout>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <MainLayout>
+      <section>
         <div className="flex h-full w-full items-center justify-center bg-black p-4 text-white">
           <Alert
             variant="destructive"
@@ -124,14 +123,14 @@ export default function DashboardClient({
             </div>
           </Alert>
         </div>
-      </MainLayout>
+      </section>
     );
   }
 
   if (!data) return null;
 
   return (
-    <MainLayout>
+    <section>
       <section className="flex h-full w-full flex-col gap-10 px-10">
         <div className="flex w-full items-center justify-between">
           <h2 className="text-2xl font-bold">
@@ -180,7 +179,10 @@ export default function DashboardClient({
 
         <div className="flex flex-col gap-10">
           <Table.CourseStatus
-            courses={data.enrolledCourses}
+            courses={data.enrolledCourses.map((course) => ({
+              ...course,
+              subjectId: course.subjectId,
+            }))}
             isLoading={isLoading && loadingTarget === "semester"}
           />
 
@@ -191,6 +193,6 @@ export default function DashboardClient({
         </div>
         <PdfUploader />
       </section>
-    </MainLayout>
+    </section>
   );
 }

@@ -16,7 +16,6 @@ export async function createFullCalendarEventAction(data: {
   if (!session?.user?.id) return { error: "Não autorizado" };
 
   try {
-    // banco
     const newEvent = await prisma.calendarEvent.create({
       data: {
         title: data.title,
@@ -26,7 +25,6 @@ export async function createFullCalendarEventAction(data: {
       },
     });
 
-    // se tiver google adiciona, senão, só banco
     if (session.accessToken) {
       const startDate = new Date(data.date);
       const endDate = new Date(startDate);

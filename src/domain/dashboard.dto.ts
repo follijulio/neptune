@@ -36,6 +36,7 @@ export interface DashboardDataResponse {
     }>;
     enrolledCourses: Array<{
       id: string;
+      subjectId: string;
       subject_name: string;
       code: string;
       status: string;

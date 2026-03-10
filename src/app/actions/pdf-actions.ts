@@ -3,7 +3,6 @@
 import Groq from "groq-sdk";
 import PDFParser from "pdf2json";
 
-import { SemesterStatus, SubjectStatus } from "@/prisma/generated/prisma/enums";
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
@@ -84,139 +83,241 @@ export async function parseAcademicHistoryAction(formData: FormData) {
   }
 }
 
-//todo: essa função realmente precisa ser otimizada - abrir uma issue depois
-export async function saveExtractedSubjectsAction(subjects: ParsedSubject[]) {
+
+type SubjectStatus = "PENDENTE" | "APROVADO" | "REPROVADO" | "CURSANDO";
+type SemesterStatus = "CONCLUIDO" | "CURSANDO";
+
+interface SemesterData {
+  totalScore: number;
+  totalHours: number;
+  status: SemesterStatus;
+}
+
+interface ActionResult {
+  success?: boolean;
+  error?: string;
+}
+
+export async function saveExtractedSubjectsAction(
+  subjects: ParsedSubject[],
+): Promise<ActionResult> {
   try {
-    const session = await auth();
-    if (!session?.user?.id) return { error: "Usuário não autenticado." };
-    const userId = session.user.id;
+    const userId = await getUserId();
+    if (!userId) return { error: "Usuário não autenticado." };
 
-    let totalCompletedHours = 0;
-    const semesterData: Record<
-      string,
-      { totalScore: number; totalHours: number; status: SemesterStatus }
-    > = {};
+    const { totalCompletedHours, semesterDataMap } = await processSubjects(
+      subjects,
+      userId,
+    );
 
-    for (let i = 0; i < subjects.length; i++) {
-      const sub = subjects[i];
-      console.log(`Processando disciplina ${i + 1}/${subjects.length}:`, sub);
-      let finalStatus: SubjectStatus = "PENDENTE";
-      const s = sub.status?.toUpperCase() || "";
-      if (s.includes("APROV")) finalStatus = "APROVADO";
-      else if (s.includes("REP")) finalStatus = "REPROVADO";
-      else if (s.includes("CURS")) finalStatus = "CURSANDO";
-
-      let finalGrade = null;
-      if (sub.grade) {
-        const parsed = parseFloat(sub.grade.replace(",", "."));
-        if (!isNaN(parsed)) finalGrade = parsed;
-      }
-
-      const hours = sub.hours ? parseInt(String(sub.hours), 10) : 60; // Padrão 60h se o PDF falhar
-      if (finalStatus === "APROVADO" && !isNaN(hours)) {
-        totalCompletedHours += hours;
-      }
-
-      let semesterId = null;
-      if (sub.semester) {
-        const period = sub.semester.trim();
-
-        if (!semesterData[period]) {
-          semesterData[period] = {
-            totalScore: 0,
-            totalHours: 0,
-            status: "CONCLUIDO",
-          };
-        }
-
-        if (finalStatus === "CURSANDO" || finalStatus === "PENDENTE") {
-          semesterData[period].status = "CURSANDO";
-        }
-
-        if (
-          finalGrade !== null &&
-          !isNaN(hours) &&
-          hours > 0 &&
-          finalStatus !== "CURSANDO"
-        ) {
-          semesterData[period].totalScore += finalGrade * hours;
-          semesterData[period].totalHours += hours;
-        }
-
-        const semesterRecord = await prisma.semester.findFirst({
-          where: { userId, title: period },
-        });
-
-        if (semesterRecord) {
-          semesterId = semesterRecord.id;
-        } else {
-          const newSemester = await prisma.semester.create({
-            data: { userId, title: period },
-          });
-          semesterId = newSemester.id;
-        }
-      }
-
-      // CORREÇÃO 3: Buscar pelo NOME em vez de tentar usar upsert com CODE
-      let subject = await prisma.subject.findFirst({
-        where: {
-          name: sub.name.trim(),
-          semesterId: semesterId as string,
-        },
-      });
-
-      // Se a disciplina ainda não existe neste semestre, nós a criamos!
-      if (!subject) {
-        subject = await prisma.subject.create({
-          data: {
-            name: sub.name.trim(),
-            workload: hours,
-            maxAbsences: Math.floor(hours * 0.25),
-            semesterId: semesterId as string,
-          },
-        });
-      }
-
-      // Mantemos a criação na tabela Enrollment (pois o seu banco de dados atual a utiliza)
-      await prisma.enrollment.create({
-        data: {
-          userId,
-          status: finalStatus,
-          grade: finalGrade,
-          subjectId: subject.id,
-          semesterId: semesterId as string,
-        },
-      });
-    }
-
-    if (totalCompletedHours > 0) {
-      const existingWorkload = await prisma.workload.findFirst({
-        where: { userId, category: "Obrigatórias" },
-      });
-
-      if (existingWorkload) {
-        await prisma.workload.update({
-          where: { id: existingWorkload.id },
-          data: {
-            completedHours:
-              existingWorkload.completedHours + totalCompletedHours,
-          },
-        });
-      } else {
-        await prisma.workload.create({
-          data: {
-            userId,
-            category: "Obrigatórias",
-            totalHours: 3200,
-            completedHours: totalCompletedHours,
-          },
-        });
-      }
-    }
+    await updateWorkload(userId, totalCompletedHours);
 
     return { success: true };
   } catch (error) {
     console.error("ERRO:", error);
     return { error: String(error) };
+  }
+}
+
+async function getUserId(): Promise<string | null> {
+  const session = await auth();
+  return session?.user?.id || null;
+}
+
+async function processSubjects(
+  subjects: ParsedSubject[],
+  userId: string,
+): Promise<{
+  totalCompletedHours: number;
+  semesterDataMap: Record<string, SemesterData>;
+}> {
+  let totalCompletedHours = 0;
+  const semesterDataMap: Record<string, SemesterData> = {};
+
+  for (const subject of subjects) {
+    const status = parseSubjectStatus(subject.status);
+    const grade = parseGrade(subject.grade);
+    const hours = parseHours(subject.hours);
+
+    if (status === "APROVADO" && hours > 0) {
+      totalCompletedHours += hours;
+    }
+
+    const semesterId = await handleSemester(
+      subject.semester,
+      userId,
+      semesterDataMap,
+      status,
+      grade,
+      hours,
+    );
+
+    const subjectRecord = await findOrCreateSubject(
+      subject.name.trim(),
+      hours,
+      semesterId,
+    );
+
+    await createEnrollment(userId, status, grade, subjectRecord.id, semesterId);
+  }
+
+  return { totalCompletedHours, semesterDataMap };
+}
+
+function parseSubjectStatus(status?: string): SubjectStatus {
+  const normalized = status?.toUpperCase() || "";
+
+  if (normalized.includes("APROV")) return "APROVADO";
+  if (normalized.includes("REP")) return "REPROVADO";
+  if (normalized.includes("CURS")) return "CURSANDO";
+
+  return "PENDENTE";
+}
+
+function parseGrade(grade?: string): number | null {
+  if (!grade) return null;
+
+  const parsed = parseFloat(grade.replace(",", "."));
+  return isNaN(parsed) ? null : parsed;
+}
+
+function parseHours(hours?: number | string): number {
+  if (!hours) return 60;
+
+  const parsed = parseInt(String(hours), 10);
+  return isNaN(parsed) ? 60 : parsed;
+}
+
+async function handleSemester(
+  semester: string | undefined,
+  userId: string,
+  semesterDataMap: Record<string, SemesterData>,
+  status: SubjectStatus,
+  grade: number | null,
+  hours: number,
+): Promise<string | null> {
+  if (!semester) return null;
+
+  const period = semester.trim();
+
+  updateSemesterData(semesterDataMap, period, status, grade, hours);
+
+  return await findOrCreateSemester(userId, period);
+}
+
+function updateSemesterData(
+  semesterDataMap: Record<string, SemesterData>,
+  period: string,
+  status: SubjectStatus,
+  grade: number | null,
+  hours: number,
+): void {
+  if (!semesterDataMap[period]) {
+    semesterDataMap[period] = {
+      totalScore: 0,
+      totalHours: 0,
+      status: "CONCLUIDO",
+    };
+  }
+
+  if (status === "CURSANDO" || status === "PENDENTE") {
+    semesterDataMap[period].status = "CURSANDO";
+  }
+
+  if (grade !== null && hours > 0 && status !== "CURSANDO") {
+    semesterDataMap[period].totalScore += grade * hours;
+    semesterDataMap[period].totalHours += hours;
+  }
+}
+
+async function findOrCreateSemester(
+  userId: string,
+  period: string,
+): Promise<string> {
+  const existingSemester = await prisma.semester.findFirst({
+    where: { userId, title: period },
+  });
+
+  if (existingSemester) {
+    return existingSemester.id;
+  }
+
+  const newSemester = await prisma.semester.create({
+    data: { userId, title: period },
+  });
+
+  return newSemester.id;
+}
+
+async function findOrCreateSubject(
+  name: string,
+  hours: number,
+  semesterId: string | null,
+) {
+  const existingSubject = await prisma.subject.findFirst({
+    where: {
+      name,
+      semesterId: semesterId as string,
+    },
+  });
+
+  if (existingSubject) {
+    return existingSubject;
+  }
+
+  return await prisma.subject.create({
+    data: {
+      name,
+      workload: hours,
+      maxAbsences: Math.floor(hours * 0.25),
+      semesterId: semesterId as string,
+    },
+  });
+}
+
+async function createEnrollment(
+  userId: string,
+  status: SubjectStatus,
+  grade: number | null,
+  subjectId: string,
+  semesterId: string | null,
+): Promise<void> {
+  await prisma.enrollment.create({
+    data: {
+      userId,
+      status,
+      grade,
+      subjectId,
+      semesterId: semesterId as string,
+    },
+  });
+}
+
+async function updateWorkload(
+  userId: string,
+  totalCompletedHours: number,
+): Promise<void> {
+  if (totalCompletedHours <= 0) return;
+
+  const existingWorkload = await prisma.workload.findFirst({
+    where: { userId, category: "Obrigatórias" },
+  });
+
+  if (existingWorkload) {
+    await prisma.workload.update({
+      where: { id: existingWorkload.id },
+      data: {
+        completedHours: existingWorkload.completedHours + totalCompletedHours,
+      },
+    });
+  } else {
+    await prisma.workload.create({
+      data: {
+        userId,
+        category: "Obrigatórias",
+        totalHours: 3200,
+        completedHours: totalCompletedHours,
+      },
+    });
   }
 }

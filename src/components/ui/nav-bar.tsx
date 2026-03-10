@@ -73,7 +73,7 @@ const PublicNavBar = () => (
 );
 
 const PrivateNavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => (
-  <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
+  <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md ">
     <section className="flex w-full justify-start">
       <Logo />
     </section>

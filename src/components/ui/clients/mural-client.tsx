@@ -207,7 +207,7 @@ export default function MuralClient({
   }
 
   return (
-    <MainLayout>
+    <section>
       <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
@@ -304,6 +304,6 @@ export default function MuralClient({
           </SortableContext>
         </DndContext>
       )}
-    </MainLayout>
+    </section>
   );
 }

@@ -100,7 +100,7 @@ export default function LinksClient({
   }
 
   return (
-    <MainLayout>
+    <section>
       <div className="w-full">
         <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -223,6 +223,6 @@ export default function LinksClient({
           </div>
         )}
       </div>
-    </MainLayout>
+    </section>
   );
 }

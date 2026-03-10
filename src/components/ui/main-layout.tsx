@@ -6,12 +6,12 @@ interface MainLayoutProps {
 }
 
 const MainLayoutContent = ({ children }: MainLayoutProps) => {
-  return <main className="flex-1 px-4">{children}</main>;
+  return <main className="h-full w-full flex-1 px-4 overflow-scroll">{children}</main>;
 };
 
 const MainLayoutContainer = ({ children }: MainLayoutProps) => {
   return (
-    <div className="flex min-h-screen w-screen flex-col gap-4 bg-black py-2 text-white">
+    <div className="flex h-screen w-screen flex-col gap-4 bg-black py-2 text-white">
       {children}
     </div>
   );

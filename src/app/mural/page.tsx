@@ -5,7 +5,7 @@ import { findNotesAction } from "../actions/notes-actions";
 import { auth } from "@/src/auth";
 import MuralClient from "@/src/components/ui/clients/mural-client";
 
-export default async function MuralPage() {
+export default async function Page() {
   const session = await auth();
 
   if (!session?.user?.id) {

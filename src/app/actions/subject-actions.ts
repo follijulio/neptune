@@ -18,7 +18,6 @@ export async function updateSubjectGradesAction(
   if (!session?.user?.id) return { error: "Não autorizado" };
 
   try {
-    // Garante que a disciplina pertence ao semestre do usuário atual
     const subject = await prisma.subject.findUnique({
       where: { id: subjectId },
       include: { semester: true },
@@ -53,19 +52,31 @@ export async function updateSubjectAbsencesAction(
   const session = await auth();
   if (!session?.user?.id) return { error: "Não autorizado" };
 
+  if (!subjectId) {
+    console.error("ERRO: Tentativa de atualizar faltas sem subjectId!");
+    return { error: "ID da disciplina não fornecido." };
+  }
+
   try {
+    const has = await prisma.subject.findFirst({
+      where: { id: subjectId, semester: { userId: session.user.id } },
+    });
+    const hasEnrollment = await prisma.enrollment.findFirst({
+      where: { id: subjectId },
+    });
     await prisma.subject.update({
       where: { id: subjectId },
       data: { currentAbsences: absences },
     });
 
+    revalidatePath("/dashboard");
     revalidatePath("/semester");
-    return { success: "Faltas atualizadas!" };
-  } catch {
-    return { error: "Falha ao atualizar faltas." };
+    return { success: true };
+  } catch (error: any) {
+    console.error("ERRO PRISMA:", error.message);
+    return { error: "Erro no banco de dados ao salvar faltas." };
   }
 }
-
 export async function createSubjectAction(data: {
   name: string;
   workload: number;
@@ -99,14 +110,18 @@ export async function deleteSubjectAction(subjectId: string) {
   if (!session?.user?.id) return { error: "Não autorizado" };
 
   try {
-    await prisma.subject.delete({
-      where: { id: subjectId },
-    });
+    await prisma.$transaction([
+      prisma.enrollment.deleteMany({ where: { subjectId } }),
+      prisma.subject.delete({ where: { id: subjectId } }),
+    ]);
 
     revalidatePath("/semester");
-    return { success: "Disciplina apagada com sucesso!" };
+    revalidatePath("/dashboard");
+    return { success: "Disciplina eliminada!" };
   } catch (error) {
-    console.error("Erro ao apagar disciplina:", error);
-    return { error: "Falha ao apagar a disciplina." };
+    console.error("Erro ao deletar:", error);
+    return {
+      error: "Não foi possível apagar. Verifique se há dados dependentes.",
+    };
   }
 }

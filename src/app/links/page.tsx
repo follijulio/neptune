@@ -4,7 +4,7 @@ import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import LinksClient from "@/src/components/ui/clients/link-client";
 
-export default async function LinksPage() {
+export default async function Page() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 

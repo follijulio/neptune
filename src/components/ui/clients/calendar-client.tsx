@@ -50,7 +50,6 @@ type CalendarEvent = {
   date: Date | string;
 };
 
-// ==================== Componente: MonthNavigator ====================
 function MonthNavigator({
   currentMonth,
   onPrevMonth,
@@ -83,7 +82,6 @@ function MonthNavigator({
   );
 }
 
-// ==================== Componente: CalendarDay ====================
 function CalendarDay({
   day,
   dayEvents,
@@ -131,7 +129,6 @@ function CalendarDay({
   );
 }
 
-// ==================== Componente: CalendarGrid ====================
 function CalendarGrid({
   calendarDays,
   currentMonth,
@@ -184,7 +181,6 @@ function CalendarGrid({
   );
 }
 
-// ==================== Componente: UpcomingEventsList ====================
 function UpcomingEventsList({
   events,
   onEventClick,
@@ -333,7 +329,6 @@ function CreateEventModal({
   );
 }
 
-// ==================== Componente: EventDetailsModal ====================
 function EventDetailsModal({
   isOpen,
   event,
@@ -422,7 +417,6 @@ function EventDetailsModal({
   );
 }
 
-// ==================== Componente Principal ====================
 export default function CalendarClient({
   initialEvents = [],
 }: {
@@ -517,7 +511,7 @@ export default function CalendarClient({
   }
 
   return (
-    <MainLayout>
+    <section>
       <header className="mb-2 flex justify-between border-[#1A1A1A] px-4">
         <MonthNavigator
           currentMonth={currentMonth}
@@ -564,6 +558,6 @@ export default function CalendarClient({
         onDelete={handleDeleteEvent}
         isDeleting={isDeleting}
       />
-    </MainLayout>
+    </section>
   );
 }

@@ -29,7 +29,7 @@ import { Label } from "@/src/components/shadcn-ui/label";
 
 type AuthView = "login" | "register";
 
-export default function AuthPage() {
+export default function Page() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined | null>("");
 
@@ -152,7 +152,6 @@ export default function AuthPage() {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                {/* TODO: transfomar em componente depois */}
                 {showTwoFactor ? (
                   <form onSubmit={handleLogin} className="space-y-6">
                     <input type="hidden" name="email" value={email} />

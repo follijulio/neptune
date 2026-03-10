@@ -14,7 +14,6 @@ import {
 import Link from "next/link";
 
 import { Button } from "../components/shadcn-ui/button";
-import { Logo } from "../components/ui/nav-bar";
 
 const features = [
   {
@@ -99,30 +98,6 @@ const benefits = [
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
-      <header className="sticky top-0 z-50 w-full border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <Logo />
-          </div>
-
-          <nav className="flex items-center gap-4">
-            <Link href="/login">
-              <Button
-                variant="ghost"
-                className="text-[#888888] hover:bg-[#121212] hover:text-[#E0E0E0]"
-              >
-                Entrar
-              </Button>
-            </Link>
-            <Link href="/login?tab=register">
-              <Button className="bg-[#E0E0E0] font-semibold text-[#000000] hover:bg-[#CCCCCC]">
-                Começar agora
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
       <main className="flex flex-1 flex-col items-center">
         <section className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 px-6 py-24 text-center lg:py-40">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-sm font-medium text-[#007AFF]">
@@ -258,12 +233,8 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              {steps.map((step, index) => (
+              {steps.map((step) => (
                 <div key={step.number} className="relative flex flex-col gap-4">
-                  {index < steps.length - 1 && (
-                    <div className="absolute top-12 left-[calc(100%)] hidden h-[2px] w-full bg-gradient-to-r from-[#007AFF]/50 to-transparent md:block" />
-                  )}
-
                   <div className="flex items-center gap-4">
                     <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-[#007AFF]/30 bg-[#007AFF]/10 text-2xl font-bold text-[#007AFF]">
                       {step.number}

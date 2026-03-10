@@ -4,20 +4,17 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
+import { sendVerificationEmail } from "@/src/lib/mail";
+import { generateTwoFactorToken } from "@/src/lib/tokens";
 
 export async function sendSettings2FACodeAction() {
   const session = await auth();
   if (!session?.user?.id || !session.user.email)
     return { error: "Não autorizado" };
 
-  // TODO: precisa ser implementado o envio real do código por email... (esqueci rsrs)
   try {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    // TODO: alterar pra 5 minutos, mas por enquanto - até terminar o calendar - vou deixar 15 minutos pra facilitar os testes
-    // const expiresIn = 15 * 60 * 1000; // 15 minutos
-    // const expires = new Date(new Date().getTime() + expiresIn);
-
-    console.log(`CÓDIGO 2FA GERADO PARA ${session.user.email}: ${code}`);
+    const twoFactorToken = await generateTwoFactorToken(session.user.email);
+    await sendVerificationEmail(twoFactorToken.email, twoFactorToken.token);
     return { success: "Código enviado para o seu e-mail!" };
   } catch {
     return { error: "Erro ao gerar o código 2FA." };

@@ -19,6 +19,7 @@ interface CourseDrawerActionProps {
 }
 
 const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
+  //todo: implementar ações reais aqui, como editar status, adicionar notas, etc.
   const handleUpdate = () => {
     console.log("Update course:", course.code);
   };

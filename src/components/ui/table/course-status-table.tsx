@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCircle } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { LuBookMarked } from "react-icons/lu";
@@ -18,12 +18,13 @@ import {
 import { AbsenceCell } from "./absence-cell";
 import DrawerAction from "./drawer-action-table";
 
-import { useEnrollmentUpdate } from "@/src/hooks/enrollment/use-enrollment-update";
+import { updateSubjectAbsencesAction } from "@/src/app/actions/subject-actions";
 import { useFilterParam } from "@/src/hooks/useFilterParam";
 import { cn } from "@/src/lib/utils";
 
 export interface CourseStatusCardProps {
   id: string;
+  subjectId: string;
   subject_name: string;
   code: string;
   status: string;
@@ -106,23 +107,19 @@ const CourseRowSkeleton = () => (
         </div>
       </div>
     </TableCell>
-
     <TableCell>
       <div className="flex items-center gap-2">
         <div className="h-3 w-3 animate-pulse rounded-full bg-white/10" />
         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
       </div>
     </TableCell>
-
     <TableCell className="flex h-full items-center gap-4">
       <div className="h-2 w-24 animate-pulse rounded-full bg-white/10" />
       <div className="h-4 w-8 animate-pulse rounded bg-white/10" />
     </TableCell>
-
     <TableCell>
       <div className="h-4 w-8 animate-pulse rounded bg-white/10" />
     </TableCell>
-
     <TableCell className="text-right">
       <div className="ml-auto h-6 w-6 animate-pulse rounded-full bg-white/10" />
     </TableCell>
@@ -130,8 +127,6 @@ const CourseRowSkeleton = () => (
 );
 
 const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
-  const { execute: updateEnrollment } = useEnrollmentUpdate();
-
   const [localAbsences, setLocalAbsences] = useState(course.absences ?? 0);
   const [localMaxAbsences, setLocalMaxAbsences] = useState(
     course.maxAbsences ?? 18,
@@ -142,32 +137,22 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
     maxAbsences?: number;
   }) => {
     const previousAbsences = localAbsences;
-    const previousMaxAbsences = localMaxAbsences;
-
     const newAbsences =
       changes.absences !== undefined ? changes.absences : localAbsences;
-    const newMaxAbsences =
-      changes.maxAbsences !== undefined
-        ? changes.maxAbsences
-        : localMaxAbsences;
 
     setLocalAbsences(newAbsences);
-    setLocalMaxAbsences(newMaxAbsences);
 
     try {
-      const result = await updateEnrollment({
-        id: course.id,
-        absences: newAbsences,
-        maxAbsences: newMaxAbsences,
-      });
-
-      if (!result.success) {
-        throw new Error(result.error);
+      if (changes.absences !== undefined) {
+        const result = await updateSubjectAbsencesAction(
+          course.subjectId,
+          newAbsences,
+        );
+        if (result?.error) throw new Error(result.error);
       }
     } catch (error) {
       console.error("Falha ao salvar faltas:", error);
       setLocalAbsences(previousAbsences);
-      setLocalMaxAbsences(previousMaxAbsences);
     }
   };
 
@@ -179,10 +164,10 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
           <div className="ml-4">
             <p className="text-base font-semibold">{course.subject_name}</p>
             <p
-              className={
-                (cn("text-sm font-light text-[#888888]"),
-                course.code === "N/A" ? "text-xs font-thin italic" : "")
-              }
+              className={cn(
+                "text-sm font-light text-[#888888]",
+                course.code === "N/A" ? "text-xs font-thin italic" : "",
+              )}
             >
               {course.code}
             </p>
@@ -233,7 +218,6 @@ const CoursesTable: React.FC<{
         <TableHead className="text-right">AÇÃO</TableHead>
       </TableRow>
     </TableHeader>
-
     <TableBody>
       {isLoading ? (
         Array.from({ length: 3 }).map((_, idx) => (
@@ -263,6 +247,13 @@ const CourseStatusTable: React.FC<{
       toggle: false,
     },
   );
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.get("semester")) {
+      setSemester(getCurrentSemester());
+    }
+  }, [setSemester]);
 
   const handleSemesterNavigation = (direction: "next" | "previous") => {
     const nextSemester = navigateSemester(
