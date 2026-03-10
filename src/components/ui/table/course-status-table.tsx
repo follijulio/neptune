@@ -178,7 +178,14 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
           <LuBookMarked className="text-lg text-[#888888]" />
           <div className="ml-4">
             <p className="text-base font-semibold">{course.subject_name}</p>
-            <p className="text-sm font-light text-[#888888]">{course.code}</p>
+            <p
+              className={
+                (cn("text-sm font-light text-[#888888]"),
+                course.code === "N/A" ? "text-xs font-thin italic" : "")
+              }
+            >
+              {course.code}
+            </p>
           </div>
         </div>
       </TableCell>
@@ -239,7 +246,7 @@ const CoursesTable: React.FC<{
           </TableCell>
         </TableRow>
       ) : (
-        courses.map((course) => <CourseRow key={course.code} course={course} />)
+        courses.map((course, i) => <CourseRow key={i} course={course} />)
       )}
     </TableBody>
   </Table>

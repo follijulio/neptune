@@ -61,7 +61,52 @@ export async function updateSubjectAbsencesAction(
 
     revalidatePath("/semester");
     return { success: "Faltas atualizadas!" };
-  } catch (error) {
+  } catch {
     return { error: "Falha ao atualizar faltas." };
+  }
+}
+
+export async function createSubjectAction(data: {
+  name: string;
+  workload: number;
+  semesterId: string;
+}) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    const maxAbsences = Math.floor(data.workload * 0.25);
+
+    await prisma.subject.create({
+      data: {
+        name: data.name,
+        workload: data.workload,
+        maxAbsences,
+        semesterId: data.semesterId,
+      },
+    });
+
+    revalidatePath("/semester");
+    return { success: "Disciplina adicionada com sucesso!" };
+  } catch (error) {
+    console.error("Erro ao criar disciplina:", error);
+    return { error: "Falha ao adicionar a disciplina." };
+  }
+}
+
+export async function deleteSubjectAction(subjectId: string) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    await prisma.subject.delete({
+      where: { id: subjectId },
+    });
+
+    revalidatePath("/semester");
+    return { success: "Disciplina apagada com sucesso!" };
+  } catch (error) {
+    console.error("Erro ao apagar disciplina:", error);
+    return { error: "Falha ao apagar a disciplina." };
   }
 }

@@ -97,11 +97,9 @@ export async function saveExtractedSubjectsAction(subjects: ParsedSubject[]) {
       { totalScore: number; totalHours: number; status: SemesterStatus }
     > = {};
 
-    for (const sub of subjects) {
-      const subjectCode =
-        sub.code?.trim() ||
-        `GEN-${Buffer.from(sub.name).toString("base64").substring(0, 8).toUpperCase()}`;
-
+    for (let i = 0; i < subjects.length; i++) {
+      const sub = subjects[i];
+      console.log(`Processando disciplina ${i + 1}/${subjects.length}:`, sub);
       let finalStatus: SubjectStatus = "PENDENTE";
       const s = sub.status?.toUpperCase() || "";
       if (s.includes("APROV")) finalStatus = "APROVADO";
@@ -114,7 +112,7 @@ export async function saveExtractedSubjectsAction(subjects: ParsedSubject[]) {
         if (!isNaN(parsed)) finalGrade = parsed;
       }
 
-      const hours = sub.hours ? parseInt(String(sub.hours), 10) : 0;
+      const hours = sub.hours ? parseInt(String(sub.hours), 10) : 60; // Padrão 60h se o PDF falhar
       if (finalStatus === "APROVADO" && !isNaN(hours)) {
         totalCompletedHours += hours;
       }
@@ -146,55 +144,49 @@ export async function saveExtractedSubjectsAction(subjects: ParsedSubject[]) {
         }
 
         const semesterRecord = await prisma.semester.findFirst({
-          where: { userId, period },
+          where: { userId, title: period },
         });
 
         if (semesterRecord) {
           semesterId = semesterRecord.id;
         } else {
           const newSemester = await prisma.semester.create({
-            data: { userId, period, status: "PENDENTE" },
+            data: { userId, title: period },
           });
           semesterId = newSemester.id;
         }
       }
 
-      const subject = await prisma.subject.upsert({
-        where: { code: subjectCode },
-        update: {},
-        create: { code: subjectCode, name: sub.name.trim() },
+      // CORREÇÃO 3: Buscar pelo NOME em vez de tentar usar upsert com CODE
+      let subject = await prisma.subject.findFirst({
+        where: {
+          name: sub.name.trim(),
+          semesterId: semesterId as string,
+        },
       });
 
+      // Se a disciplina ainda não existe neste semestre, nós a criamos!
+      if (!subject) {
+        subject = await prisma.subject.create({
+          data: {
+            name: sub.name.trim(),
+            workload: hours,
+            maxAbsences: Math.floor(hours * 0.25),
+            semesterId: semesterId as string,
+          },
+        });
+      }
+
+      // Mantemos a criação na tabela Enrollment (pois o seu banco de dados atual a utiliza)
       await prisma.enrollment.create({
         data: {
           userId,
           status: finalStatus,
           grade: finalGrade,
           subjectId: subject.id,
-          semesterId,
+          semesterId: semesterId as string,
         },
       });
-    }
-
-    for (const [period, data] of Object.entries(semesterData)) {
-      let cr = null;
-      if (data.totalHours > 0) {
-        cr = parseFloat((data.totalScore / data.totalHours).toFixed(2));
-      }
-
-      const semesterRecord = await prisma.semester.findFirst({
-        where: { userId, period },
-      });
-
-      if (semesterRecord) {
-        await prisma.semester.update({
-          where: { id: semesterRecord.id },
-          data: {
-            status: data.status,
-            yieldCoefficient: cr,
-          },
-        });
-      }
     }
 
     if (totalCompletedHours > 0) {

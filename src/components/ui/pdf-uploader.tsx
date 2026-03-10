@@ -145,7 +145,7 @@ export default function PdfUploader() {
             {isLoading ? "Analisando o documento..." : "Analisar Documento"}
           </Button>
           {isLoading && (
-            <Alert className="mt-2 w-full rounded-xl border-[#1A1A1A] bg-[#0B0B0B]/80 px-4 py-3 backdrop-blur-sm">
+            <Alert className="mt-2 flex w-full rounded-xl border-[#1A1A1A] bg-[#0B0B0B]/80 px-4 py-3 backdrop-blur-sm">
               <div className="flex items-start gap-3">
                 <span className="mt-1 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-[#007AFF]" />
                 <div className="w-full">

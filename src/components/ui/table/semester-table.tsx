@@ -187,8 +187,8 @@ const SemesterAccordion: React.FC<{ semesters: Semester[] }> = ({
               </span>
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-4 gap-4 border-t border-white/15 pt-4 pb-2 leading-relaxed text-gray-300">
-              {semester.data.map((subject) => (
-                <SubjectCard key={subject.code} subject={subject} />
+              {semester.data.map((subject, i) => (
+                <SubjectCard key={i} subject={subject} />
               ))}
             </AccordionContent>
           </AccordionItem>
@@ -222,7 +222,14 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
           >
             {subject_name}
           </h3>
-          <p className="text-sm text-white/60">{code}</p>
+          <p
+            className={
+              (cn("text-sm text-white/60"),
+              code === "N/A" ? "text-xs font-thin italic" : "")
+            }
+          >
+            {code}
+          </p>
         </section>
         <section className="mt-4 flex flex-row gap-4 font-bold">
           <SubjectLink

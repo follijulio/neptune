@@ -31,14 +31,21 @@ const NAV_ITEMS = [
   { label: "Calendário", href: "/calendar" },
   { label: "Links", href: "/links" },
   { label: "Configurações", href: "/settings" },
+  { label: "Semestre", href: "/semester" },
 ];
 
 export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   return (
-    <nav className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
-      <Logo />
-      <NavLinks />
-      <UserMenu profileImageUrl={profileImageUrl} />
+    <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
+      <section className="flex w-full justify-start">
+        <Logo />
+      </section>
+      <section className="flex w-full justify-center">
+        <NavLinks />
+      </section>
+      <section className="flex w-full justify-end">
+        <UserMenu profileImageUrl={profileImageUrl} />
+      </section>
     </nav>
   );
 };
