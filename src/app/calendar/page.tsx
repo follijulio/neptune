@@ -8,7 +8,7 @@ export default async function CalendarPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/auth");
+    redirect("/login");
   }
 
   const events = await prisma.calendarEvent.findMany({

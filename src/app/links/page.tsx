@@ -6,7 +6,7 @@ import LinksClient from "@/src/components/ui/clients/link-client";
 
 export default async function LinksPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/auth");
+  if (!session?.user?.id) redirect("/login");
 
   const links = await prisma.link.findMany({
     where: { userId: session.user.id },
