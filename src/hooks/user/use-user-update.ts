@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { updateUserAction } from "@/src/app/actions/user-action";
 import { UpdateUserDto, UpdateUserResponse } from "@/src/domain/user.dto";
-import { useState } from "react";
 
 export function useUserUpdate() {
   const [isLoading, setIsLoading] = useState(false);

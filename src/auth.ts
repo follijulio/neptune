@@ -1,12 +1,12 @@
-import { prisma } from "@/prisma/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
-import type { Session } from "next-auth";
 import NextAuth from "next-auth";
-import type { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
+
 import { authConfig } from "./auth.config";
+
+import { prisma } from "@/prisma/lib/prisma";
 
 declare module "next-auth" {
   interface Session {
@@ -14,7 +14,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module "@auth/core/jwt" {
   interface JWT {
     accessToken?: string;
   }

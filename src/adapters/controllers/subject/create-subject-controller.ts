@@ -1,6 +1,7 @@
+import { CreateSubjectService } from "../../services/subject/create-subject-service";
+
 import { CreateSubjectDto } from "@/src/domain/subject.dto";
 import { CreateSubjectSchema } from "@/src/schemas/subject-schema";
-import { CreateSubjectService } from "../../services/subject/create-subject-service";
 
 export class CreateSubjectController {
   async create(subjectData: CreateSubjectDto) {

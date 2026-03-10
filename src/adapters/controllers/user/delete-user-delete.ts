@@ -1,6 +1,7 @@
+import { DeleteUserService } from "../../services/user/delete-user-service";
+
 import { DeleteUserDto } from "@/src/domain/user.dto";
 import { DeleteUserSchema } from "@/src/schemas/user-schema";
-import { DeleteUserService } from "../../services/user/delete-user-service";
 
 export class DeleteUserController {
   async delete(userData: DeleteUserDto) {

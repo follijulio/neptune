@@ -1,17 +1,18 @@
-import Link from "next/link";
+import { FaChartPie } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
 import {
-  LuTrendingUp,
-  LuBookOpen,
-  LuGraduationCap,
   LuArrowRight,
+  LuBookOpen,
   LuCalendarDays,
-  LuStickyNote,
   LuExternalLink,
   LuFileUp,
+  LuGraduationCap,
   LuSparkles,
+  LuStickyNote,
+  LuTrendingUp,
 } from "react-icons/lu";
-import { FiCheckCircle } from "react-icons/fi";
-import { FaChartPie } from "react-icons/fa";
+import Link from "next/link";
+
 import { Button } from "../components/shadcn-ui/button";
 import { Logo } from "../components/ui/nav-bar";
 

@@ -1,10 +1,11 @@
 "use server";
 
+import Groq from "groq-sdk";
+import PDFParser from "pdf2json";
+
 import { SemesterStatus, SubjectStatus } from "@/prisma/generated/prisma/enums";
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import Groq from "groq-sdk";
-import PDFParser from "pdf2json";
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,

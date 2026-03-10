@@ -1,6 +1,8 @@
-import { auth } from "@/src/auth";
 import { redirect } from "next/navigation";
+
 import { findNotesAction } from "../actions/notes-actions";
+
+import { auth } from "@/src/auth";
 import MuralClient from "@/src/components/ui/clients/mural-client";
 
 export default async function MuralPage() {

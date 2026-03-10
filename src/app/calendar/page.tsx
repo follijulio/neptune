@@ -1,7 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import CalendarClient from "@/src/components/ui/clients/calendar-client";
-import { redirect } from "next/navigation";
 
 export default async function CalendarPage() {
   const session = await auth();

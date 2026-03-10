@@ -1,11 +1,12 @@
 "use server";
 
+import bcrypt from "bcryptjs";
+import { AuthError } from "next-auth";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { signIn, signOut } from "@/src/auth";
 import { sendVerificationEmail } from "@/src/lib/mail";
 import { generateTwoFactorToken } from "@/src/lib/tokens";
-import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string;

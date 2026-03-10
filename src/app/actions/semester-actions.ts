@@ -8,7 +8,6 @@ import {
   SemesterResponse,
   UpdateSemesterDto,
 } from "@/src/domain/semester.dto";
-
 import {
   DeleteSemesterDto,
   DeleteSemesterResponse,

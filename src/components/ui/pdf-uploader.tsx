@@ -1,6 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { LuCheck, LuCircleAlert,LuFileText, LuUpload } from "react-icons/lu";
+import { useRouter } from "next/navigation";
+
+import { Alert } from "../shadcn-ui/alert";
+
+import {
+  parseAcademicHistoryAction,
+  saveExtractedSubjectsAction,
+} from "@/src/app/actions/pdf-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
   Card,
@@ -9,13 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/shadcn-ui/card";
-import { LuUpload, LuFileText, LuCheck, LuCircleAlert } from "react-icons/lu";
-import {
-  parseAcademicHistoryAction,
-  saveExtractedSubjectsAction,
-} from "@/src/app/actions/pdf-actions";
-import { Alert } from "../shadcn-ui/alert";
-import { useRouter } from "next/navigation";
 
 interface ParsedSubject {
   code?: string;

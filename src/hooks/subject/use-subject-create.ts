@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { createSubjectAction } from "@/src/app/actions/subject-actions";
 import { CreateSubjectDto, SubjectResponse } from "@/src/domain/subject.dto";
-import { useState } from "react";
 
 export function useSubjectCreate() {
   const [isLoading, setIsLoading] = useState(false);

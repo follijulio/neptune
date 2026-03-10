@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { createWorkloadAction } from "@/src/app/actions/workload-actions";
 import { CreateWorkloadDto, WorkloadResponse } from "@/src/domain/workload.dto";
-import { useState } from "react";
 
 export function useWorkloadCreate() {
   const [isLoading, setIsLoading] = useState(false);

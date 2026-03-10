@@ -1,15 +1,14 @@
 "use client";
 
 import { IoMdTrendingUp } from "react-icons/io";
-
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent } from "../../shadcn-ui/card";
 import {
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "../../shadcn-ui/chart";
 
 interface ChartLineLabelProps {

@@ -1,6 +1,7 @@
+import { UpdateWorkloadService } from "../../services/workload/update-workload-service";
+
 import { UpdateWorkloadDto } from "@/src/domain/workload.dto";
 import { UpdateWorkloadSchema } from "@/src/schemas/workload-schema";
-import { UpdateWorkloadService } from "../../services/workload/update-workload-service";
 
 export class UpdateWorkloadController {
   async update(workloadData: UpdateWorkloadDto) {

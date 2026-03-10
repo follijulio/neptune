@@ -1,6 +1,7 @@
+import bcrypt from "bcryptjs";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { createUserDto } from "@/src/domain/user.dto";
-import bcrypt from "bcryptjs";
 
 export class CreateUserService {
   async create(user: createUserDto) {

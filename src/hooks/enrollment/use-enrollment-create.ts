@@ -1,9 +1,10 @@
+import { useState } from "react";
+
 import { createEnrollmentAction } from "@/src/app/actions/enrollment-actions";
 import {
   CreateEnrollmentDto,
   EnrollmentResponse,
 } from "@/src/domain/enrollment.dto";
-import { useState } from "react";
 
 export function useEnrollmentCreate() {
   const [isLoading, setIsLoading] = useState(false);

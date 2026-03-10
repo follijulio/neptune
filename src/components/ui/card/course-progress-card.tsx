@@ -8,6 +8,7 @@ import {
   RadialBar,
   RadialBarChart,
 } from "recharts";
+
 import { ChartConfig, ChartContainer } from "../../shadcn-ui/chart";
 
 interface CourseProgressCardProps {

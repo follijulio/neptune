@@ -1,11 +1,11 @@
 "use client";
 
-import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-import { LuBookMarked } from "react-icons/lu";
-import { FaCircle } from "react-icons/fa";
 import * as React from "react";
 import { useState } from "react";
-import { cn } from "@/src/lib/utils";
+import { FaCircle } from "react-icons/fa";
+import { GrFormNext, GrFormPrevious } from "react-icons/gr";
+import { LuBookMarked } from "react-icons/lu";
+
 import {
   Table,
   TableBody,
@@ -14,10 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "../../shadcn-ui/table";
-import DrawerAction from "./drawer-action-table";
-import { useFilterParam } from "@/src/hooks/useFilterParam";
+
 import { AbsenceCell } from "./absence-cell";
+import DrawerAction from "./drawer-action-table";
+
 import { useEnrollmentUpdate } from "@/src/hooks/enrollment/use-enrollment-update";
+import { useFilterParam } from "@/src/hooks/useFilterParam";
+import { cn } from "@/src/lib/utils";
 
 export interface CourseStatusCardProps {
   id: string;

@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import * as RechartsPrimitive from "recharts";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
+import * as RechartsPrimitive from "recharts";
 
 import { cn } from "@/src/lib/utils";
 
@@ -378,11 +378,11 @@ const Progress = React.forwardRef<
 Progress.displayName = ProgressPrimitive.Root.displayName;
 
 export {
-  Progress,
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
+  Progress,
 };

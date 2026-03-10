@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { deleteUserAction } from "@/src/app/actions/user-action";
 import { DeleteUserDto, DeleteUserResponse } from "@/src/domain/user.dto";
-import { useState } from "react";
 
 export function useUserDelete() {
   const [isLoading, setIsLoading] = useState(false);

@@ -1,6 +1,7 @@
+import { CreateEnrollmentService } from "../../services/enrollment/create-enrollment-service";
+
 import { CreateEnrollmentDto } from "@/src/domain/enrollment.dto";
 import { CreateEnrollmentSchema } from "@/src/schemas/enrollment-schema";
-import { CreateEnrollmentService } from "../../services/enrollment/create-enrollment-service";
 
 export class CreateEnrollmentController {
   async create(enrollmentData: CreateEnrollmentDto) {

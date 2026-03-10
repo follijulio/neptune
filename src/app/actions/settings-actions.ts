@@ -1,9 +1,10 @@
 "use server";
 
-import { prisma } from "@/prisma/lib/prisma";
-import { auth } from "@/src/auth";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+
+import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
 
 export async function updateAccountAction(data: {
   name?: string;
@@ -55,7 +56,7 @@ export async function updateAccountAction(data: {
 
     revalidatePath("/dashboard");
     return { success: "Conta atualizada com sucesso!" };
-  } catch (error) {
+  } catch {
     return { error: "Erro ao processar atualização." };
   }
 }

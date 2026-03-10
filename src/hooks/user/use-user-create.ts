@@ -1,6 +1,8 @@
-import { registerUserAction } from "@/src/app/actions/user-action";
 import { useState } from "react";
+
 import { createUserDto, RegisterUserResponse } from "../../domain/user.dto";
+
+import { registerUserAction } from "@/src/app/actions/user-action";
 
 export function useCreateUser() {
   const [isLoading, setIsLoading] = useState(false);

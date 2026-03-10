@@ -1,9 +1,10 @@
+import { UpdateEnrollmentService } from "../../services/enrollment/update-enrollment-service";
+
 import {
   EnrollmentResponse,
   UpdateEnrollmentDto,
 } from "@/src/domain/enrollment.dto";
 import { UpdateEnrollmentSchema } from "@/src/schemas/enrollment-schema";
-import { UpdateEnrollmentService } from "../../services/enrollment/update-enrollment-service";
 
 export class UpdateEnrollmentController {
   async update(enrollmentData: UpdateEnrollmentDto) {

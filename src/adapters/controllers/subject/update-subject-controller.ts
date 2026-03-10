@@ -1,6 +1,7 @@
+import { UpdateSubjectService } from "../../services/subject/update-subject-service";
+
 import { UpdateSubjectDto } from "@/src/domain/subject.dto";
 import { UpdateSubjectSchema } from "@/src/schemas/subject-schema";
-import { UpdateSubjectService } from "../../services/subject/update-subject-service";
 
 export class UpdateSubjectController {
   async update(subjectData: UpdateSubjectDto) {

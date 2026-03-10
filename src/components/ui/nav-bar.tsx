@@ -1,18 +1,20 @@
 "use client";
 
+import { LuHexagon, LuLogOut, LuSettings } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import { Avatar, AvatarFallback, AvatarImage } from "../shadcn-ui/avatar";
 import {
-  DropdownMenuTrigger,
-  DropdownMenuContent,
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "../shadcn-ui/dropdown-menu";
-import { LuHexagon, LuLogOut, LuSettings } from "react-icons/lu";
+
 import { logoutAction } from "@/src/app/actions/auth-action";
 
 interface NavBarProps {

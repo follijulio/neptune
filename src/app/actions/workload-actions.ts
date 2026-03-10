@@ -1,10 +1,10 @@
 "use server";
 
 import { CreateWorkloadController } from "@/src/adapters/controllers/workload/create-workload-controller";
-import { CreateWorkloadDto, WorkloadResponse } from "@/src/domain/workload.dto";
-import { UpdateWorkloadController } from "@/src/adapters/controllers/workload/update-workload-controller";
-import { UpdateWorkloadDto } from "@/src/domain/workload.dto";
 import { DeleteWorkloadController } from "@/src/adapters/controllers/workload/delete-workload-controller";
+import { UpdateWorkloadController } from "@/src/adapters/controllers/workload/update-workload-controller";
+import { CreateWorkloadDto, WorkloadResponse } from "@/src/domain/workload.dto";
+import { UpdateWorkloadDto } from "@/src/domain/workload.dto";
 import {
   DeleteWorkloadDto,
   DeleteWorkloadResponse,

@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { updateWorkloadAction } from "@/src/app/actions/workload-actions";
 import { UpdateWorkloadDto, WorkloadResponse } from "@/src/domain/workload.dto";
-import { useState } from "react";
 
 export function useWorkloadUpdate() {
   const [isLoading, setIsLoading] = useState(false);

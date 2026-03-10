@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import {
+  LuArrowLeft,
+  LuArrowRight,
   LuGraduationCap,
   LuTarget,
-  LuArrowRight,
-  LuArrowLeft,
 } from "react-icons/lu";
-import PdfUploader from "../pdf-uploader";
-import Link from "next/link";
-import { Button } from "../../shadcn-ui/button";
 import { UploadCloud } from "lucide-react";
+
+import { Button } from "../../shadcn-ui/button";
+import PdfUploader from "../pdf-uploader";
+
 import { skipOnboardingAction } from "@/src/app/actions/dashboard-actions";
 
 export default function OnboardingFlow({ userName }: { userName: string }) {

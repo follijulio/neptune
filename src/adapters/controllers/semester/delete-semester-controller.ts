@@ -1,6 +1,7 @@
+import { DeleteSemesterService } from "../../services/semester/delete-semester-service";
+
 import { DeleteSemesterDto } from "@/src/domain/semester.dto";
 import { DeleteSemesterSchema } from "@/src/schemas/semester-schema";
-import { DeleteSemesterService } from "../../services/semester/delete-semester-service";
 
 export class DeleteSemesterController {
   async delete(semesterData: DeleteSemesterDto) {

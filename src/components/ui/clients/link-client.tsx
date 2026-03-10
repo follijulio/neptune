@@ -1,9 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import {
+  LuBookOpen,
+  LuCalculator,
+  LuCode,
+  LuExternalLink,
+  LuGlobe,
+  LuGraduationCap,
+  LuPlus,
+  LuTrash2,
+} from "react-icons/lu";
 import { useRouter } from "next/navigation";
+
+import MainLayout from "../main-layout";
+
+import {
+  createLinkAction,
+  deleteLinkAction,
+} from "@/src/app/actions/links-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { Input } from "@/src/components/shadcn-ui/input";
 import {
   Dialog,
   DialogContent,
@@ -11,21 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/shadcn-ui/dialog";
-import {
-  createLinkAction,
-  deleteLinkAction,
-} from "@/src/app/actions/links-actions";
-import {
-  LuPlus,
-  LuTrash2,
-  LuGlobe,
-  LuGraduationCap,
-  LuBookOpen,
-  LuCalculator,
-  LuCode,
-  LuExternalLink,
-} from "react-icons/lu";
-import MainLayout from "../main-layout";
+import { Input } from "@/src/components/shadcn-ui/input";
 
 type LinkItem = {
   id: string;

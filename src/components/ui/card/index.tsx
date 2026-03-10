@@ -4,12 +4,12 @@ import { CourseProgressCard } from "./course-progress-card";
 import { DistributionWorkCard } from "./distribution-work-card";
 import { YieldCoefficientCard } from "./yield-coefficient-card";
 
-export const Card = {
+const Cards = {
   AttentionRequired: AttentionRequiredCard,
   AverageRating: AverageRatingCard,
   CourseProgress: CourseProgressCard,
   DistributionWork: DistributionWorkCard,
   YieldCoefficient: YieldCoefficientCard,
-} as const;
+};
 
-export default Card;
+export default Cards;

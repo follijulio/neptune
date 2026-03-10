@@ -1,9 +1,10 @@
+import { useState } from "react";
+
 import { deleteSubjectAction } from "@/src/app/actions/subject-actions";
 import {
   DeleteSubjectDto,
   DeleteSubjectResponse,
 } from "@/src/domain/subject.dto";
-import { useState } from "react";
 
 export function useSubjectDelete() {
   const [isLoading, setIsLoading] = useState(false);

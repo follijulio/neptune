@@ -1,9 +1,10 @@
+import { useState } from "react";
+
 import { deleteEnrollmentAction } from "@/src/app/actions/enrollment-actions";
 import {
   DeleteEnrollmentDto,
   DeleteEnrollmentResponse,
 } from "@/src/domain/enrollment.dto";
-import { useState } from "react";
 
 export function useEnrollmentDelete() {
   const [isLoading, setIsLoading] = useState(false);

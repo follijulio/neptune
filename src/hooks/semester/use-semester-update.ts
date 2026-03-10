@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { updateSemesterAction } from "@/src/app/actions/semester-actions";
 import { SemesterResponse, UpdateSemesterDto } from "@/src/domain/semester.dto";
-import { useState } from "react";
 
 export function useSemesterUpdate() {
   const [isLoading, setIsLoading] = useState(false);

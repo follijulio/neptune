@@ -1,8 +1,9 @@
 "use server";
 
+import bcrypt from "bcryptjs";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import bcrypt from "bcryptjs";
 
 export async function sendSettings2FACodeAction() {
   const session = await auth();
@@ -13,11 +14,12 @@ export async function sendSettings2FACodeAction() {
   try {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     // TODO: alterar pra 5 minutos, mas por enquanto - até terminar o calendar - vou deixar 15 minutos pra facilitar os testes
-    const expiresIn = 15 * 60 * 1000; // 15 minutos
-    const expires = new Date(new Date().getTime() + expiresIn);
+    // const expiresIn = 15 * 60 * 1000; // 15 minutos
+    // const expires = new Date(new Date().getTime() + expiresIn);
+
     console.log(`CÓDIGO 2FA GERADO PARA ${session.user.email}: ${code}`);
     return { success: "Código enviado para o seu e-mail!" };
-  } catch (error) {
+  } catch {
     return { error: "Erro ao gerar o código 2FA." };
   }
 }
@@ -39,7 +41,7 @@ export async function resetPasswordWith2FAAction(
     });
 
     return { success: "Senha alterada com sucesso!" };
-  } catch (error) {
+  } catch {
     return { error: "Erro ao redefinir a senha." };
   }
 }

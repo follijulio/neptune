@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { revalidatePath } from "next/cache";
 
 export async function createNoteAction(data: {
   title: string;

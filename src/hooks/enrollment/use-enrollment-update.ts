@@ -1,8 +1,9 @@
 import { useState } from "react";
+
 import { updateEnrollmentAction } from "../../app/actions/enrollment-actions";
 import {
-  UpdateEnrollmentDto,
   EnrollmentResponse,
+  UpdateEnrollmentDto,
 } from "../../domain/enrollment.dto";
 
 export function useEnrollmentUpdate() {

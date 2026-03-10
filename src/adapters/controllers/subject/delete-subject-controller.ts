@@ -1,6 +1,7 @@
+import { DeleteSubjectService } from "../../services/subject/delete-subject-service";
+
 import { DeleteSubjectDto } from "@/src/domain/subject.dto";
 import { DeleteSubjectSchema } from "@/src/schemas/subject-schema";
-import { DeleteSubjectService } from "../../services/subject/delete-subject-service";
 
 export class DeleteSubjectController {
   async delete(subjectData: DeleteSubjectDto) {

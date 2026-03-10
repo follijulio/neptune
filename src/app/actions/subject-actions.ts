@@ -1,11 +1,10 @@
 "use server";
 
 import { CreateSubjectController } from "@/src/adapters/controllers/subject/create-subject-controller";
+import { DeleteSubjectController } from "@/src/adapters/controllers/subject/delete-subject-controller";
 import { UpdateSubjectController } from "@/src/adapters/controllers/subject/update-subject-controller";
 import { UpdateSubjectDto } from "@/src/domain/subject.dto";
 import { CreateSubjectDto, SubjectResponse } from "@/src/domain/subject.dto";
-
-import { DeleteSubjectController } from "@/src/adapters/controllers/subject/delete-subject-controller";
 import {
   DeleteSubjectDto,
   DeleteSubjectResponse,

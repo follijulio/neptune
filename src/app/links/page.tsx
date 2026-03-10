@@ -1,7 +1,8 @@
+import { redirect } from "next/navigation";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import LinksClient from "@/src/components/ui/clients/link-client";
-import { redirect } from "next/navigation";
 
 export default async function LinksPage() {
   const session = await auth();

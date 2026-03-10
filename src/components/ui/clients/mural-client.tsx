@@ -1,10 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect,useState } from "react";
+import { LuCheck, LuGripHorizontal,LuPlus, LuTrash2 } from "react-icons/lu";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useRouter } from "next/navigation";
+
+import MainLayout from "../main-layout";
+
+import {
+  createNoteAction,
+  deleteNoteAction,
+  reorderNotesAction,
+} from "@/src/app/actions/notes-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { Input } from "@/src/components/shadcn-ui/input";
-import { Textarea } from "@/src/components/shadcn-ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -12,31 +36,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/shadcn-ui/dialog";
-import { LuPlus, LuTrash2, LuCheck, LuGripHorizontal } from "react-icons/lu";
-import {
-  deleteNoteAction,
-  createNoteAction,
-  reorderNotesAction,
-} from "@/src/app/actions/notes-actions";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { NavBar } from "../nav-bar";
-import MainLayout from "../main-layout";
+import { Input } from "@/src/components/shadcn-ui/input";
+import { Textarea } from "@/src/components/shadcn-ui/textarea";
 
 type Note = {
   id: string;

@@ -1,15 +1,17 @@
 import { GoPlus } from "react-icons/go";
+
 import { Button } from "../../shadcn-ui/button";
 import {
   Drawer,
-  DrawerTrigger,
+  DrawerClose,
   DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
   DrawerDescription,
   DrawerFooter,
-  DrawerClose,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
 } from "../../shadcn-ui/drawer";
+
 import { CourseStatusCardProps } from "./course-status-table";
 
 interface CourseDrawerActionProps {

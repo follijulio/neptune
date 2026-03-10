@@ -1,6 +1,9 @@
 "use client";
 
-import { cn } from "@/src/lib/utils";
+import { FaListOl } from "react-icons/fa";
+import { MdOutlineFolder } from "react-icons/md";
+import Link from "next/link";
+
 import {
   Accordion,
   AccordionContent,
@@ -10,10 +13,9 @@ import {
 import { Badge } from "../../shadcn-ui/badge";
 import { Button } from "../../shadcn-ui/button";
 import { Card } from "../../shadcn-ui/card";
+
 import { useFilterParam } from "@/src/hooks/useFilterParam";
-import { MdOutlineFolder } from "react-icons/md";
-import { FaListOl } from "react-icons/fa";
-import Link from "next/link";
+import { cn } from "@/src/lib/utils";
 
 interface Subject {
   subject_name: string;
@@ -42,41 +44,41 @@ const CURRICULUM_FILTERS: FilterOption[] = [
 const DEFAULT_FILTER = "all";
 const PASSING_GRADE = 6;
 
-const SubjectCardSkeleton = () => (
-  <Card className="flex flex-row justify-between rounded-[2px] border border-white/10 bg-transparent p-4">
-    <div className="flex w-full flex-col justify-between gap-4">
-      <section className="space-y-2">
-        <div className="h-5 w-3/4 animate-pulse rounded bg-white/10" />
-        <div className="h-3 w-1/4 animate-pulse rounded bg-white/10" />
-      </section>
-      <section className="flex flex-row gap-4">
-        <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-        <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-      </section>
-    </div>
-    <div>
-      <div className="h-6 w-14 animate-pulse rounded-full bg-white/10" />
-    </div>
-  </Card>
-);
+// const SubjectCardSkeleton = () => (
+//   <Card className="flex flex-row justify-between rounded-[2px] border border-white/10 bg-transparent p-4">
+//     <div className="flex w-full flex-col justify-between gap-4">
+//       <section className="space-y-2">
+//         <div className="h-5 w-3/4 animate-pulse rounded bg-white/10" />
+//         <div className="h-3 w-1/4 animate-pulse rounded bg-white/10" />
+//       </section>
+//       <section className="flex flex-row gap-4">
+//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
+//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
+//       </section>
+//     </div>
+//     <div>
+//       <div className="h-6 w-14 animate-pulse rounded-full bg-white/10" />
+//     </div>
+//   </Card>
+// );
 
-const SemesterAccordionSkeleton = () => (
-  <div className="flex w-full flex-col gap-3">
-    {[1, 2].map((i) => (
-      <Card
-        key={i}
-        className="min-h-20 justify-center border border-white/20 bg-black p-4 shadow-lg"
-      >
-        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-white/10" />
-        <div className="grid grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map((j) => (
-            <SubjectCardSkeleton key={j} />
-          ))}
-        </div>
-      </Card>
-    ))}
-  </div>
-);
+// const SemesterAccordionSkeleton = () => (
+//   <div className="flex w-full flex-col gap-3">
+//     {[1, 2].map((i) => (
+//       <Card
+//         key={i}
+//         className="min-h-20 justify-center border border-white/20 bg-black p-4 shadow-lg"
+//       >
+//         <div className="mb-4 h-6 w-32 animate-pulse rounded bg-white/10" />
+//         <div className="grid grid-cols-4 gap-4">
+//           {[1, 2, 3, 4].map((j) => (
+//             <SubjectCardSkeleton key={j} />
+//           ))}
+//         </div>
+//       </Card>
+//     ))}
+//   </div>
+// );
 
 const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   data,

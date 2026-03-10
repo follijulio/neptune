@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { GetDashboardDataController } from "@/src/adapters/controllers/dashboard/get-dashboard-data-controller";
 import { auth } from "@/src/auth";
@@ -7,7 +9,6 @@ import {
   DashboardDataResponse,
   DashboardFiltersDto,
 } from "@/src/domain/dashboard.dto";
-import { redirect } from "next/navigation";
 
 export async function getDashboardDataAction(
   filters: DashboardFiltersDto,

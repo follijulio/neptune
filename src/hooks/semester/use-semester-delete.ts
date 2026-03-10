@@ -1,9 +1,10 @@
+import { useState } from "react";
+
 import { deleteSemesterAction } from "@/src/app/actions/semester-actions";
 import {
   DeleteSemesterDto,
   DeleteSemesterResponse,
 } from "@/src/domain/semester.dto";
-import { useState } from "react";
 
 export function useSemesterDelete() {
   const [isLoading, setIsLoading] = useState(false);

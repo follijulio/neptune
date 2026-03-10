@@ -1,31 +1,32 @@
 "use client";
 
-import { Input } from "@/src/components/shadcn-ui/input";
-import { Button } from "@/src/components/shadcn-ui/button";
+import { useState } from "react";
+import { AlertCircle, CheckCircle } from "lucide-react";
+
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/src/components/shadcn-ui/avatar";
+  resetPasswordWith2FAAction,
+  sendSettings2FACodeAction,
+} from "@/src/app/actions/settings-2fa-actions";
+import { updateAccountAction } from "@/src/app/actions/settings-actions";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from "@/src/components/shadcn-ui/alert";
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/src/components/shadcn-ui/avatar";
+import { Button } from "@/src/components/shadcn-ui/button";
+import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/src/components/shadcn-ui/dialog";
-import { useState } from "react";
-import { updateAccountAction } from "@/src/app/actions/settings-actions";
-import {
-  sendSettings2FACodeAction,
-  resetPasswordWith2FAAction,
-} from "@/src/app/actions/settings-2fa-actions";
-import { AlertCircle, CheckCircle } from "lucide-react";
+import { Input } from "@/src/components/shadcn-ui/input";
 import MainLayout from "@/src/components/ui/main-layout";
 
 export default function SettingsClient({

@@ -1,6 +1,7 @@
+import { useState } from "react";
+
 import { createSemesterAction } from "@/src/app/actions/semester-actions";
 import { CreateSemesterDto, SemesterResponse } from "@/src/domain/semester.dto";
-import { useState } from "react";
 
 export function useSemesterCreate() {
   const [isLoading, setIsLoading] = useState(false);

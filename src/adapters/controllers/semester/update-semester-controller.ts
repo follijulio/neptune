@@ -1,6 +1,7 @@
+import { UpdateSemesterService } from "../../services/semester/update-semester-service";
+
 import { UpdateSemesterDto } from "@/src/domain/semester.dto";
 import { UpdateSemesterSchema } from "@/src/schemas/semester-schema";
-import { UpdateSemesterService } from "../../services/semester/update-semester-service";
 
 export class UpdateSemesterController {
   async update(semesterData: UpdateSemesterDto) {

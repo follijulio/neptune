@@ -1,6 +1,7 @@
+import { UpdateUserService } from "../../services/user/update-user-service";
+
 import { UpdateUserDto } from "@/src/domain/user.dto";
 import { UpdateUserSchema } from "@/src/schemas/user-schema";
-import { UpdateUserService } from "../../services/user/update-user-service";
 
 export class UpdateUserController {
   async update(userData: UpdateUserDto) {

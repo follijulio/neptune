@@ -1,6 +1,7 @@
+import { DeleteWorkloadService } from "../../services/workload/delete-workload-service";
+
 import { DeleteWorkloadDto } from "@/src/domain/workload.dto";
 import { DeleteWorkloadSchema } from "@/src/schemas/workload-schema";
-import { DeleteWorkloadService } from "../../services/workload/delete-workload-service";
 
 export class DeleteWorkloadController {
   async delete(workloadData: DeleteWorkloadDto) {

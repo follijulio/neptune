@@ -1,6 +1,7 @@
+import { CreateWorkloadService } from "../../services/workload/create-workload-service";
+
 import { CreateWorkloadDto } from "@/src/domain/workload.dto";
 import { CreateWorkloadSchema } from "@/src/schemas/workload-schema";
-import { CreateWorkloadService } from "../../services/workload/create-workload-service";
 
 export class CreateWorkloadController {
   async create(workloadData: CreateWorkloadDto) {

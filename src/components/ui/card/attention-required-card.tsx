@@ -1,5 +1,6 @@
-import { cn } from "@/src/lib/utils";
 import { RiErrorWarningLine } from "react-icons/ri";
+
+import { cn } from "@/src/lib/utils";
 
 interface Subject {
   subject_name: string;

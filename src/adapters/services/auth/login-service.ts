@@ -1,7 +1,8 @@
-import { prisma } from "@/prisma/lib/prisma";
-import { LoginUserDto, LoginUserResponse } from "@/src/domain/user.dto";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
+
+import { prisma } from "@/prisma/lib/prisma";
+import { LoginUserDto, LoginUserResponse } from "@/src/domain/user.dto";
 
 export class LoginService {
   async execute(credentials: LoginUserDto): Promise<LoginUserResponse> {
@@ -13,7 +14,7 @@ export class LoginService {
 
     const isPasswordValid = await bcrypt.compare(
       credentials.password,
-      user.passwordHash,
+      user.passwordHash || "",
     );
 
     if (!isPasswordValid) throw new Error("E-mail ou senha inválidos");

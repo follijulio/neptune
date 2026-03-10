@@ -1,6 +1,7 @@
+import { CreateSemesterService } from "../../services/semester/create-semester-service";
+
 import { CreateSemesterDto } from "@/src/domain/semester.dto";
 import { CreateSemesterSchema } from "@/src/schemas/semester-schema";
-import { CreateSemesterService } from "../../services/semester/create-semester-service";
 
 export class CreateSemesterController {
   async create(semesterData: CreateSemesterDto) {

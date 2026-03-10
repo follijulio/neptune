@@ -1,14 +1,13 @@
 "use server";
 
 import { CreateEnrollmentController } from "@/src/adapters/controllers/enrollment/create-enrollment-controller";
+import { DeleteEnrollmentController } from "@/src/adapters/controllers/enrollment/delete-enrollment-controller";
+import { UpdateEnrollmentController } from "@/src/adapters/controllers/enrollment/update-enrollment-controller";
 import {
   CreateEnrollmentDto,
   EnrollmentResponse,
 } from "@/src/domain/enrollment.dto";
-
-import { UpdateEnrollmentController } from "@/src/adapters/controllers/enrollment/update-enrollment-controller";
 import { UpdateEnrollmentDto } from "@/src/domain/enrollment.dto";
-import { DeleteEnrollmentController } from "@/src/adapters/controllers/enrollment/delete-enrollment-controller";
 import {
   DeleteEnrollmentDto,
   DeleteEnrollmentResponse,

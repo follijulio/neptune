@@ -1,22 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { UploadCloud } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { NavBar } from "../nav-bar";
-import Cards from "../card";
-import Table from "../table";
+
 import { useDashboardData } from "../../../hooks/dashboard/use-dashboard-data";
-import PdfUploader from "@/src/components/ui/pdf-uploader";
+import { Alert } from "../../shadcn-ui/alert";
+import Cards from "../card";
+import MainLayout from "../main-layout";
+import Table from "../table";
+
+import { Button } from "@/src/components/shadcn-ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogTitle,
+  DialogTrigger,
 } from "@/src/components/shadcn-ui/dialog";
-import { UploadCloud } from "lucide-react";
-import { Button } from "@/src/components/shadcn-ui/button";
-import MainLayout from "../main-layout";
-import { Alert } from "../../shadcn-ui/alert";
+import PdfUploader from "@/src/components/ui/pdf-uploader";
 
 export default function DashboardClient({
   userId,

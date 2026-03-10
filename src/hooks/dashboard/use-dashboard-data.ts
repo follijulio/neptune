@@ -1,9 +1,10 @@
+import { useCallback, useState } from "react";
+
 import { getDashboardDataAction } from "@/src/app/actions/dashboard-actions";
 import {
   DashboardDataResponse,
   DashboardFiltersDto,
 } from "@/src/domain/dashboard.dto";
-import { useCallback, useState } from "react";
 
 export function useDashboardData() {
   const [data, setData] = useState<DashboardDataResponse["data"] | undefined>(

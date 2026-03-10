@@ -1,45 +1,47 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useMemo,useState } from "react";
 import {
-  format,
+  LuAlignLeft,
+  LuCalendarDays,
+  LuCalendarPlus,
+  LuChevronLeft,
+  LuChevronRight,
+  LuClock,
+} from "react-icons/lu";
+import {
   addMonths,
-  subMonths,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
   eachDayOfInterval,
-  isSameMonth,
+  endOfMonth,
+  endOfWeek,
+  format,
   isSameDay,
+  isSameMonth,
   isToday,
   startOfDay,
+  startOfMonth,
+  startOfWeek,
+  subMonths,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import MainLayout from "../main-layout";
+
+import {
+  createFullCalendarEventAction,
+  deleteCalendarEventAction,
+} from "@/src/app/actions/calendar-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { Input } from "@/src/components/shadcn-ui/input";
-import { Textarea } from "@/src/components/shadcn-ui/textarea";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/src/components/shadcn-ui/dialog";
-import {
-  createFullCalendarEventAction,
-  deleteCalendarEventAction,
-} from "@/src/app/actions/calendar-actions";
-import {
-  LuCalendarPlus,
-  LuClock,
-  LuChevronLeft,
-  LuChevronRight,
-  LuCalendarDays,
-  LuAlignLeft,
-} from "react-icons/lu";
-import MainLayout from "../main-layout";
-import { Trash2 } from "lucide-react";
+import { Input } from "@/src/components/shadcn-ui/input";
+import { Textarea } from "@/src/components/shadcn-ui/textarea";
 
 type CalendarEvent = {
   id: string;

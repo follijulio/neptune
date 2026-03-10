@@ -1,28 +1,30 @@
 "use client";
 
-import {
-  Alert,
-  AlertTitle,
-  AlertDescription,
-} from "@/src/components/shadcn-ui/alert";
-import { Button } from "@/src/components/shadcn-ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/src/components/shadcn-ui/card";
-import { Input } from "@/src/components/shadcn-ui/input";
 import { useState } from "react";
+import { IoAlertCircleOutline } from "react-icons/io5";
 import { LuHexagon } from "react-icons/lu";
+
 import {
   loginAction,
   loginWithGoogleAction,
   registerAction,
 } from "../actions/auth-action";
-import { IoAlertCircleOutline } from "react-icons/io5";
+
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/src/components/shadcn-ui/alert";
+import { Button } from "@/src/components/shadcn-ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/shadcn-ui/card";
+import { Input } from "@/src/components/shadcn-ui/input";
 import { Label } from "@/src/components/shadcn-ui/label";
 
 type AuthView = "login" | "register";
