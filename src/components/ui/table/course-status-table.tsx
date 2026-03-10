@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaCircle } from "react-icons/fa";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { LuBookMarked } from "react-icons/lu";
@@ -128,9 +128,7 @@ const CourseRowSkeleton = () => (
 
 const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
   const [localAbsences, setLocalAbsences] = useState(course.absences ?? 0);
-  const [localMaxAbsences, setLocalMaxAbsences] = useState(
-    course.maxAbsences ?? 18,
-  );
+  const [localMaxAbsences] = useState(course.maxAbsences ?? 18);
 
   const handleAbsenceUpdate = async (changes: {
     absences?: number;
@@ -264,7 +262,7 @@ const CourseStatusTable: React.FC<{
   };
 
   return (
-    <div className="min-h-[300px] w-full rounded-lg">
+    <div className="min-h-75 w-full rounded-lg">
       <SemesterNavigator
         currentSemester={currentSemester ?? getCurrentSemester()}
         onNavigate={handleSemesterNavigation}

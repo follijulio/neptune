@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { LuRocket } from "react-icons/lu";
+import Link from "next/link";
 
 const STAR_BACKGROUND_STYLE: React.CSSProperties = {
   backgroundImage: `

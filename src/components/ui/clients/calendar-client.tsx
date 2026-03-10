@@ -27,8 +27,6 @@ import { ptBR } from "date-fns/locale";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import MainLayout from "../main-layout";
-
 import {
   createFullCalendarEventAction,
   deleteCalendarEventAction,

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+
 import { NavBar } from "./nav-bar";
 
 interface MainLayoutProps {
@@ -6,7 +7,11 @@ interface MainLayoutProps {
 }
 
 const MainLayoutContent = ({ children }: MainLayoutProps) => {
-  return <main className="h-full w-full flex-1 px-4 overflow-scroll">{children}</main>;
+  return (
+    <main className="h-full w-full flex-1 overflow-scroll px-4">
+      {children}
+    </main>
+  );
 };
 
 const MainLayoutContainer = ({ children }: MainLayoutProps) => {

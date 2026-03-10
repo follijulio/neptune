@@ -83,7 +83,6 @@ export async function parseAcademicHistoryAction(formData: FormData) {
   }
 }
 
-
 type SubjectStatus = "PENDENTE" | "APROVADO" | "REPROVADO" | "CURSANDO";
 type SemesterStatus = "CONCLUIDO" | "CURSANDO";
 
@@ -105,7 +104,7 @@ export async function saveExtractedSubjectsAction(
     const userId = await getUserId();
     if (!userId) return { error: "Usuário não autenticado." };
 
-    const { totalCompletedHours, semesterDataMap } = await processSubjects(
+    const { totalCompletedHours} = await processSubjects(
       subjects,
       userId,
     );

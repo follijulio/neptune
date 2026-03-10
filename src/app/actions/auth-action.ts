@@ -99,9 +99,11 @@ export async function registerAction(formData: FormData) {
         passwordHash: hashedPassword,
       },
     });
-    
   } catch (dbError) {
-    return { error: "Erro ao salvar no banco de dados. Verifique o console." + { dbError } };
+    return {
+      error:
+        "Erro ao salvar no banco de dados. Verifique o console." + { dbError },
+    };
   }
 
   try {

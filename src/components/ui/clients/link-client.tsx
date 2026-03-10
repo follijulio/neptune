@@ -13,8 +13,6 @@ import {
 } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
-import MainLayout from "../main-layout";
-
 import {
   createLinkAction,
   deleteLinkAction,

@@ -105,7 +105,7 @@ export default function LandingPage() {
             <span>Feito de estudantes para estudantes</span>
           </div>
 
-          <h1 className="max-w-4xl bg-gradient-to-b from-[#FFFFFF] to-[#888888] bg-clip-text text-5xl font-extrabold tracking-tight text-transparent lg:text-7xl">
+          <h1 className="max-w-4xl bg-linear-to-b from-[#FFFFFF] to-[#888888] bg-clip-text text-5xl font-extrabold tracking-tight text-transparent lg:text-7xl">
             Domine sua jornada na Licenciatura com dados.
           </h1>
 
@@ -165,7 +165,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <div className="flex min-h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8">
+              <div className="flex min-h-100 flex-col items-center justify-center gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8">
                 <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[#007AFF]/30 bg-[#007AFF]/10">
                   <LuFileUp className="text-4xl text-[#007AFF]" />
                 </div>

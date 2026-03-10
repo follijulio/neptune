@@ -384,7 +384,6 @@ function GradeInputs({
 }
 
 function SubjectCardFooter({
-  subjectId,
   status,
   currentAverage,
   neededForFinal,

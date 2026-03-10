@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/src/components/shadcn-ui/button";
+import { useEffect, useState } from "react";
 import {
-  LuPlay,
-  LuPause,
-  LuRotateCcw,
+  LuBed,
   LuBrain,
   LuCoffee,
-  LuBed,
+  LuPause,
+  LuPlay,
+  LuRotateCcw,
 } from "react-icons/lu";
+
+import { Button } from "@/src/components/shadcn-ui/button";
 
 type Mode = "focus" | "shortBreak" | "longBreak";
 
@@ -50,14 +51,20 @@ export default function Page() {
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setIsActive(false);
+            const audio = new Audio(
+              "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
+            );
+            audio
+              .play()
+              .catch(() => console.log("Áudio bloqueado pelo navegador"));
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
-    } else if (timeLeft === 0 && isActive) {
-      setIsActive(false);
-      const audio = new Audio(
-        "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
-      );
-      audio.play().catch(() => console.log("Áudio bloqueado pelo navegador"));
     }
 
     return () => clearInterval(interval);
@@ -88,7 +95,7 @@ export default function Page() {
   const ModeIcon = currentMode.icon;
 
   return (
-    <div className="flex flex-col w-full h-full items-center justify-center px-4 text-white">
+    <div className="flex h-full w-full flex-col items-center justify-center px-4 text-white">
       <div
         className={`relative flex w-full max-w-md flex-col items-center rounded-[2rem] border border-[#1A1A1A] bg-[#0A0A0A] p-8 shadow-2xl transition-all duration-500 sm:p-12 ${isActive ? `shadow-${currentMode.color.split("-")[1]}/10 border-[#1A1A1A]` : ""}`}
       >
@@ -118,7 +125,7 @@ export default function Page() {
             </span>
           </div>
 
-          <h1 className="bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-[100px] leading-none font-black tracking-tighter text-transparent tabular-nums select-none sm:text-[120px]">
+          <h1 className="bg-linear-to-b from-white to-zinc-500 bg-clip-text text-[100px] leading-none font-black tracking-tighter text-transparent tabular-nums select-none sm:text-[120px]">
             {formatTime(timeLeft)}
           </h1>
         </div>
@@ -145,7 +152,7 @@ export default function Page() {
           <Button
             onClick={resetTimer}
             variant="ghost"
-            className="h-16 w-16 rounded-2xl bg-zinc-900 p-0 text-zinc-400 transition-all hover:rotate-[-45deg] hover:bg-zinc-800 hover:text-white"
+            className="h-16 w-16 rounded-2xl bg-zinc-900 p-0 text-zinc-400 transition-all hover:-rotate-45 hover:bg-zinc-800 hover:text-white"
             title="Reiniciar Timer"
           >
             <LuRotateCcw className="h-6 w-6" />

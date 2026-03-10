@@ -5,11 +5,11 @@ import { LuCheck, LuCircleAlert, LuFileText, LuUpload } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 import { Alert } from "../shadcn-ui/alert";
+
 import {
   parseAcademicHistoryAction,
   saveExtractedSubjectsAction,
 } from "@/src/app/actions/pdf-actions";
-import { Button } from "@/src/components/shadcn-ui/button";
 import {
   Card,
   CardContent,
@@ -226,7 +226,7 @@ export default function PdfUploader() {
     if (response.error) {
       setState((prev) => ({
         ...prev,
-        error: response.error,
+        error: response.error ?? null,
         isLoading: false,
       }));
     } else if (response.subjects) {
@@ -246,7 +246,11 @@ export default function PdfUploader() {
     const response = await saveExtractedSubjectsAction(state.results);
 
     if (response.error) {
-      setState((prev) => ({ ...prev, error: response.error, isSaving: false }));
+      setState((prev) => ({
+        ...prev,
+        error: response.error ?? null,
+        isSaving: false,
+      }));
     } else if (response.success) {
       setState((prev) => ({
         ...prev,
@@ -282,10 +286,7 @@ export default function PdfUploader() {
         <form onSubmit={handleUpload} className="space-y-6">
           <FileInputZone file={state.file} onChange={handleFileChange} />
           <ErrorAlert error={state.error} />
-          <UploadButton
-            isLoading={state.isLoading}
-            hasFile={!!state.file}
-          />
+          <UploadButton isLoading={state.isLoading} hasFile={!!state.file} />
           {state.isLoading && <LoadingAlert />}
         </form>
 

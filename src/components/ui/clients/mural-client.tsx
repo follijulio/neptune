@@ -21,8 +21,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useRouter } from "next/navigation";
 
-import MainLayout from "../main-layout";
-
 import {
   createNoteAction,
   deleteNoteAction,
@@ -89,7 +87,7 @@ function SortableNoteCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-[280px] flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
+      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-70 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
     >
       <div
         className="absolute top-0 left-0 h-2 w-full"
@@ -243,7 +241,7 @@ export default function MuralClient({
                 <Textarea
                   name="content"
                   placeholder="a prova vai ter questões sobre..."
-                  className="min-h-[120px] resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                  className="min-h-30 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
               <div className="space-y-3">

@@ -58,12 +58,6 @@ export async function updateSubjectAbsencesAction(
   }
 
   try {
-    const has = await prisma.subject.findFirst({
-      where: { id: subjectId, semester: { userId: session.user.id } },
-    });
-    const hasEnrollment = await prisma.enrollment.findFirst({
-      where: { id: subjectId },
-    });
     await prisma.subject.update({
       where: { id: subjectId },
       data: { currentAbsences: absences },
@@ -72,8 +66,8 @@ export async function updateSubjectAbsencesAction(
     revalidatePath("/dashboard");
     revalidatePath("/semester");
     return { success: true };
-  } catch (error: any) {
-    console.error("ERRO PRISMA:", error.message);
+  } catch (error) {
+    console.error("ERRO PRISMA:", { error });
     return { error: "Erro no banco de dados ao salvar faltas." };
   }
 }

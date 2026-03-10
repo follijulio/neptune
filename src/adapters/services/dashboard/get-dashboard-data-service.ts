@@ -99,7 +99,7 @@ export class GetDashboardDataService {
     }));
 
     const enrolledCourses = filteredEnrollments.map((env: any) => ({
-      id: env.id, 
+      id: env.id,
       subjectId: env.subjectId,
       subject_name: env.subject.name,
       code: env.subject.code || "N/A",

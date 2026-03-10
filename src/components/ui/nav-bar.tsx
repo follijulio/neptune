@@ -1,12 +1,11 @@
 "use client";
 
+import { LuHexagon, LuLogOut, LuSettings } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LuHexagon, LuLogOut, LuSettings } from "react-icons/lu";
 
-import { logoutAction } from "@/src/app/actions/auth-action";
-import { Button } from "../shadcn-ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../shadcn-ui/avatar";
+import { Button } from "../shadcn-ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../shadcn-ui/dropdown-menu";
+
+import { logoutAction } from "@/src/app/actions/auth-action";
 
 interface NavBarProps {
   profileImageUrl?: string;
@@ -38,14 +39,12 @@ const NAV_ITEMS: NavItem[] = [
 
 export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   const pathname = usePathname();
-  const isHomePage = pathname === "/";
   const isNavPage = NAV_ITEMS.some((item) => pathname?.startsWith(item.href));
 
-  if (isHomePage || !isNavPage) {
-    return <PublicNavBar />;
+  if (isNavPage) {
+    return <PrivateNavBar profileImageUrl={profileImageUrl} />;
   }
-
-  return <PrivateNavBar profileImageUrl={profileImageUrl} />;
+  return <PublicNavBar />;
 };
 
 const PublicNavBar = () => (
@@ -73,7 +72,7 @@ const PublicNavBar = () => (
 );
 
 const PrivateNavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => (
-  <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md ">
+  <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
     <section className="flex w-full justify-start">
       <Logo />
     </section>

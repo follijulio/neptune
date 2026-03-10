@@ -7,7 +7,6 @@ import { useSearchParams } from "next/navigation";
 import { useDashboardData } from "../../../hooks/dashboard/use-dashboard-data";
 import { Alert } from "../../shadcn-ui/alert";
 import Cards from "../card";
-import section from "../main-layout";
 import Table from "../table";
 
 import { Button } from "@/src/components/shadcn-ui/button";

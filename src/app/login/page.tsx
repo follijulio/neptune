@@ -84,7 +84,7 @@ export default function Page() {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center gap-12 bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
-      <div className="flex w-full max-w-[400px] flex-col items-center text-center lg:items-start lg:text-left">
+      <div className="flex w-full max-w-100 flex-col items-center text-center lg:items-start lg:text-left">
         <LuHexagon className="mb-6 text-7xl text-[#007AFF] lg:text-8xl" />
         <h1 className="mb-4 text-5xl font-bold tracking-tight text-[#E0E0E0] lg:text-6xl">
           Netuno
@@ -128,7 +128,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="w-full max-w-[450px]">
+      <div className="w-full max-w-112.5">
         {currentView === "login" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
             <Card className="rounded-2xl border-0 bg-[#121212] p-8 text-[#E0E0E0] shadow-none">
