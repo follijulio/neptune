@@ -5,12 +5,10 @@ import { DeleteSemesterController } from "@/src/adapters/controllers/semester/de
 import { UpdateSemesterController } from "@/src/adapters/controllers/semester/update-semester-controller";
 import {
   CreateSemesterDto,
-  SemesterResponse,
-  UpdateSemesterDto,
-} from "@/src/domain/semester.dto";
-import {
   DeleteSemesterDto,
   DeleteSemesterResponse,
+  SemesterResponse,
+  UpdateSemesterDto,
 } from "@/src/domain/semester.dto";
 
 export async function createSemesterAction(
@@ -20,7 +18,16 @@ export async function createSemesterAction(
     const controller = new CreateSemesterController();
     const semester = await controller.create(formData);
 
-    return { success: true, data: semester };
+    return {
+      success: true,
+      data: {
+        id: semester.id,
+        period: semester.title,
+        status: semester.isCurrent ? "CURRENT" : "INACTIVE",
+        yieldCoefficient: null,
+        userId: semester.userId,
+      },
+    };
   } catch (error) {
     return {
       success: false,
@@ -36,7 +43,16 @@ export async function updateSemesterAction(
     const controller = new UpdateSemesterController();
     const semester = await controller.update(formData);
 
-    return { success: true, data: semester };
+    return {
+      success: true,
+      data: {
+        id: semester.id,
+        period: semester.title,
+        status: semester.isCurrent ? "CURRENT" : "INACTIVE",
+        yieldCoefficient: null,
+        userId: semester.userId,
+      },
+    };
   } catch (error) {
     return {
       success: false,

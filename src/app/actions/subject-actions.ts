@@ -1,59 +1,67 @@
 "use server";
 
-import { CreateSubjectController } from "@/src/adapters/controllers/subject/create-subject-controller";
-import { DeleteSubjectController } from "@/src/adapters/controllers/subject/delete-subject-controller";
-import { UpdateSubjectController } from "@/src/adapters/controllers/subject/update-subject-controller";
-import { UpdateSubjectDto } from "@/src/domain/subject.dto";
-import { CreateSubjectDto, SubjectResponse } from "@/src/domain/subject.dto";
-import {
-  DeleteSubjectDto,
-  DeleteSubjectResponse,
-} from "@/src/domain/subject.dto";
+import { revalidatePath } from "next/cache";
 
-export async function createSubjectAction(
-  formData: CreateSubjectDto,
-): Promise<SubjectResponse> {
+import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
+
+export async function updateSubjectGradesAction(
+  subjectId: string,
+  data: {
+    ab1?: number | null;
+    ab2?: number | null;
+    reav?: number | null;
+    finalExam?: number | null;
+  },
+) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
   try {
-    const controller = new CreateSubjectController();
-    const subject = await controller.create(formData);
+    // Garante que a disciplina pertence ao semestre do usuário atual
+    const subject = await prisma.subject.findUnique({
+      where: { id: subjectId },
+      include: { semester: true },
+    });
 
-    return { success: true, data: subject };
+    if (!subject || subject.semester.userId !== session.user.id) {
+      return { error: "Disciplina não encontrada ou acesso negado." };
+    }
+
+    await prisma.subject.update({
+      where: { id: subjectId },
+      data: {
+        ab1: data.ab1,
+        ab2: data.ab2,
+        reav: data.reav,
+        finalExam: data.finalExam,
+      },
+    });
+
+    revalidatePath("/semester");
+    return { success: "Notas atualizadas com sucesso!" };
   } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
-    };
+    console.error("Erro ao atualizar notas:", error);
+    return { error: "Falha ao salvar as notas." };
   }
 }
 
-export async function updateSubjectAction(
-  formData: UpdateSubjectDto,
-): Promise<SubjectResponse> {
+export async function updateSubjectAbsencesAction(
+  subjectId: string,
+  absences: number,
+) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
   try {
-    const controller = new UpdateSubjectController();
-    const subject = await controller.update(formData);
+    await prisma.subject.update({
+      where: { id: subjectId },
+      data: { currentAbsences: absences },
+    });
 
-    return { success: true, data: subject };
+    revalidatePath("/semester");
+    return { success: "Faltas atualizadas!" };
   } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
-    };
-  }
-}
-
-export async function deleteSubjectAction(
-  formData: DeleteSubjectDto,
-): Promise<DeleteSubjectResponse> {
-  try {
-    const controller = new DeleteSubjectController();
-    await controller.delete(formData);
-
-    return { success: true };
-  } catch (error) {
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
-    };
+    return { error: "Falha ao atualizar faltas." };
   }
 }

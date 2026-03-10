@@ -1495,10 +1495,11 @@ export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeo
 
 export const SemesterScalarFieldEnum = {
   id: 'id',
-  period: 'period',
-  status: 'status',
-  yieldCoefficient: 'yieldCoefficient',
-  userId: 'userId'
+  title: 'title',
+  isCurrent: 'isCurrent',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SemesterScalarFieldEnum = (typeof SemesterScalarFieldEnum)[keyof typeof SemesterScalarFieldEnum]
@@ -1506,8 +1507,18 @@ export type SemesterScalarFieldEnum = (typeof SemesterScalarFieldEnum)[keyof typ
 
 export const SubjectScalarFieldEnum = {
   id: 'id',
-  code: 'code',
-  name: 'name'
+  name: 'name',
+  professor: 'professor',
+  workload: 'workload',
+  maxAbsences: 'maxAbsences',
+  currentAbsences: 'currentAbsences',
+  ab1: 'ab1',
+  ab2: 'ab2',
+  reav: 'reav',
+  finalExam: 'finalExam',
+  semesterId: 'semesterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type SubjectScalarFieldEnum = (typeof SubjectScalarFieldEnum)[keyof typeof SubjectScalarFieldEnum]
@@ -1645,16 +1656,9 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'SemesterStatus'
+ * Reference to a field of type 'Boolean'
  */
-export type EnumSemesterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SemesterStatus'>
-    
-
-
-/**
- * Reference to a field of type 'SemesterStatus[]'
- */
-export type ListEnumSemesterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SemesterStatus[]'>
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -20,76 +20,64 @@ export type SemesterModel = runtime.Types.Result.DefaultSelection<Prisma.$Semest
 
 export type AggregateSemester = {
   _count: SemesterCountAggregateOutputType | null
-  _avg: SemesterAvgAggregateOutputType | null
-  _sum: SemesterSumAggregateOutputType | null
   _min: SemesterMinAggregateOutputType | null
   _max: SemesterMaxAggregateOutputType | null
 }
 
-export type SemesterAvgAggregateOutputType = {
-  yieldCoefficient: number | null
-}
-
-export type SemesterSumAggregateOutputType = {
-  yieldCoefficient: number | null
-}
-
 export type SemesterMinAggregateOutputType = {
   id: string | null
-  period: string | null
-  status: $Enums.SemesterStatus | null
-  yieldCoefficient: number | null
+  title: string | null
+  isCurrent: boolean | null
   userId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SemesterMaxAggregateOutputType = {
   id: string | null
-  period: string | null
-  status: $Enums.SemesterStatus | null
-  yieldCoefficient: number | null
+  title: string | null
+  isCurrent: boolean | null
   userId: string | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type SemesterCountAggregateOutputType = {
   id: number
-  period: number
-  status: number
-  yieldCoefficient: number
+  title: number
+  isCurrent: number
   userId: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
-export type SemesterAvgAggregateInputType = {
-  yieldCoefficient?: true
-}
-
-export type SemesterSumAggregateInputType = {
-  yieldCoefficient?: true
-}
-
 export type SemesterMinAggregateInputType = {
   id?: true
-  period?: true
-  status?: true
-  yieldCoefficient?: true
+  title?: true
+  isCurrent?: true
   userId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SemesterMaxAggregateInputType = {
   id?: true
-  period?: true
-  status?: true
-  yieldCoefficient?: true
+  title?: true
+  isCurrent?: true
   userId?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type SemesterCountAggregateInputType = {
   id?: true
-  period?: true
-  status?: true
-  yieldCoefficient?: true
+  title?: true
+  isCurrent?: true
   userId?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -131,18 +119,6 @@ export type SemesterAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: SemesterAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: SemesterSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: SemesterMinAggregateInputType
@@ -173,21 +149,18 @@ export type SemesterGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: SemesterCountAggregateInputType | true
-  _avg?: SemesterAvgAggregateInputType
-  _sum?: SemesterSumAggregateInputType
   _min?: SemesterMinAggregateInputType
   _max?: SemesterMaxAggregateInputType
 }
 
 export type SemesterGroupByOutputType = {
   id: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient: number | null
+  title: string
+  isCurrent: boolean
   userId: string
+  createdAt: Date
+  updatedAt: Date
   _count: SemesterCountAggregateOutputType | null
-  _avg: SemesterAvgAggregateOutputType | null
-  _sum: SemesterSumAggregateOutputType | null
   _min: SemesterMinAggregateOutputType | null
   _max: SemesterMaxAggregateOutputType | null
 }
@@ -212,21 +185,25 @@ export type SemesterWhereInput = {
   OR?: Prisma.SemesterWhereInput[]
   NOT?: Prisma.SemesterWhereInput | Prisma.SemesterWhereInput[]
   id?: Prisma.StringFilter<"Semester"> | string
-  period?: Prisma.StringFilter<"Semester"> | string
-  status?: Prisma.EnumSemesterStatusFilter<"Semester"> | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.FloatNullableFilter<"Semester"> | number | null
+  title?: Prisma.StringFilter<"Semester"> | string
+  isCurrent?: Prisma.BoolFilter<"Semester"> | boolean
   userId?: Prisma.StringFilter<"Semester"> | string
+  createdAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  subjects?: Prisma.SubjectListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
 }
 
 export type SemesterOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  period?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  yieldCoefficient?: Prisma.SortOrderInput | Prisma.SortOrder
+  title?: Prisma.SortOrder
+  isCurrent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  subjects?: Prisma.SubjectOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
 }
 
@@ -235,25 +212,26 @@ export type SemesterWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SemesterWhereInput | Prisma.SemesterWhereInput[]
   OR?: Prisma.SemesterWhereInput[]
   NOT?: Prisma.SemesterWhereInput | Prisma.SemesterWhereInput[]
-  period?: Prisma.StringFilter<"Semester"> | string
-  status?: Prisma.EnumSemesterStatusFilter<"Semester"> | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.FloatNullableFilter<"Semester"> | number | null
+  title?: Prisma.StringFilter<"Semester"> | string
+  isCurrent?: Prisma.BoolFilter<"Semester"> | boolean
   userId?: Prisma.StringFilter<"Semester"> | string
+  createdAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  subjects?: Prisma.SubjectListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
 }, "id">
 
 export type SemesterOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  period?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  yieldCoefficient?: Prisma.SortOrderInput | Prisma.SortOrder
+  title?: Prisma.SortOrder
+  isCurrent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.SemesterCountOrderByAggregateInput
-  _avg?: Prisma.SemesterAvgOrderByAggregateInput
   _max?: Prisma.SemesterMaxOrderByAggregateInput
   _min?: Prisma.SemesterMinOrderByAggregateInput
-  _sum?: Prisma.SemesterSumOrderByAggregateInput
 }
 
 export type SemesterScalarWhereWithAggregatesInput = {
@@ -261,69 +239,81 @@ export type SemesterScalarWhereWithAggregatesInput = {
   OR?: Prisma.SemesterScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SemesterScalarWhereWithAggregatesInput | Prisma.SemesterScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Semester"> | string
-  period?: Prisma.StringWithAggregatesFilter<"Semester"> | string
-  status?: Prisma.EnumSemesterStatusWithAggregatesFilter<"Semester"> | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.FloatNullableWithAggregatesFilter<"Semester"> | number | null
+  title?: Prisma.StringWithAggregatesFilter<"Semester"> | string
+  isCurrent?: Prisma.BoolWithAggregatesFilter<"Semester"> | boolean
   userId?: Prisma.StringWithAggregatesFilter<"Semester"> | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Semester"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Semester"> | Date | string
 }
 
 export type SemesterCreateInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSemestersInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutSemesterInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutSemesterInput
 }
 
 export type SemesterUncheckedCreateInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
   userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutSemesterInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutSemesterInput
 }
 
 export type SemesterUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSemestersNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutSemesterNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutSemesterNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterCreateManyInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
   userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type SemesterUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SemesterUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SemesterListRelationFilter = {
@@ -338,34 +328,34 @@ export type SemesterOrderByRelationAggregateInput = {
 
 export type SemesterCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  period?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  yieldCoefficient?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  isCurrent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-}
-
-export type SemesterAvgOrderByAggregateInput = {
-  yieldCoefficient?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SemesterMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  period?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  yieldCoefficient?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  isCurrent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type SemesterMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  period?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  yieldCoefficient?: Prisma.SortOrder
+  title?: Prisma.SortOrder
+  isCurrent?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
-export type SemesterSumOrderByAggregateInput = {
-  yieldCoefficient?: Prisma.SortOrder
+export type SemesterScalarRelationFilter = {
+  is?: Prisma.SemesterWhereInput
+  isNot?: Prisma.SemesterWhereInput
 }
 
 export type SemesterNullableScalarRelationFilter = {
@@ -415,16 +405,22 @@ export type SemesterUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.SemesterScalarWhereInput | Prisma.SemesterScalarWhereInput[]
 }
 
-export type EnumSemesterStatusFieldUpdateOperationsInput = {
-  set?: $Enums.SemesterStatus
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type SemesterCreateNestedOneWithoutSubjectsInput = {
+  create?: Prisma.XOR<Prisma.SemesterCreateWithoutSubjectsInput, Prisma.SemesterUncheckedCreateWithoutSubjectsInput>
+  connectOrCreate?: Prisma.SemesterCreateOrConnectWithoutSubjectsInput
+  connect?: Prisma.SemesterWhereUniqueInput
+}
+
+export type SemesterUpdateOneRequiredWithoutSubjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.SemesterCreateWithoutSubjectsInput, Prisma.SemesterUncheckedCreateWithoutSubjectsInput>
+  connectOrCreate?: Prisma.SemesterCreateOrConnectWithoutSubjectsInput
+  upsert?: Prisma.SemesterUpsertWithoutSubjectsInput
+  connect?: Prisma.SemesterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SemesterUpdateToOneWithWhereWithoutSubjectsInput, Prisma.SemesterUpdateWithoutSubjectsInput>, Prisma.SemesterUncheckedUpdateWithoutSubjectsInput>
 }
 
 export type SemesterCreateNestedOneWithoutEnrollmentsInput = {
@@ -445,17 +441,21 @@ export type SemesterUpdateOneWithoutEnrollmentsNestedInput = {
 
 export type SemesterCreateWithoutUserInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.SubjectCreateNestedManyWithoutSemesterInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutSemesterInput
 }
 
 export type SemesterUncheckedCreateWithoutUserInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutSemesterInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutSemesterInput
 }
 
@@ -490,26 +490,87 @@ export type SemesterScalarWhereInput = {
   OR?: Prisma.SemesterScalarWhereInput[]
   NOT?: Prisma.SemesterScalarWhereInput | Prisma.SemesterScalarWhereInput[]
   id?: Prisma.StringFilter<"Semester"> | string
-  period?: Prisma.StringFilter<"Semester"> | string
-  status?: Prisma.EnumSemesterStatusFilter<"Semester"> | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.FloatNullableFilter<"Semester"> | number | null
+  title?: Prisma.StringFilter<"Semester"> | string
+  isCurrent?: Prisma.BoolFilter<"Semester"> | boolean
   userId?: Prisma.StringFilter<"Semester"> | string
+  createdAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Semester"> | Date | string
+}
+
+export type SemesterCreateWithoutSubjectsInput = {
+  id?: string
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutSemestersInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutSemesterInput
+}
+
+export type SemesterUncheckedCreateWithoutSubjectsInput = {
+  id?: string
+  title: string
+  isCurrent?: boolean
+  userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutSemesterInput
+}
+
+export type SemesterCreateOrConnectWithoutSubjectsInput = {
+  where: Prisma.SemesterWhereUniqueInput
+  create: Prisma.XOR<Prisma.SemesterCreateWithoutSubjectsInput, Prisma.SemesterUncheckedCreateWithoutSubjectsInput>
+}
+
+export type SemesterUpsertWithoutSubjectsInput = {
+  update: Prisma.XOR<Prisma.SemesterUpdateWithoutSubjectsInput, Prisma.SemesterUncheckedUpdateWithoutSubjectsInput>
+  create: Prisma.XOR<Prisma.SemesterCreateWithoutSubjectsInput, Prisma.SemesterUncheckedCreateWithoutSubjectsInput>
+  where?: Prisma.SemesterWhereInput
+}
+
+export type SemesterUpdateToOneWithWhereWithoutSubjectsInput = {
+  where?: Prisma.SemesterWhereInput
+  data: Prisma.XOR<Prisma.SemesterUpdateWithoutSubjectsInput, Prisma.SemesterUncheckedUpdateWithoutSubjectsInput>
+}
+
+export type SemesterUpdateWithoutSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutSemestersNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutSemesterNestedInput
+}
+
+export type SemesterUncheckedUpdateWithoutSubjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterCreateWithoutEnrollmentsInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutSemestersInput
+  subjects?: Prisma.SubjectCreateNestedManyWithoutSemesterInput
 }
 
 export type SemesterUncheckedCreateWithoutEnrollmentsInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
   userId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  subjects?: Prisma.SubjectUncheckedCreateNestedManyWithoutSemesterInput
 }
 
 export type SemesterCreateOrConnectWithoutEnrollmentsInput = {
@@ -530,48 +591,58 @@ export type SemesterUpdateToOneWithWhereWithoutEnrollmentsInput = {
 
 export type SemesterUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutSemestersNestedInput
+  subjects?: Prisma.SubjectUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterUncheckedUpdateWithoutEnrollmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterCreateManyUserInput = {
   id?: string
-  period: string
-  status: $Enums.SemesterStatus
-  yieldCoefficient?: number | null
+  title: string
+  isCurrent?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type SemesterUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUpdateManyWithoutSemesterNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  subjects?: Prisma.SubjectUncheckedUpdateManyWithoutSemesterNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutSemesterNestedInput
 }
 
 export type SemesterUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  period?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumSemesterStatusFieldUpdateOperationsInput | $Enums.SemesterStatus
-  yieldCoefficient?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  isCurrent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -580,10 +651,12 @@ export type SemesterUncheckedUpdateManyWithoutUserInput = {
  */
 
 export type SemesterCountOutputType = {
+  subjects: number
   enrollments: number
 }
 
 export type SemesterCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  subjects?: boolean | SemesterCountOutputTypeCountSubjectsArgs
   enrollments?: boolean | SemesterCountOutputTypeCountEnrollmentsArgs
 }
 
@@ -600,6 +673,13 @@ export type SemesterCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * SemesterCountOutputType without action
  */
+export type SemesterCountOutputTypeCountSubjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubjectWhereInput
+}
+
+/**
+ * SemesterCountOutputType without action
+ */
 export type SemesterCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EnrollmentWhereInput
 }
@@ -607,44 +687,50 @@ export type SemesterCountOutputTypeCountEnrollmentsArgs<ExtArgs extends runtime.
 
 export type SemesterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  period?: boolean
-  status?: boolean
-  yieldCoefficient?: boolean
+  title?: boolean
+  isCurrent?: boolean
   userId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subjects?: boolean | Prisma.Semester$subjectsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Semester$enrollmentsArgs<ExtArgs>
   _count?: boolean | Prisma.SemesterCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["semester"]>
 
 export type SemesterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  period?: boolean
-  status?: boolean
-  yieldCoefficient?: boolean
+  title?: boolean
+  isCurrent?: boolean
   userId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["semester"]>
 
 export type SemesterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  period?: boolean
-  status?: boolean
-  yieldCoefficient?: boolean
+  title?: boolean
+  isCurrent?: boolean
   userId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["semester"]>
 
 export type SemesterSelectScalar = {
   id?: boolean
-  period?: boolean
-  status?: boolean
-  yieldCoefficient?: boolean
+  title?: boolean
+  isCurrent?: boolean
   userId?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type SemesterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "period" | "status" | "yieldCoefficient" | "userId", ExtArgs["result"]["semester"]>
+export type SemesterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "isCurrent" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["semester"]>
 export type SemesterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subjects?: boolean | Prisma.Semester$subjectsArgs<ExtArgs>
   enrollments?: boolean | Prisma.Semester$enrollmentsArgs<ExtArgs>
   _count?: boolean | Prisma.SemesterCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -659,14 +745,16 @@ export type $SemesterPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Semester"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    subjects: Prisma.$SubjectPayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    period: string
-    status: $Enums.SemesterStatus
-    yieldCoefficient: number | null
+    title: string
+    isCurrent: boolean
     userId: string
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["semester"]>
   composites: {}
 }
@@ -1062,6 +1150,7 @@ readonly fields: SemesterFieldRefs;
 export interface Prisma__SemesterClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  subjects<T extends Prisma.Semester$subjectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Semester$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.Semester$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Semester$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1093,10 +1182,11 @@ export interface Prisma__SemesterClient<T, Null = never, ExtArgs extends runtime
  */
 export interface SemesterFieldRefs {
   readonly id: Prisma.FieldRef<"Semester", 'String'>
-  readonly period: Prisma.FieldRef<"Semester", 'String'>
-  readonly status: Prisma.FieldRef<"Semester", 'SemesterStatus'>
-  readonly yieldCoefficient: Prisma.FieldRef<"Semester", 'Float'>
+  readonly title: Prisma.FieldRef<"Semester", 'String'>
+  readonly isCurrent: Prisma.FieldRef<"Semester", 'Boolean'>
   readonly userId: Prisma.FieldRef<"Semester", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Semester", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Semester", 'DateTime'>
 }
     
 
@@ -1490,6 +1580,30 @@ export type SemesterDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Semesters to delete.
    */
   limit?: number
+}
+
+/**
+ * Semester.subjects
+ */
+export type Semester$subjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Subject
+   */
+  select?: Prisma.SubjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Subject
+   */
+  omit?: Prisma.SubjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubjectInclude<ExtArgs> | null
+  where?: Prisma.SubjectWhereInput
+  orderBy?: Prisma.SubjectOrderByWithRelationInput | Prisma.SubjectOrderByWithRelationInput[]
+  cursor?: Prisma.SubjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubjectScalarFieldEnum | Prisma.SubjectScalarFieldEnum[]
 }
 
 /**

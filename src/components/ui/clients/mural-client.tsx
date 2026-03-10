@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect,useState } from "react";
-import { LuCheck, LuGripHorizontal,LuPlus, LuTrash2 } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { LuCheck, LuGripHorizontal, LuPlus, LuTrash2 } from "react-icons/lu";
 import {
   closestCenter,
   DndContext,

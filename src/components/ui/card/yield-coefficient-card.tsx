@@ -2,7 +2,7 @@
 
 import { IoMdTrendingUp } from "react-icons/io";
 import { RiArrowRightDownLine, RiArrowRightUpLine } from "react-icons/ri";
-import { Area,AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { Card } from "../../shadcn-ui/card";
 import {

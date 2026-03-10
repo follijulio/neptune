@@ -88,23 +88,40 @@ model Account {
 }
 
 model Semester {
-  id               String         @id @default(uuid())
-  period           String
-  status           SemesterStatus
-  yieldCoefficient Float?
+  id        String  @id @default(uuid())
+  title     String
+  isCurrent Boolean @default(false)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjects Subject[]
 
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   enrollments Enrollment[]
 }
 
 model Subject {
-  id          String       @id @default(uuid())
-  code        String       @unique
-  name        String
-  enrollments Enrollment[]
+  id        String  @id @default(uuid())
+  name      String
+  professor String?
+
+  workload        Int
+  maxAbsences     Int
+  currentAbsences Int @default(0)
+
+  ab1       Float?
+  ab2       Float?
+  reav      Float?
+  finalExam Float?
+
+  semesterId String
+  semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   notes       Note[]
+  enrollments Enrollment[]
 }
 
 model Enrollment {
@@ -153,7 +170,7 @@ model Link {
   id        String   @id @default(uuid())
   title     String
   url       String
-  icon      String   @default("Globe")  
+  icon      String   @default("Globe")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
