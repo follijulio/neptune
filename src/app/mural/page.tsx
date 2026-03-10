@@ -7,7 +7,7 @@ export default async function MuralPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/auth");
+    redirect("/login");
   }
   const notes = await findNotesAction(session.user.id);
 

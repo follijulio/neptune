@@ -12,8 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "../shadcn-ui/dropdown-menu";
-import jura from "@/src/assets/fonts/jura";
-import { LuLogOut, LuSettings } from "react-icons/lu";
+import { LuHexagon, LuLogOut, LuSettings } from "react-icons/lu";
 import { logoutAction } from "@/src/app/actions/auth-action";
 
 interface NavBarProps {
@@ -27,13 +26,14 @@ interface UserMenuProps {
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Mural", href: "/mural" },
-  { label: "Calendário", href: "/calendar" }, //todo: implementar rota
-  { label: "Links", href: "/links" }, //todo: implementar rota
+  { label: "Calendário", href: "/calendar" },
+  { label: "Links", href: "/links" },
+  { label: "Configurações", href: "/settings" },
 ];
 
 export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   return (
-    <nav className="h-16 w-full flex items-center justify-between px-8 border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md sticky top-0 z-50">
+    <nav className="h-16 w-full flex items-center justify-between px-8 border-b border-white/30 backdrop-blur-md sticky top-0 z-50">
       <Logo />
       <NavLinks />
       <UserMenu profileImageUrl={profileImageUrl} />
@@ -41,10 +41,13 @@ export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   );
 };
 
-const Logo = () => (
+export const Logo = () => (
   <Link href="/dashboard" className="text-2xl select-none flex items-center">
-    <span className={`font-bold text-white tracking-wider ${jura.className}`}>
-      Netuno
+    <span
+      className={`font-bold text-white tracking-wider flex gap-2 items-center`}
+    >
+      <LuHexagon className="text-[#007AFF] text-2xl inline" />
+      <p className="">Netuno</p>
     </span>
   </Link>
 );
@@ -53,7 +56,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <div className="hidden md:flex items-center gap-8">
+    <div className="hidden md:flex items-center gap-8 ">
       {NAV_ITEMS.map((item) => {
         const isActive =
           pathname === item.href || pathname?.startsWith(`${item.href}/`);
@@ -62,7 +65,7 @@ const NavLinks = () => {
           <Link
             key={item.href}
             href={item.href}
-            className={`font-medium transition-colors hover:text-white ${
+            className={`font-semibold transition-colors hover:text-white ${
               isActive ? "text-[#007AFF] text-xl" : "text-zinc-500 text-base"
             }`}
           >

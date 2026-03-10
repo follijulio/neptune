@@ -7,9 +7,9 @@ import {
   LuArrowRight,
   LuArrowLeft,
 } from "react-icons/lu";
-import PdfUploader from "./pdf-uploader";
+import PdfUploader from "../pdf-uploader";
 import Link from "next/link";
-import { Button } from "../shadcn-ui/button";
+import { Button } from "../../shadcn-ui/button";
 import { UploadCloud } from "lucide-react";
 import { skipOnboardingAction } from "@/src/app/actions/dashboard-actions";
 
@@ -58,7 +58,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         ))}
       </div>
 
-     <div className="w-full bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col">
+      <div className="w-full bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col">
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col justify-center text-center">
             <h1 className="text-4xl font-bold text-[#E0E0E0] mb-4">
@@ -80,7 +80,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
           </div>
         )}
 
-       {step === 2 && (
+        {step === 2 && (
           <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col justify-center">
             <h2 className="text-3xl font-bold text-[#E0E0E0] mb-2 text-center">
               O seu alvo principal
@@ -123,7 +123,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
           </div>
         )}
 
-       {step === 3 && (
+        {step === 3 && (
           <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col">
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-[#E0E0E0] mb-2">

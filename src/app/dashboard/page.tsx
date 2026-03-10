@@ -7,7 +7,7 @@ export default async function DashboardPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/auth");
+    redirect("/login");
   }
 
   const hasSemester = await prisma.semester.findFirst({
@@ -21,7 +21,5 @@ export default async function DashboardPage() {
     redirect("/onboarding");
   }
 
-  return (
-    <DashboardClient userId={session.user.id} userName={session.user.name} />
-  );
+  return <DashboardClient userId={session.user.id} />;
 }

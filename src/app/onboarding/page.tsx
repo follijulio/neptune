@@ -1,12 +1,12 @@
 import { auth } from "@/src/auth";
 import { redirect } from "next/navigation";
-import OnboardingFlow from "@/src/components/ui/onboarding-flow";
+import OnboardingFlow from "@/src/components/ui/flow/onboarding-flow";
 
 export default async function OnboardingPage() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    redirect("/auth");
+    redirect("/login");
   }
 
   return (

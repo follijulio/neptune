@@ -61,7 +61,9 @@ export const ModelName = {
   Subject: 'Subject',
   Enrollment: 'Enrollment',
   TwoFactorToken: 'TwoFactorToken',
-  TwoFactorConfirmation: 'TwoFactorConfirmation'
+  TwoFactorConfirmation: 'TwoFactorConfirmation',
+  CalendarEvent: 'CalendarEvent',
+  Link: 'Link'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -206,6 +208,33 @@ export const TwoFactorConfirmationScalarFieldEnum = {
 } as const
 
 export type TwoFactorConfirmationScalarFieldEnum = (typeof TwoFactorConfirmationScalarFieldEnum)[keyof typeof TwoFactorConfirmationScalarFieldEnum]
+
+
+export const CalendarEventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  date: 'date',
+  googleEventId: 'googleEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type CalendarEventScalarFieldEnum = (typeof CalendarEventScalarFieldEnum)[keyof typeof CalendarEventScalarFieldEnum]
+
+
+export const LinkScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  url: 'url',
+  icon: 'icon',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId'
+} as const
+
+export type LinkScalarFieldEnum = (typeof LinkScalarFieldEnum)[keyof typeof LinkScalarFieldEnum]
 
 
 export const SortOrder = {

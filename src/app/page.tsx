@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  LuHexagon,
   LuTrendingUp,
   LuBookOpen,
   LuGraduationCap,
@@ -14,6 +13,7 @@ import {
 import { FiCheckCircle } from "react-icons/fi";
 import { FaChartPie } from "react-icons/fa";
 import { Button } from "../components/shadcn-ui/button";
+import { Logo } from "../components/ui/nav-bar";
 
 const features = [
   {
@@ -101,8 +101,7 @@ export default function LandingPage() {
       <header className="w-full border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <LuHexagon className="text-[#007AFF] text-3xl" />
-            <span className="text-xl font-bold tracking-tight">Netuno</span>
+            <Logo />
           </div>
 
           <nav className="flex items-center gap-4">

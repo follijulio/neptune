@@ -96,3 +96,13 @@ export type TwoFactorToken = Prisma.TwoFactorTokenModel
  * 
  */
 export type TwoFactorConfirmation = Prisma.TwoFactorConfirmationModel
+/**
+ * Model CalendarEvent
+ * 
+ */
+export type CalendarEvent = Prisma.CalendarEventModel
+/**
+ * Model Link
+ * 
+ */
+export type Link = Prisma.LinkModel
