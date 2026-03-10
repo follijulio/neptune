@@ -7,7 +7,7 @@ export class DeleteEnrollmentController {
     try {
       const validatedData = DeleteEnrollmentSchema.parse(enrollmentData);
       const service = new DeleteEnrollmentService();
-      
+
       return await service.delete(validatedData);
     } catch (error) {
       throw new Error("Erro ao deletar matrícula", { cause: error });

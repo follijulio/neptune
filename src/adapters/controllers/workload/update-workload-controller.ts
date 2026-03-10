@@ -7,7 +7,7 @@ export class UpdateWorkloadController {
     try {
       const validatedData = UpdateWorkloadSchema.parse(workloadData);
       const service = new UpdateWorkloadService();
-      
+
       return await service.update(validatedData);
     } catch (error) {
       throw new Error("Erro ao atualizar carga horária", { cause: error });

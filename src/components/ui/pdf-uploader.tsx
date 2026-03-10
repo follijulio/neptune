@@ -86,9 +86,9 @@ export default function PdfUploader() {
   };
 
   return (
-    <Card className="bg-[#121212] border-[#1A1A1A] text-[#E0E0E0] w-full max-w-2xl mx-auto mt-10">
+    <Card className="mx-auto mt-10 w-full max-w-2xl border-[#1A1A1A] bg-[#121212] text-[#E0E0E0]">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-2xl font-bold">
           <LuFileText className="text-[#007AFF]" />
           Importar Histórico Escolar
         </CardTitle>
@@ -100,28 +100,28 @@ export default function PdfUploader() {
 
       <CardContent>
         <form onSubmit={handleUpload} className="space-y-6">
-          <div className="relative border-2 border-dashed border-[#1A1A1A] hover:border-[#007AFF] transition-colors rounded-xl p-8 flex flex-col items-center justify-center bg-[#000000]/50 text-center cursor-pointer group">
+          <div className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#1A1A1A] bg-[#000000]/50 p-8 text-center transition-colors hover:border-[#007AFF]">
             <input
               type="file"
               accept="application/pdf"
               onChange={handleFileChange}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
             />
             {file ? (
               <>
-                <LuCheck className="text-4xl text-[#00FF88] mb-4" />
-                <p className="text-[#E0E0E0] font-medium">{file.name}</p>
-                <p className="text-sm text-[#888888] mt-1">
+                <LuCheck className="mb-4 text-4xl text-[#00FF88]" />
+                <p className="font-medium text-[#E0E0E0]">{file.name}</p>
+                <p className="mt-1 text-sm text-[#888888]">
                   {(file.size / 1024 / 1024).toFixed(2)} MB
                 </p>
               </>
             ) : (
               <>
-                <LuUpload className="text-5xl text-[#888888] group-hover:text-[#007AFF] transition-colors mb-4" />
-                <p className="text-[#E0E0E0] font-medium">
+                <LuUpload className="mb-4 text-5xl text-[#888888] transition-colors group-hover:text-[#007AFF]" />
+                <p className="font-medium text-[#E0E0E0]">
                   Clique ou arraste seu PDF aqui
                 </p>
-                <p className="text-sm text-[#888888] mt-1">
+                <p className="mt-1 text-sm text-[#888888]">
                   Apenas arquivos .pdf
                 </p>
               </>
@@ -129,8 +129,8 @@ export default function PdfUploader() {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 text-[#FF3B30] bg-[#FF3B30]/10 p-4 rounded-lg border border-[#FF3B30]/20">
-              <LuCircleAlert className="text-xl shrink-0" />
+            <div className="flex items-center gap-2 rounded-lg border border-[#FF3B30]/20 bg-[#FF3B30]/10 p-4 text-[#FF3B30]">
+              <LuCircleAlert className="shrink-0 text-xl" />
               <p className="text-sm">{error}</p>
             </div>
           )}
@@ -138,24 +138,24 @@ export default function PdfUploader() {
           <Button
             type="submit"
             disabled={!file || isLoading}
-            className="w-full h-12 bg-[#007AFF] hover:bg-[#007AFF]/80 text-white font-bold text-lg rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-12 w-full rounded-lg bg-[#007AFF] text-lg font-bold text-white transition-all hover:bg-[#007AFF]/80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Analisando o documento..." : "Analisar Documento"}
           </Button>
           {isLoading && (
-            <Alert className="mt-2 border-[#1A1A1A] bg-[#0B0B0B]/80 backdrop-blur-sm rounded-xl px-4 py-3 w-full">
+            <Alert className="mt-2 w-full rounded-xl border-[#1A1A1A] bg-[#0B0B0B]/80 px-4 py-3 backdrop-blur-sm">
               <div className="flex items-start gap-3">
-                <span className="mt-1 h-2.5 w-2.5 rounded-full bg-[#007AFF] animate-pulse shrink-0" />
+                <span className="mt-1 h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-[#007AFF]" />
                 <div className="w-full">
                   <p className="text-sm font-medium text-[#E0E0E0]">
                     Analisando seu histórico...
                   </p>
-                  <p className="text-xs text-[#888888] mt-1">
+                  <p className="mt-1 text-xs text-[#888888]">
                     Isso pode levar alguns segundos, dependendo do tamanho do
                     PDF.
                   </p>
                   <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#1A1A1A]">
-                    <div className="h-full w-2/3 rounded-full bg-[#007AFF] animate-pulse" />
+                    <div className="h-full w-2/3 animate-pulse rounded-full bg-[#007AFF]" />
                   </div>
                 </div>
               </div>
@@ -164,28 +164,28 @@ export default function PdfUploader() {
         </form>
 
         {results && !savedSuccess && (
-          <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <h3 className="text-[#E0E0E0] font-bold mb-4 flex items-center justify-between">
+          <div className="animate-in fade-in slide-in-from-bottom-4 mt-8 duration-500">
+            <h3 className="mb-4 flex items-center justify-between font-bold text-[#E0E0E0]">
               <span>Disciplinas Encontradas ({results.length})</span>
             </h3>
 
-            <div className="max-h-64 overflow-y-auto pr-2 space-y-2 custom-scrollbar mb-6">
+            <div className="custom-scrollbar mb-6 max-h-64 space-y-2 overflow-y-auto pr-2">
               {results.map((subject, index) => (
                 <div
                   key={index}
-                  className="bg-[#000000] border border-[#1A1A1A] rounded-lg p-3 flex items-center justify-between"
+                  className="flex items-center justify-between rounded-lg border border-[#1A1A1A] bg-[#000000] p-3"
                 >
                   <div className="flex flex-col">
-                    <span className="font-medium text-[#E0E0E0] text-sm">
+                    <span className="text-sm font-medium text-[#E0E0E0]">
                       {subject.code ? `${subject.code} - ` : ""}
                       {subject.name}
                     </span>
-                    <span className="text-xs text-[#888888] mt-1">
+                    <span className="mt-1 text-xs text-[#888888]">
                       Status: {subject.status}
                     </span>
                   </div>
                   {subject.grade && (
-                    <div className="bg-[#121212] px-3 py-1 rounded border border-[#1A1A1A] font-bold text-[#007AFF]">
+                    <div className="rounded border border-[#1A1A1A] bg-[#121212] px-3 py-1 font-bold text-[#007AFF]">
                       {subject.grade}
                     </div>
                   )}
@@ -196,7 +196,7 @@ export default function PdfUploader() {
             <Button
               onClick={handleSaveToDatabase}
               disabled={isSaving}
-              className="w-full h-12 bg-[#00FF88] hover:bg-[#00FF88]/80 text-[#000000] font-bold text-lg rounded-lg transition-all"
+              className="h-12 w-full rounded-lg bg-[#00FF88] text-lg font-bold text-[#000000] transition-all hover:bg-[#00FF88]/80"
             >
               {isSaving
                 ? "Salvando na sua conta..."
@@ -206,9 +206,9 @@ export default function PdfUploader() {
         )}
 
         {savedSuccess && (
-          <div className="mt-8 p-6 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded-xl text-center animate-in zoom-in duration-300">
-            <LuCheck className="text-5xl text-[#00FF88] mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#E0E0E0] mb-2">
+          <div className="animate-in zoom-in mt-8 rounded-xl border border-[#00FF88]/30 bg-[#00FF88]/10 p-6 text-center duration-300">
+            <LuCheck className="mx-auto mb-4 text-5xl text-[#00FF88]" />
+            <h3 className="mb-2 text-xl font-bold text-[#E0E0E0]">
               Histórico Importado!
             </h3>
             <p className="text-[#888888]">

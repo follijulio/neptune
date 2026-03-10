@@ -7,7 +7,7 @@ export class UpdateSubjectController {
     try {
       const validatedData = UpdateSubjectSchema.parse(subjectData);
       const service = new UpdateSubjectService();
-      
+
       return await service.update(validatedData);
     } catch (error) {
       throw new Error("Erro ao atualizar disciplina", { cause: error });

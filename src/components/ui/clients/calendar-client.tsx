@@ -59,21 +59,21 @@ function MonthNavigator({
   onNextMonth: () => void;
 }) {
   return (
-    <div className="flex justify-between items-center mb-6 bg-[#0A0A0A] border border-[#1A1A1A] rounded-xl p-2 w-full max-w-xs mx-auto xl:mx-0">
+    <div className="mx-auto mb-6 flex w-full max-w-xs items-center justify-between rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-2 xl:mx-0">
       <Button
         variant="ghost"
         onClick={onPrevMonth}
-        className="hover:bg-zinc-800 px-3"
+        className="px-3 hover:bg-zinc-800"
       >
         <LuChevronLeft className="h-5 w-5" />
       </Button>
-      <h2 className="text-lg sm:text-xl font-bold w-40 sm:w-48 text-center capitalize text-[#E0E0E0] truncate">
+      <h2 className="w-40 truncate text-center text-lg font-bold text-[#E0E0E0] capitalize sm:w-48 sm:text-xl">
         {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
       </h2>
       <Button
         variant="ghost"
         onClick={onNextMonth}
-        className="hover:bg-zinc-800 px-3"
+        className="px-3 hover:bg-zinc-800"
       >
         <LuChevronRight className="h-5 w-5" />
       </Button>
@@ -100,30 +100,25 @@ function CalendarDay({
   return (
     <div
       onClick={() => onDayClick(day)}
-      className={`border-r border-b border-[#1A1A1A] p-2 transition-colors cursor-pointer hover:bg-zinc-900/80 flex flex-col gap-1.5 overflow-hidden
-        ${!isSameMonth(day, currentMonth) ? "bg-black/60 text-zinc-700" : "bg-transparent text-zinc-300"}
-        ${(idx + 1) % 7 === 0 ? "border-r-0" : ""}
-      `}
+      className={`flex cursor-pointer flex-col gap-1.5 overflow-hidden border-r border-b border-[#1A1A1A] p-2 transition-colors hover:bg-zinc-900/80 ${!isSameMonth(day, currentMonth) ? "bg-black/60 text-zinc-700" : "bg-transparent text-zinc-300"} ${(idx + 1) % 7 === 0 ? "border-r-0" : ""} `}
     >
-      <div className="flex justify-end mb-1 shrink-0">
+      <div className="mb-1 flex shrink-0 justify-end">
         <span
-          className={`text-xs sm:text-sm font-bold w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-full
-          ${isToday(day) ? "bg-[#007AFF] text-white shadow-[0_0_10px_rgba(0,122,255,0.5)]" : ""}
-        `}
+          className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold sm:h-7 sm:w-7 sm:text-sm ${isToday(day) ? "bg-[#007AFF] text-white shadow-[0_0_10px_rgba(0,122,255,0.5)]" : ""} `}
         >
           {format(day, "d")}
         </span>
       </div>
 
-      <div className="flex flex-col gap-1.5 overflow-y-auto flex-1 min-h-0 pr-1 custom-scrollbar">
+      <div className="custom-scrollbar flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
         {dayEvents.map((event) => (
           <div
             key={event.id}
             onClick={(e) => onEventClick(e, event)}
-            className="shrink-0 bg-[#007AFF]/20 border border-[#007AFF]/40 text-[#007AFF] text-[10px] sm:text-xs font-semibold px-2 py-1 sm:py-1.5 rounded-md truncate shadow-sm hover:bg-[#007AFF]/40 transition-all cursor-pointer"
+            className="shrink-0 cursor-pointer truncate rounded-md border border-[#007AFF]/40 bg-[#007AFF]/20 px-2 py-1 text-[10px] font-semibold text-[#007AFF] shadow-sm transition-all hover:bg-[#007AFF]/40 sm:py-1.5 sm:text-xs"
             title={event.title}
           >
-            <span className="opacity-75 mr-1">
+            <span className="mr-1 opacity-75">
               {format(event.date as Date, "HH:mm")}
             </span>
             {event.title}
@@ -151,20 +146,20 @@ function CalendarGrid({
   const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
   return (
-    <div className="overflow-x-auto pb-4 custom-scrollbar">
-      <div className="min-w-200 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl overflow-hidden shadow-2xl">
+    <div className="custom-scrollbar overflow-x-auto pb-4">
+      <div className="min-w-200 overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] shadow-2xl">
         <div className="grid grid-cols-7 border-b border-[#1A1A1A] bg-[#121212]">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="py-3 text-center text-xs sm:text-sm font-bold text-zinc-500 uppercase tracking-wider"
+              className="py-3 text-center text-xs font-bold tracking-wider text-zinc-500 uppercase sm:text-sm"
             >
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 auto-rows-[120px] sm:auto-rows-[140px]">
+        <div className="grid auto-rows-[120px] grid-cols-7 sm:auto-rows-[140px]">
           {calendarDays.map((day, idx) => {
             const dayEvents = events.filter((event) =>
               isSameDay(event.date as Date, day),
@@ -196,14 +191,14 @@ function UpcomingEventsList({
   onEventClick: (e: React.MouseEvent, event: CalendarEvent) => void;
 }) {
   return (
-    <div className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-6 shadow-xl sticky top-24">
-      <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+    <div className="sticky top-24 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-xl">
+      <h3 className="mb-6 flex items-center gap-2 text-xl font-bold text-white">
         <LuCalendarDays className="text-[#007AFF]" />
         Eventos próximos
       </h3>
 
       {events.length === 0 ? (
-        <div className="text-zinc-500 text-sm text-center py-6 border border-dashed border-[#1A1A1A] rounded-xl">
+        <div className="rounded-xl border border-dashed border-[#1A1A1A] py-6 text-center text-sm text-zinc-500">
           Nenhum evento agendado para os próximos dias.
         </div>
       ) : (
@@ -212,21 +207,21 @@ function UpcomingEventsList({
             <div
               key={`side-${event.id}`}
               onClick={(e) => onEventClick(e, event)}
-              className="flex gap-4 items-start group cursor-pointer hover:bg-zinc-900/50 p-2 -m-2 rounded-xl transition-colors"
+              className="group -m-2 flex cursor-pointer items-start gap-4 rounded-xl p-2 transition-colors hover:bg-zinc-900/50"
             >
-              <div className="bg-[#121212] border border-[#1A1A1A] rounded-lg p-2 text-center min-w-12.5 group-hover:border-[#007AFF]/50 transition-colors">
+              <div className="min-w-12.5 rounded-lg border border-[#1A1A1A] bg-[#121212] p-2 text-center transition-colors group-hover:border-[#007AFF]/50">
                 <div className="text-[10px] font-bold text-[#007AFF] uppercase">
                   {format(event.date as Date, "MMM", { locale: ptBR })}
                 </div>
-                <div className="text-lg font-bold text-white leading-none mt-1">
+                <div className="mt-1 text-lg leading-none font-bold text-white">
                   {format(event.date as Date, "dd")}
                 </div>
               </div>
               <div className="flex flex-col pt-1">
-                <span className="text-sm font-bold text-[#E0E0E0] leading-tight line-clamp-2 group-hover:text-[#007AFF] transition-colors">
+                <span className="line-clamp-2 text-sm leading-tight font-bold text-[#E0E0E0] transition-colors group-hover:text-[#007AFF]">
                   {event.title}
                 </span>
-                <span className="text-xs text-zinc-500 mt-1 flex items-center gap-1">
+                <span className="mt-1 flex items-center gap-1 text-xs text-zinc-500">
                   <LuClock className="h-3 w-3" />{" "}
                   {format(event.date as Date, "HH:mm")}
                 </span>
@@ -264,17 +259,17 @@ function CreateEventModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#121212] border-[#1A1A1A] text-white sm:max-w-md rounded-2xl">
+      <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+          <DialogTitle className="flex items-center gap-2 text-2xl font-bold">
             <LuCalendarPlus className="text-[#007AFF]" /> Novo Evento
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-5 pt-4">
           {error && (
-            <p className="text-[#FF3B30] text-sm font-medium">{error}</p>
+            <p className="text-sm font-medium text-[#FF3B30]">{error}</p>
           )}
-          <div className="bg-black/50 border border-zinc-800 rounded-lg p-3 text-sm text-zinc-300 font-medium text-center capitalize">
+          <div className="rounded-lg border border-zinc-800 bg-black/50 p-3 text-center text-sm font-medium text-zinc-300 capitalize">
             {selectedDate
               ? format(selectedDate, "dd 'de' MMMM 'de' yyyy", {
                   locale: ptBR,
@@ -289,23 +284,23 @@ function CreateEventModal({
               <Input
                 name="title"
                 placeholder="Ex: Prova de Geometria"
-                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
               />
             </div>
             <div className="col-span-1 space-y-2">
-              <label className="text-sm font-semibold text-zinc-300 flex items-center gap-1">
+              <label className="flex items-center gap-1 text-sm font-semibold text-zinc-300">
                 <LuClock /> Hora
               </label>
               <Input
                 type="time"
                 value={time}
                 onChange={(e) => onTimeChange(e.target.value)}
-                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF] [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF] [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:filter"
               />
             </div>
           </div>
           <div className="space-y-2">
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <label className="text-sm font-semibold text-zinc-300">
                 Descrição
               </label>
@@ -320,13 +315,13 @@ function CreateEventModal({
               maxLength={100}
               onChange={(e) => onDescCountChange(e.target.value.length)}
               placeholder="Anotações para o evento..."
-              className="bg-zinc-900/50 border-zinc-800 text-white min-h-25 rounded-xl focus-visible:ring-[#007AFF] resize-none"
+              className="min-h-25 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
             />
           </div>
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold h-12 rounded-xl mt-4"
+            className="mt-4 h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
           >
             {loading ? "Salvando e Sincronizando..." : "Salvar Evento"}
           </Button>
@@ -352,9 +347,9 @@ function EventDetailsModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#121212] border-[#1A1A1A] text-white sm:max-w-md rounded-2xl">
+      <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-[#E0E0E0] border-b border-[#1A1A1A] pb-4 flex items-center gap-2">
+          <DialogTitle className="flex items-center gap-2 border-b border-[#1A1A1A] pb-4 text-xl font-bold text-[#E0E0E0]">
             <LuAlignLeft className="text-[#007AFF]" /> Detalhes do Evento
           </DialogTitle>
         </DialogHeader>
@@ -362,28 +357,28 @@ function EventDetailsModal({
         {event && (
           <div className="space-y-6 pt-2">
             <div>
-              <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
+              <h3 className="mb-1 text-xs font-semibold tracking-wider text-zinc-500 uppercase">
                 Título
               </h3>
               <p className="text-xl font-bold text-[#007AFF]">{event.title}</p>
             </div>
 
-            <div className="flex gap-12 bg-black/30 p-4 rounded-xl border border-[#1A1A1A]">
+            <div className="flex gap-12 rounded-xl border border-[#1A1A1A] bg-black/30 p-4">
               <div>
-                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                <h3 className="mb-1 flex items-center gap-1 text-xs font-semibold tracking-wider text-zinc-500 uppercase">
                   Data
                 </h3>
-                <p className="text-white font-medium capitalize">
+                <p className="font-medium text-white capitalize">
                   {format(event.date as Date, "dd 'de' MMM, yyyy", {
                     locale: ptBR,
                   })}
                 </p>
               </div>
               <div>
-                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                <h3 className="mb-1 flex items-center gap-1 text-xs font-semibold tracking-wider text-zinc-500 uppercase">
                   <LuClock /> Hora
                 </h3>
-                <p className="text-white font-medium">
+                <p className="font-medium text-white">
                   {format(event.date as Date, "HH:mm")}
                 </p>
               </div>
@@ -391,10 +386,10 @@ function EventDetailsModal({
 
             {event.description && (
               <div>
-                <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+                <h3 className="mb-2 text-xs font-semibold tracking-wider text-zinc-500 uppercase">
                   Descrição
                 </h3>
-                <p className="text-zinc-300 bg-black/50 p-4 rounded-xl border border-[#1A1A1A] whitespace-pre-wrap text-sm leading-relaxed">
+                <p className="rounded-xl border border-[#1A1A1A] bg-black/50 p-4 text-sm leading-relaxed whitespace-pre-wrap text-zinc-300">
                   {event.description}
                 </p>
               </div>
@@ -402,12 +397,12 @@ function EventDetailsModal({
           </div>
         )}
 
-        <div className="flex justify-between items-center pt-6 mt-2 border-t border-[#1A1A1A]">
+        <div className="mt-2 flex items-center justify-between border-t border-[#1A1A1A] pt-6">
           <Button
             variant="ghost"
             onClick={() => event && onDelete(event.id)}
             disabled={isDeleting}
-            className="text-[#FF3B30] hover:text-white hover:bg-[#FF3B30] rounded-lg transition-colors flex items-center gap-2"
+            className="flex items-center gap-2 rounded-lg text-[#FF3B30] transition-colors hover:bg-[#FF3B30] hover:text-white"
           >
             <Trash2 className="h-4 w-4" />
             {isDeleting ? "Excluindo..." : "Excluir"}
@@ -415,7 +410,7 @@ function EventDetailsModal({
           <Button
             variant="ghost"
             onClick={() => onOpenChange(false)}
-            className="hover:bg-zinc-800 text-white rounded-lg"
+            className="rounded-lg text-white hover:bg-zinc-800"
           >
             Fechar
           </Button>
@@ -521,15 +516,15 @@ export default function CalendarClient({
 
   return (
     <MainLayout>
-      <header className="mb-2 border-[#1A1A1A] flex justify-between px-4">
+      <header className="mb-2 flex justify-between border-[#1A1A1A] px-4">
         <MonthNavigator
           currentMonth={currentMonth}
           onPrevMonth={() => setCurrentMonth(subMonths(currentMonth, 1))}
           onNextMonth={() => setCurrentMonth(addMonths(currentMonth, 1))}
         />
       </header>
-      <div className="flex flex-col xl:flex-row gap-8">
-        <div className="flex-1 min-w-0">
+      <div className="flex flex-col gap-8 xl:flex-row">
+        <div className="min-w-0 flex-1">
           <CalendarGrid
             calendarDays={calendarDays}
             currentMonth={currentMonth}
@@ -539,7 +534,7 @@ export default function CalendarClient({
           />
         </div>
 
-        <div className="w-full xl:w-80 flex flex-col gap-6 mt-0 xl:mt-18">
+        <div className="mt-0 flex w-full flex-col gap-6 xl:mt-18 xl:w-80">
           <UpcomingEventsList
             events={upcomingEvents}
             onEventClick={handleEventClick}

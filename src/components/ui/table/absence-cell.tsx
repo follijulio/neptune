@@ -76,7 +76,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
         onClick={handleBarClick}
         onMouseMove={handleBarMove}
         onMouseLeave={() => setBarGhostPct(null)}
-        className="relative w-24 h-1.25 rounded-full bg-white/10 cursor-crosshair overflow-hidden flex-shrink-0"
+        className="relative h-1.25 w-24 flex-shrink-0 cursor-crosshair overflow-hidden rounded-full bg-white/10"
       >
         {barGhostPct !== null && (
           <div
@@ -86,13 +86,13 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
         )}
         <div
           className={cn(
-            "h-full rounded-full transition-all duration-300 relative z-10",
+            "relative z-10 h-full rounded-full transition-all duration-300",
             barTw,
           )}
           style={{ width: `${ratio * 100}%` }}
         />
       </div>
-      <div className="flex items-center gap-0.5 text-sm font-mono min-w-13">
+      <div className="flex min-w-13 items-center gap-0.5 font-mono text-sm">
         {editingAbsences ? (
           <input
             autoFocus
@@ -106,7 +106,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
                 setEditingAbsences(false);
               }
             }}
-            className="w-8 text-center bg-white/10 border border-white/20 rounded px-0.5 py-px outline-none text-sm font-mono"
+            className="w-8 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-sm outline-none"
             style={{ color: barHex }}
           />
         ) : (
@@ -115,7 +115,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
               setEditingAbsences(true);
               setTempAbsences(String(absences));
             }}
-            className="px-1 py-px rounded cursor-pointer hover:bg-white/10 transition-colors"
+            className="cursor-pointer rounded px-1 py-px transition-colors hover:bg-white/10"
             style={{ color: barHex }}
             title="Clique para editar faltas"
           >
@@ -138,7 +138,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
                 setEditingMax(false);
               }
             }}
-            className="w-8 text-center bg-white/10 border border-white/20 rounded px-0.5 py-px outline-none text-sm font-mono text-white/60"
+            className="w-8 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-sm text-white/60 outline-none"
           />
         ) : (
           <span
@@ -146,7 +146,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
               setEditingMax(true);
               setTempMax(String(maxAbsences));
             }}
-            className="px-1 py-px rounded cursor-pointer text-white/40 hover:text-white/70 hover:bg-white/10 transition-colors"
+            className="cursor-pointer rounded px-1 py-px text-white/40 transition-colors hover:bg-white/10 hover:text-white/70"
             title="Clique para editar máximo"
           >
             {maxAbsences}
@@ -157,14 +157,14 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
         className={cn(
           "flex items-center gap-1.5 transition-all duration-200",
           hovered
-            ? "opacity-100 translate-x-0 pointer-events-auto"
-            : "opacity-0 -translate-x-1 pointer-events-none",
+            ? "pointer-events-auto translate-x-0 opacity-100"
+            : "pointer-events-none -translate-x-1 opacity-0",
         )}
       >
         <button
           onClick={() => onUpdate({ absences: Math.max(0, absences - 1) })}
           disabled={absences === 0}
-          className="w-6 h-6 flex items-center justify-center rounded border border-white/15 text-white/50 hover:border-white/40 hover:text-white hover:bg-white/5 transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm leading-none"
+          className="flex h-6 w-6 items-center justify-center rounded border border-white/15 text-sm leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
         >
           −
         </button>
@@ -173,7 +173,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
             onUpdate({ absences: Math.min(maxAbsences, absences + 1) })
           }
           disabled={absences >= maxAbsences}
-          className="w-6 h-6 flex items-center justify-center rounded border border-white/15 text-white/50 hover:border-white/40 hover:text-white hover:bg-white/5 transition-all disabled:opacity-20 disabled:cursor-not-allowed text-sm leading-none"
+          className="flex h-6 w-6 items-center justify-center rounded border border-white/15 text-sm leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
         >
           +
         </button>

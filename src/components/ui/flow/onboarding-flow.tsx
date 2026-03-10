@@ -29,11 +29,11 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
   const firstName = userName.split(" ")[0];
 
   return (
-    <div className="max-w-3xl w-full flex flex-col items-center">
-      <div className="w-full mb-12 flex items-center justify-between relative">
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-[#1A1A1A] -z-10 rounded-full">
+    <div className="flex w-full max-w-3xl flex-col items-center">
+      <div className="relative mb-12 flex w-full items-center justify-between">
+        <div className="absolute top-1/2 left-0 -z-10 h-1 w-full -translate-y-1/2 rounded-full bg-[#1A1A1A]">
           <div
-            className="h-full bg-[#007AFF] transition-all duration-500 ease-out rounded-full"
+            className="h-full rounded-full bg-[#007AFF] transition-all duration-500 ease-out"
             style={{ width: `${((step - 1) / 2) * 100}%` }}
           />
         </div>
@@ -45,7 +45,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         ].map((item) => (
           <div key={item.num} className="flex flex-col items-center gap-2">
             <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 ${step >= item.num ? "bg-[#007AFF] text-white" : "bg-[#1A1A1A] text-[#555555]"}`}
+              className={`flex h-12 w-12 items-center justify-center rounded-full transition-colors duration-300 ${step >= item.num ? "bg-[#007AFF] text-white" : "bg-[#1A1A1A] text-[#555555]"}`}
             >
               <item.icon className="text-xl" />
             </div>
@@ -58,13 +58,13 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         ))}
       </div>
 
-      <div className="w-full bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col">
+      <div className="relative flex min-h-[400px] w-full flex-col overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8 shadow-2xl">
         {step === 1 && (
-          <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col justify-center text-center">
-            <h1 className="text-4xl font-bold text-[#E0E0E0] mb-4">
+          <div className="animate-in fade-in slide-in-from-right-8 flex flex-1 flex-col justify-center text-center duration-500">
+            <h1 className="mb-4 text-4xl font-bold text-[#E0E0E0]">
               Bem-vindo ao Netuno, {firstName}! 🌊
             </h1>
-            <p className="text-[#888888] text-lg mb-8 max-w-xl mx-auto">
+            <p className="mx-auto mb-8 max-w-xl text-lg text-[#888888]">
               Estamos preparando o seu novo ambiente acadêmico. O Netuno vai te
               ajudar a prever coeficientes de rendimento, organizar disciplinas
               e monitorar sua evolução até o diploma.
@@ -72,7 +72,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
             <div className="mt-auto">
               <Button
                 onClick={nextStep}
-                className="bg-[#007AFF] hover:bg-[#005bb5] text-white px-8 py-6 text-lg rounded-xl w-full sm:w-auto"
+                className="w-full rounded-xl bg-[#007AFF] px-8 py-6 text-lg text-white hover:bg-[#005bb5] sm:w-auto"
               >
                 Começar Configuração <LuArrowRight className="ml-2" />
               </Button>
@@ -81,26 +81,26 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         )}
 
         {step === 2 && (
-          <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col justify-center">
-            <h2 className="text-3xl font-bold text-[#E0E0E0] mb-2 text-center">
+          <div className="animate-in fade-in slide-in-from-right-8 flex flex-1 flex-col justify-center duration-500">
+            <h2 className="mb-2 text-center text-3xl font-bold text-[#E0E0E0]">
               O seu alvo principal
             </h2>
-            <p className="text-[#888888] text-center mb-8">
+            <p className="mb-8 text-center text-[#888888]">
               Para calcularmos o seu progresso geral, precisamos saber a carga
               horária total da sua grade curricular.
             </p>
 
-            <div className="max-w-md mx-auto w-full space-y-4">
-              <label className="block text-[#E0E0E0] font-medium mb-2">
+            <div className="mx-auto w-full max-w-md space-y-4">
+              <label className="mb-2 block font-medium text-[#E0E0E0]">
                 Carga Horária Total (Horas)
               </label>
               <input
                 type="number"
                 value={totalHours}
                 onChange={(e) => setTotalHours(Number(e.target.value))}
-                className="w-full bg-[#121212] border border-[#333333] text-white text-xl rounded-xl px-4 py-4 focus:outline-none focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] transition-all"
+                className="w-full rounded-xl border border-[#333333] bg-[#121212] px-4 py-4 text-xl text-white transition-all focus:border-[#007AFF] focus:ring-1 focus:ring-[#007AFF] focus:outline-none"
               />
-              <p className="text-xs text-[#555555] mt-2">
+              <p className="mt-2 text-xs text-[#555555]">
                 *Você pode alterar isso depois nas configurações do dashboard.
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
               </Button>
               <Button
                 onClick={nextStep}
-                className="bg-[#007AFF] hover:bg-[#005bb5] text-white px-8 py-6 rounded-xl"
+                className="rounded-xl bg-[#007AFF] px-8 py-6 text-white hover:bg-[#005bb5]"
               >
                 Avançar <LuArrowRight className="ml-2" />
               </Button>
@@ -124,9 +124,9 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         )}
 
         {step === 3 && (
-          <div className="animate-in fade-in slide-in-from-right-8 duration-500 flex-1 flex flex-col">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-[#E0E0E0] mb-2">
+          <div className="animate-in fade-in slide-in-from-right-8 flex flex-1 flex-col duration-500">
+            <div className="mb-6 text-center">
+              <h2 className="mb-2 text-2xl font-bold text-[#E0E0E0]">
                 Sincronizar Histórico
               </h2>
               <p className="text-[#888888]">
@@ -136,11 +136,11 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
               </p>
             </div>
 
-            <div className="flex-1 w-full flex items-center justify-center">
+            <div className="flex w-full flex-1 items-center justify-center">
               <PdfUploader />
             </div>
 
-            <div className="mt-6 flex justify-between items-center border-t border-[#1A1A1A] pt-4">
+            <div className="mt-6 flex items-center justify-between border-t border-[#1A1A1A] pt-4">
               <Button
                 onClick={prevStep}
                 variant="ghost"
@@ -151,7 +151,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
               <button
                 onClick={handleSkip}
                 disabled={isSkipping}
-                className="text-sm text-[#555555] hover:text-[#888888] transition-colors hover:underline disabled:opacity-50"
+                className="text-sm text-[#555555] transition-colors hover:text-[#888888] hover:underline disabled:opacity-50"
               >
                 {isSkipping ? "Preparando painel..." : "Pular sincronização"}
               </button>

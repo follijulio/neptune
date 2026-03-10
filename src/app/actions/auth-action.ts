@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma/lib/prisma";
 import { signIn, signOut } from "@/src/auth";
-import { sendTwoFactorEmail } from "@/src/lib/mail";
+import { sendVerificationEmail } from "@/src/lib/mail";
 import { generateTwoFactorToken } from "@/src/lib/tokens";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
@@ -61,7 +61,7 @@ export async function loginAction(formData: FormData) {
       });
     } else {
       const twoFactorToken = await generateTwoFactorToken(user.email);
-      await sendTwoFactorEmail(twoFactorToken.email, twoFactorToken.token);
+      await sendVerificationEmail(twoFactorToken.email, twoFactorToken.token);
 
       return { twoFactor: true };
     }

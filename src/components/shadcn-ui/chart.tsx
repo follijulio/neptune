@@ -225,7 +225,7 @@ function ChartTooltipContent({
                     )}
                     <div
                       className={cn(
-                        "flex flex-1 gap-2 justify-between items-center leading-none",
+                        "flex flex-1 items-center justify-between gap-2 leading-none",
                         nestLabel ? "items-end" : "items-center",
                       )}
                     >
@@ -236,7 +236,7 @@ function ChartTooltipContent({
                         </span>
                       </div>
                       {item.value && (
-                        <span className="font-mono font-medium tabular-nums ">
+                        <span className="font-mono font-medium tabular-nums">
                           {item.value.toLocaleString()}
                         </span>
                       )}
@@ -361,14 +361,14 @@ const Progress = React.forwardRef<
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      "relative h-2 w-full overflow-hidden rounded-full bg-zinc-800 ",
+      "relative h-2 w-full overflow-hidden rounded-full bg-zinc-800",
       className,
     )}
     {...props}
   >
     <ProgressPrimitive.Indicator
       className={cn(
-        "h-full w-full flex-1 transition-all shadow-2xl shadow-white rounded-full",
+        "h-full w-full flex-1 rounded-full shadow-2xl shadow-white transition-all",
         indicatorClassName,
       )}
       style={{ transform: `translateX(-${100 - (value || 0)}%)` }}

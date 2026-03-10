@@ -61,20 +61,20 @@ const SemesterNavigator: React.FC<{
   onNavigate: (direction: "next" | "previous") => void;
   disabled?: boolean;
 }> = ({ currentSemester, onNavigate, disabled }) => (
-  <div className="flex items-center gap-2 mb-4">
+  <div className="mb-4 flex items-center gap-2">
     <button
       onClick={() => onNavigate("previous")}
       disabled={disabled}
       className={cn(
-        "p-1 bg-black hover:invert rounded-full h-8 w-8 flex items-center justify-center transition-all",
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+        "flex h-8 w-8 items-center justify-center rounded-full bg-black p-1 transition-all hover:invert",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
       )}
       aria-label="Semestre anterior"
     >
       <GrFormPrevious className="inline" />
     </button>
 
-    <h2 className="text-lg font-semibold w-40 text-center">
+    <h2 className="w-40 text-center text-lg font-semibold">
       Semestre: {currentSemester}
     </h2>
 
@@ -82,8 +82,8 @@ const SemesterNavigator: React.FC<{
       onClick={() => onNavigate("next")}
       disabled={disabled}
       className={cn(
-        "p-1 bg-black hover:invert rounded-full h-8 w-8 flex items-center justify-center transition-all",
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+        "flex h-8 w-8 items-center justify-center rounded-full bg-black p-1 transition-all hover:invert",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
       )}
       aria-label="Próximo semestre"
     >
@@ -96,32 +96,32 @@ const CourseRowSkeleton = () => (
   <TableRow className="h-full border-b border-white/10">
     <TableCell>
       <div className="flex items-center">
-        <div className="w-5 h-5 bg-white/10 rounded animate-pulse" />
+        <div className="h-5 w-5 animate-pulse rounded bg-white/10" />
         <div className="ml-4 flex flex-col gap-2">
-          <div className="w-32 h-4 bg-white/10 rounded animate-pulse" />
-          <div className="w-16 h-3 bg-white/10 rounded animate-pulse" />
+          <div className="h-4 w-32 animate-pulse rounded bg-white/10" />
+          <div className="h-3 w-16 animate-pulse rounded bg-white/10" />
         </div>
       </div>
     </TableCell>
 
     <TableCell>
       <div className="flex items-center gap-2">
-        <div className="w-3 h-3 rounded-full bg-white/10 animate-pulse" />
-        <div className="w-20 h-4 bg-white/10 rounded animate-pulse" />
+        <div className="h-3 w-3 animate-pulse rounded-full bg-white/10" />
+        <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
       </div>
     </TableCell>
 
-    <TableCell className="flex items-center h-full gap-4">
-      <div className="w-24 h-2 bg-white/10 rounded-full animate-pulse" />
-      <div className="w-8 h-4 bg-white/10 rounded animate-pulse" />
+    <TableCell className="flex h-full items-center gap-4">
+      <div className="h-2 w-24 animate-pulse rounded-full bg-white/10" />
+      <div className="h-4 w-8 animate-pulse rounded bg-white/10" />
     </TableCell>
 
     <TableCell>
-      <div className="w-8 h-4 bg-white/10 rounded animate-pulse" />
+      <div className="h-4 w-8 animate-pulse rounded bg-white/10" />
     </TableCell>
 
     <TableCell className="text-right">
-      <div className="w-6 h-6 bg-white/10 rounded-full ml-auto animate-pulse" />
+      <div className="ml-auto h-6 w-6 animate-pulse rounded-full bg-white/10" />
     </TableCell>
   </TableRow>
 );
@@ -183,7 +183,7 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
       <TableCell>
         <p
           className={cn(
-            "font-semibold text-base flex flex-row items-center gap-2",
+            "flex flex-row items-center gap-2 text-base font-semibold",
             getStatusColor(course.status),
           )}
         >
@@ -192,7 +192,7 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
         </p>
       </TableCell>
 
-      <TableCell className="flex items-center h-full gap-4">
+      <TableCell className="flex h-full items-center gap-4">
         <AbsenceCell
           absences={localAbsences}
           maxAbsences={localMaxAbsences}
@@ -231,7 +231,7 @@ const CoursesTable: React.FC<{
         ))
       ) : courses.length === 0 ? (
         <TableRow>
-          <TableCell colSpan={5} className="text-center py-10 text-[#888888]">
+          <TableCell colSpan={5} className="py-10 text-center text-[#888888]">
             Nenhuma disciplina encontrada para este semestre.
           </TableCell>
         </TableRow>
@@ -263,7 +263,7 @@ const CourseStatusTable: React.FC<{
   };
 
   return (
-    <div className="rounded-lg w-full min-h-[300px]">
+    <div className="min-h-[300px] w-full rounded-lg">
       <SemesterNavigator
         currentSemester={currentSemester ?? getCurrentSemester()}
         onNavigate={handleSemesterNavigation}

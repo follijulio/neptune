@@ -88,31 +88,31 @@ function SortableNoteCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl flex flex-col min-h-[280px] shadow-lg hover:border-zinc-700 transition-colors overflow-hidden  slide-in-from-bottom-4 duration-500 fill-mode-both ${isDragging ? "shadow-2xl ring-2 ring-[#007AFF]/50 cursor-grabbing" : ""}`}
+      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-[280px] flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
     >
       <div
-        className="absolute top-0 left-0 w-full h-2"
+        className="absolute top-0 left-0 h-2 w-full"
         style={{ backgroundColor: note.color || "#007AFF" }}
       />
 
       <div
         {...attributes}
         {...listeners}
-        className="absolute top-4 right-4 text-zinc-600 hover:text-zinc-300 cursor-grab active:cursor-grabbing p-1 touch-none"
+        className="absolute top-4 right-4 cursor-grab touch-none p-1 text-zinc-600 hover:text-zinc-300 active:cursor-grabbing"
         title="Arrastar anotação"
       >
         <LuGripHorizontal className="h-5 w-5" />
       </div>
 
-      <div className="p-8 flex flex-col h-full">
-        <h3 className="text-2xl font-bold text-[#E0E0E0] mb-4 pr-8 leading-tight">
+      <div className="flex h-full flex-col p-8">
+        <h3 className="mb-4 pr-8 text-2xl leading-tight font-bold text-[#E0E0E0]">
           {note.title}
         </h3>
-        <p className="text-[#A0A0A0] text-base flex-1 whitespace-pre-wrap leading-relaxed">
+        <p className="flex-1 text-base leading-relaxed whitespace-pre-wrap text-[#A0A0A0]">
           {note.content}
         </p>
 
-        <div className="mt-8 flex justify-between items-center text-sm font-medium text-zinc-600 border-t border-[#1A1A1A] pt-4">
+        <div className="mt-8 flex items-center justify-between border-t border-[#1A1A1A] pt-4 text-sm font-medium text-zinc-600">
           <span>{new Date(note.createdAt).toLocaleDateString("pt-BR")}</span>
           <button
             onClick={(e) => {
@@ -120,7 +120,7 @@ function SortableNoteCard({
               onDelete(note.id);
             }}
             disabled={isDeleting}
-            className="text-zinc-500 hover:text-[#FF3B30] transition-colors disabled:opacity-50 p-2 -mr-2 rounded-lg hover:bg-[#FF3B30]/10 z-10 relative"
+            className="relative z-10 -mr-2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50"
             title="Apagar anotação"
           >
             <LuTrash2 className="h-5 w-5" />
@@ -207,24 +207,15 @@ export default function MuralClient({
 
   return (
     <MainLayout>
-      <header className="mb-12 flex justify-between items-end border-b border-[#1A1A1A] pb-6">
-        <div>
-          <h1 className="text-4xl font-bold text-white tracking-tight">
-            Mural de Anotações
-          </h1>
-          <p className="text-zinc-500 mt-2 text-base">
-            Organize as suas provas e ideias. Arraste os cartões para priorizar.
-          </p>
-        </div>
-
+      <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold gap-2 rounded-xl h-12 px-6">
+            <Button className="h-12 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white hover:bg-[#005bb5]">
               <LuPlus className="h-5 w-5" /> Novo Post-it
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="bg-[#121212] border-[#1A1A1A] text-white sm:max-w-md rounded-2xl">
+          <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold">
                 Criar Anotação
@@ -232,7 +223,7 @@ export default function MuralClient({
             </DialogHeader>
             <form onSubmit={handleCreate} className="space-y-6 pt-4">
               {error && (
-                <p className="text-red-500 text-sm font-medium">{error}</p>
+                <p className="text-sm font-medium text-red-500">{error}</p>
               )}
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-zinc-300">
@@ -241,7 +232,7 @@ export default function MuralClient({
                 <Input
                   name="title"
                   placeholder="prova de ..."
-                  className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                  className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
               <div className="space-y-2">
@@ -251,7 +242,7 @@ export default function MuralClient({
                 <Textarea
                   name="content"
                   placeholder="a prova vai ter questões sobre..."
-                  className="bg-zinc-900/50 border-zinc-800 text-white min-h-[120px] rounded-xl focus-visible:ring-[#007AFF] resize-none"
+                  className="min-h-[120px] resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
               <div className="space-y-3">
@@ -264,12 +255,12 @@ export default function MuralClient({
                       key={c.value}
                       type="button"
                       onClick={() => setSelectedColor(c.value)}
-                      className={`h-8 w-8 rounded-full flex items-center justify-center transition-transform hover:scale-110 ${selectedColor === c.value ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
+                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-110 ${selectedColor === c.value ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
                       style={{ backgroundColor: c.value }}
                       title={c.name}
                     >
                       {selectedColor === c.value && (
-                        <LuCheck className="text-white h-4 w-4 drop-shadow-md" />
+                        <LuCheck className="h-4 w-4 text-white drop-shadow-md" />
                       )}
                     </button>
                   ))}
@@ -278,7 +269,7 @@ export default function MuralClient({
               <Button
                 type="submit"
                 disabled={isSaving}
-                className="w-full bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold h-12 rounded-xl"
+                className="h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
               >
                 {isSaving ? "Salvando..." : "Salvar Post-it"}
               </Button>
@@ -288,8 +279,8 @@ export default function MuralClient({
       </header>
 
       {notes.length === 0 ? (
-        <div className="text-center py-24 border border-dashed border-[#1A1A1A] rounded-2xl bg-[#0A0A0A]">
-          <p className="text-zinc-500 text-lg">Mural vazio...</p>
+        <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-24 text-center">
+          <p className="text-lg text-zinc-500">Mural vazio...</p>
         </div>
       ) : (
         <DndContext
@@ -298,7 +289,7 @@ export default function MuralClient({
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={notes} strategy={rectSortingStrategy}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {notes.map((note, index) => (
                 <SortableNoteCard
                   key={note.id}

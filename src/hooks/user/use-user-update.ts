@@ -6,7 +6,7 @@ export function useUserUpdate() {
   const [isLoading, setIsLoading] = useState(false);
 
   const execute = async (
-    userData: UpdateUserDto
+    userData: UpdateUserDto,
   ): Promise<UpdateUserResponse> => {
     setIsLoading(true);
     try {

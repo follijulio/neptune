@@ -7,7 +7,7 @@ export class UpdateSemesterController {
     try {
       const validatedData = UpdateSemesterSchema.parse(semesterData);
       const service = new UpdateSemesterService();
-      
+
       return await service.update(validatedData);
     } catch (error) {
       throw new Error("Erro ao atualizar semestre", { cause: error });

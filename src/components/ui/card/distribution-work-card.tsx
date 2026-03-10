@@ -86,7 +86,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
             content={
               <ChartTooltipContent
                 hideLabel
-                className="bg-black text-white border-white/20 flex flex-row gap-2"
+                className="flex flex-row gap-2 border-white/20 bg-black text-white"
               />
             }
           />
@@ -98,7 +98,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
             stroke="none"
           />
           <ChartLegend
-            className="text-white text-sm"
+            className="text-sm text-white"
             content={<ChartLegendContent className="text-white" />}
           />
         </PieChart>
@@ -111,11 +111,11 @@ export const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({
   ChartData,
 }) => {
   return (
-    <Card className="w-full h-full p-4 rounded-3xl border border-white/50 text-white bg-transparent">
-      <h1 className="flex items-center gap-2 font-semibold text-[#888888] mb-4">
+    <Card className="h-full w-full rounded-3xl border border-white/50 bg-transparent p-4 text-white">
+      <h1 className="mb-4 flex items-center gap-2 font-semibold text-[#888888]">
         <FaRegClock className="inline" /> Distribuição de Carga Horária
       </h1>
-      <section className="flex-1 min-h-0 w-full">
+      <section className="min-h-0 w-full flex-1">
         <ChartPieDonut ChartData={ChartData} />
       </section>
     </Card>

@@ -7,7 +7,7 @@ export class GetDashboardDataController {
     try {
       const validatedFilters = DashboardFiltersSchema.parse(filters);
       const service = new GetDashboardDataService();
-      
+
       return await service.execute(validatedFilters);
     } catch (error) {
       throw new Error("Erro ao carregar dados do dashboard", { cause: error });

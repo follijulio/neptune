@@ -97,9 +97,9 @@ const benefits = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30 flex flex-col">
-      <header className="w-full border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <div className="flex min-h-screen w-full flex-col bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
+      <header className="sticky top-0 z-50 w-full border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-2">
             <Logo />
           </div>
@@ -108,13 +108,13 @@ export default function LandingPage() {
             <Link href="/login">
               <Button
                 variant="ghost"
-                className="text-[#888888] hover:text-[#E0E0E0] hover:bg-[#121212]"
+                className="text-[#888888] hover:bg-[#121212] hover:text-[#E0E0E0]"
               >
                 Entrar
               </Button>
             </Link>
             <Link href="/login?tab=register">
-              <Button className="bg-[#E0E0E0] text-[#000000] hover:bg-[#CCCCCC] font-semibold">
+              <Button className="bg-[#E0E0E0] font-semibold text-[#000000] hover:bg-[#CCCCCC]">
                 Começar agora
               </Button>
             </Link>
@@ -122,66 +122,66 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center">
-        <section className="w-full max-w-7xl mx-auto px-6 py-24 lg:py-40 flex flex-col items-center text-center gap-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#007AFF]/10 border border-[#007AFF]/20 text-[#007AFF] text-sm font-medium">
+      <main className="flex flex-1 flex-col items-center">
+        <section className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 px-6 py-24 text-center lg:py-40">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-sm font-medium text-[#007AFF]">
             <LuGraduationCap className="text-base" />
             <span>Feito de estudantes para estudantes</span>
           </div>
 
-          <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight max-w-4xl bg-gradient-to-b from-[#FFFFFF] to-[#888888] bg-clip-text text-transparent">
+          <h1 className="max-w-4xl bg-gradient-to-b from-[#FFFFFF] to-[#888888] bg-clip-text text-5xl font-extrabold tracking-tight text-transparent lg:text-7xl">
             Domine sua jornada na Licenciatura com dados.
           </h1>
 
-          <p className="text-lg lg:text-xl text-[#888888] max-w-2xl leading-relaxed">
+          <p className="max-w-2xl text-lg leading-relaxed text-[#888888] lg:text-xl">
             O Netuno é o seu painel de controle acadêmico. Acompanhe seu
             Coeficiente de Rendimento, gerencie horas complementares e preveja
             seus próximos semestres em uma interface inteligente e escura.
           </p>
 
           <Link href="/login?tab=register" className="mt-6">
-            <Button className="h-14 px-8 text-lg bg-[#007AFF] text-white hover:bg-[#007AFF]/90 font-bold rounded-full flex items-center gap-2 shadow-lg shadow-[#007AFF]/20">
+            <Button className="flex h-14 items-center gap-2 rounded-full bg-[#007AFF] px-8 text-lg font-bold text-white shadow-lg shadow-[#007AFF]/20 hover:bg-[#007AFF]/90">
               Criar conta gratuitamente
               <LuArrowRight className="text-xl" />
             </Button>
           </Link>
         </section>
 
-        <section className="w-full bg-linear-to-br from-[#007AFF]/10 via-[#000000] to-[#000000] border-y border-[#007AFF]/20 py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="w-full border-y border-[#007AFF]/20 bg-linear-to-br from-[#007AFF]/10 via-[#000000] to-[#000000] py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               <div className="flex flex-col gap-6">
-                <div className="inline-flex items-center gap-2 w-fit px-3 py-1 rounded-full bg-[#007AFF]/10 border border-[#007AFF]/30 text-[#007AFF] text-sm font-medium">
+                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#007AFF]/30 bg-[#007AFF]/10 px-3 py-1 text-sm font-medium text-[#007AFF]">
                   <LuSparkles className="text-base" />
                   <span>Recurso exclusivo</span>
                 </div>
 
-                <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+                <h2 className="text-4xl leading-tight font-bold lg:text-5xl">
                   Importação automática do seu histórico
                 </h2>
 
-                <p className="text-lg text-[#888888] leading-relaxed">
+                <p className="text-lg leading-relaxed text-[#888888]">
                   Esqueça a digitação manual de dezenas de disciplinas. Faça
                   upload do PDF do seu histórico acadêmico e deixe o Netuno
                   extrair automaticamente todas as suas disciplinas, notas,
                   carga horária e status.
                 </p>
 
-                <div className="flex flex-col gap-3 mt-4">
+                <div className="mt-4 flex flex-col gap-3">
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
+                    <FiCheckCircle className="mt-0.5 shrink-0 text-xl text-[#00FF88]" />
                     <p className="text-[#E0E0E0]">
                       Reconhecimento inteligente de dados do histórico
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
+                    <FiCheckCircle className="mt-0.5 shrink-0 text-xl text-[#00FF88]" />
                     <p className="text-[#E0E0E0]">
                       Extração automática de notas, CR e carga horária
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
-                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
+                    <FiCheckCircle className="mt-0.5 shrink-0 text-xl text-[#00FF88]" />
                     <p className="text-[#E0E0E0]">
                       Organização instantânea por período e status
                     </p>
@@ -189,17 +189,17 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <div className="bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-8 flex flex-col items-center justify-center gap-6 min-h-[400px]">
-                <div className="w-20 h-20 rounded-2xl bg-[#007AFF]/10 border border-[#007AFF]/30 flex items-center justify-center">
-                  <LuFileUp className="text-[#007AFF] text-4xl" />
+              <div className="flex min-h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8">
+                <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-[#007AFF]/30 bg-[#007AFF]/10">
+                  <LuFileUp className="text-4xl text-[#007AFF]" />
                 </div>
                 <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">
+                  <h3 className="mb-2 text-xl font-bold">
                     Arraste seu PDF aqui
                   </h3>
                   <p className="text-[#888888]">ou clique para selecionar</p>
                 </div>
-                <div className="text-xs text-[#555555] text-center max-w-xs">
+                <div className="max-w-xs text-center text-xs text-[#555555]">
                   Formatos aceitos: PDF do histórico acadêmico oficial da sua
                   instituição
                 </div>
@@ -209,25 +209,25 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full bg-[#000000] py-24">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col items-center text-center mb-16 gap-4">
-              <h2 className="text-3xl lg:text-4xl font-bold">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-16 flex flex-col items-center gap-4 text-center">
+              <h2 className="text-3xl font-bold lg:text-4xl">
                 Tudo que você precisa em um só lugar
               </h2>
-              <p className="text-[#888888] text-lg max-w-2xl">
+              <p className="max-w-2xl text-lg text-[#888888]">
                 Esqueça as planilhas confusas. Tenha métricas precisas sobre o
                 seu desempenho acadêmico atualizadas em tempo real.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature) => (
                 <div
                   key={feature.title}
-                  className="bg-[#0A0A0A] border border-[#1A1A1A] p-8 rounded-2xl flex flex-col gap-4 hover:border-[#222222] transition-all duration-300 group"
+                  className="group flex flex-col gap-4 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8 transition-all duration-300 hover:border-[#222222]"
                 >
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300"
+                    className="mb-2 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                     style={{
                       color: feature.accent,
                       backgroundColor: `${feature.accent}1A`,
@@ -237,7 +237,7 @@ export default function LandingPage() {
                   </div>
 
                   <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-[#888888] leading-relaxed">
+                  <p className="leading-relaxed text-[#888888]">
                     {feature.description}
                   </p>
                 </div>
@@ -246,34 +246,34 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="w-full bg-[#121212] border-y border-[#1A1A1A] py-24">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-col items-center text-center mb-16 gap-4">
-              <h2 className="text-3xl lg:text-4xl font-bold">Como funciona</h2>
-              <p className="text-[#888888] text-lg max-w-2xl">
+        <section className="w-full border-y border-[#1A1A1A] bg-[#121212] py-24">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-16 flex flex-col items-center gap-4 text-center">
+              <h2 className="text-3xl font-bold lg:text-4xl">Como funciona</h2>
+              <p className="max-w-2xl text-lg text-[#888888]">
                 Configure sua conta e comece a gerenciar sua vida acadêmica em
                 minutos. É simples, rápido e intuitivo.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {steps.map((step, index) => (
-                <div key={step.number} className="flex flex-col gap-4 relative">
+                <div key={step.number} className="relative flex flex-col gap-4">
                   {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-12 left-[calc(100%)] w-full h-[2px] bg-gradient-to-r from-[#007AFF]/50 to-transparent" />
+                    <div className="absolute top-12 left-[calc(100%)] hidden h-[2px] w-full bg-gradient-to-r from-[#007AFF]/50 to-transparent md:block" />
                   )}
 
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl bg-[#007AFF]/10 border-2 border-[#007AFF]/30 flex items-center justify-center text-2xl font-bold text-[#007AFF]">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-[#007AFF]/30 bg-[#007AFF]/10 text-2xl font-bold text-[#007AFF]">
                       {step.number}
                     </div>
-                    <div className="w-10 h-10 rounded-full bg-[#000000] border border-[#1A1A1A] flex items-center justify-center text-[#007AFF]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#1A1A1A] bg-[#000000] text-[#007AFF]">
                       {step.icon}
                     </div>
                   </div>
 
                   <h3 className="text-xl font-bold">{step.title}</h3>
-                  <p className="text-[#888888] leading-relaxed">
+                  <p className="leading-relaxed text-[#888888]">
                     {step.description}
                   </p>
                 </div>
@@ -283,13 +283,13 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full bg-[#000000] py-24">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
               <div className="flex flex-col gap-6">
-                <h2 className="text-3xl lg:text-4xl font-bold leading-tight">
+                <h2 className="text-3xl leading-tight font-bold lg:text-4xl">
                   Por que escolher o Netuno?
                 </h2>
-                <p className="text-lg text-[#888888] leading-relaxed">
+                <p className="text-lg leading-relaxed text-[#888888]">
                   Uma plataforma completa projetada especificamente para
                   estudantes universitários que querem ter controle total sobre
                   sua trajetória acadêmica.
@@ -300,9 +300,9 @@ export default function LandingPage() {
                 {benefits.map((benefit, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 bg-[#0A0A0A] border border-[#1A1A1A] p-4 rounded-lg hover:border-[#222222] transition-colors"
+                    className="flex items-start gap-3 rounded-lg border border-[#1A1A1A] bg-[#0A0A0A] p-4 transition-colors hover:border-[#222222]"
                   >
-                    <FiCheckCircle className="text-[#00FF88] text-xl shrink-0 mt-0.5" />
+                    <FiCheckCircle className="mt-0.5 shrink-0 text-xl text-[#00FF88]" />
                     <p className="text-[#E0E0E0]">{benefit}</p>
                   </div>
                 ))}
@@ -311,17 +311,17 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="w-full bg-gradient-to-b from-[#000000] via-[#007AFF]/5 to-[#000000] border-y border-[#007AFF]/10 py-24">
-          <div className="max-w-4xl mx-auto px-6 text-center flex flex-col items-center gap-8">
-            <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+        <section className="w-full border-y border-[#007AFF]/10 bg-gradient-to-b from-[#000000] via-[#007AFF]/5 to-[#000000] py-24">
+          <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 px-6 text-center">
+            <h2 className="text-4xl leading-tight font-bold lg:text-5xl">
               Pronto para transformar sua experiência acadêmica?
             </h2>
-            <p className="text-lg lg:text-xl text-[#888888] max-w-2xl">
+            <p className="max-w-2xl text-lg text-[#888888] lg:text-xl">
               Junte-se aos estudantes que já estão no controle de sua jornada
               universitária. É gratuito para começar.
             </p>
             <Link href="/login?tab=register">
-              <Button className="h-14 px-8 text-lg bg-[#007AFF] text-white hover:bg-[#007AFF]/90 font-bold rounded-full flex items-center gap-2 shadow-lg shadow-[#007AFF]/20">
+              <Button className="flex h-14 items-center gap-2 rounded-full bg-[#007AFF] px-8 text-lg font-bold text-white shadow-lg shadow-[#007AFF]/20 hover:bg-[#007AFF]/90">
                 Criar conta gratuitamente
                 <LuArrowRight className="text-xl" />
               </Button>
@@ -330,8 +330,8 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="w-full bg-[#000000] border-t border-[#1A1A1A] py-10 text-center">
-        <p className="text-[#555555] text-sm">
+      <footer className="w-full border-t border-[#1A1A1A] bg-[#000000] py-10 text-center">
+        <p className="text-sm text-[#555555]">
           &copy; {new Date().getFullYear()} Netuno. Desenvolvido para facilitar
           a vida universitária.
         </p>

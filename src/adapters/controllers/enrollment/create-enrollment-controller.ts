@@ -7,7 +7,7 @@ export class CreateEnrollmentController {
     try {
       const validatedData = CreateEnrollmentSchema.parse(enrollmentData);
       const service = new CreateEnrollmentService();
-      
+
       return await service.create(validatedData);
     } catch (error) {
       throw new Error("Erro ao criar matrícula", { cause: error });

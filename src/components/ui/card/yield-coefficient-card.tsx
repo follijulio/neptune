@@ -44,7 +44,7 @@ const calculateDifference = (current: number, previous: number) => {
   return {
     value,
     isPositive,
-    formatted: value !== 0 ? `${prefix}${value.toFixed(1)}` : "",
+    formatted: value !== 0 ? `${prefix}${value.toFixed(2)}` : "",
   };
 };
 
@@ -104,8 +104,8 @@ export const YieldCoefficientCard = ({
   const trendColor = difference.isPositive ? COLORS.positive : COLORS.negative;
 
   return (
-    <Card className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
-      <section className="gap-2 flex flex-col h-1/3 w-full">
+    <Card className="h-72 w-full rounded-3xl border border-white/50 bg-transparent p-4 text-white">
+      <section className="flex h-1/3 w-full flex-col gap-2">
         <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
           <IoMdTrendingUp className="inline" /> Coeficiente de Rendimento
         </h1>

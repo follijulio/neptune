@@ -13,5 +13,5 @@ export class CreateUserController {
     } catch (error) {
       throw new Error("Erro ao criar usuário", { cause: error });
     }
-  } 
+  }
 }

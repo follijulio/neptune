@@ -7,7 +7,7 @@ export class DeleteWorkloadController {
     try {
       const validatedData = DeleteWorkloadSchema.parse(workloadData);
       const service = new DeleteWorkloadService();
-      
+
       return await service.delete(validatedData);
     } catch (error) {
       throw new Error("Erro ao deletar carga horária", { cause: error });

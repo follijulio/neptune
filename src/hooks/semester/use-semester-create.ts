@@ -6,7 +6,7 @@ export function useSemesterCreate() {
   const [isLoading, setIsLoading] = useState(false);
 
   const execute = async (
-    semesterData: CreateSemesterDto
+    semesterData: CreateSemesterDto,
   ): Promise<SemesterResponse> => {
     setIsLoading(true);
     try {

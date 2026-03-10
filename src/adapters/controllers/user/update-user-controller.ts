@@ -7,7 +7,7 @@ export class UpdateUserController {
     try {
       const validatedData = UpdateUserSchema.parse(userData);
       const service = new UpdateUserService();
-      
+
       return await service.update(validatedData);
     } catch (error) {
       throw new Error("Erro ao atualizar usuário", { cause: error });

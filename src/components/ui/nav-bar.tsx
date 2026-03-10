@@ -33,7 +33,7 @@ const NAV_ITEMS = [
 
 export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
   return (
-    <nav className="h-16 w-full flex items-center justify-between px-8 border-b border-white/30 backdrop-blur-md sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 flex h-16 w-full items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
       <Logo />
       <NavLinks />
       <UserMenu profileImageUrl={profileImageUrl} />
@@ -42,11 +42,11 @@ export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
 };
 
 export const Logo = () => (
-  <Link href="/dashboard" className="text-2xl select-none flex items-center">
+  <Link href="/dashboard" className="flex items-center text-2xl select-none">
     <span
-      className={`font-bold text-white tracking-wider flex gap-2 items-center`}
+      className={`flex items-center gap-2 font-bold tracking-wider text-white`}
     >
-      <LuHexagon className="text-[#007AFF] text-2xl inline" />
+      <LuHexagon className="inline text-2xl text-[#007AFF]" />
       <p className="">Netuno</p>
     </span>
   </Link>
@@ -56,7 +56,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <div className="hidden md:flex items-center gap-8 ">
+    <div className="hidden items-center gap-8 md:flex">
       {NAV_ITEMS.map((item) => {
         const isActive =
           pathname === item.href || pathname?.startsWith(`${item.href}/`);
@@ -66,7 +66,7 @@ const NavLinks = () => {
             key={item.href}
             href={item.href}
             className={`font-semibold transition-colors hover:text-white ${
-              isActive ? "text-[#007AFF] text-xl" : "text-zinc-500 text-base"
+              isActive ? "text-xl text-[#007AFF]" : "text-base text-zinc-500"
             }`}
           >
             {item.label}
@@ -81,16 +81,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="cursor-pointer border border-[#1A1A1A] hover:border-zinc-700 transition-colors">
+        <Avatar className="cursor-pointer border border-[#1A1A1A] transition-colors hover:border-zinc-700">
           <AvatarImage src={profileImageUrl} alt="Perfil do usuário" />
-          <AvatarFallback className="bg-[#007AFF] text-white font-bold">
+          <AvatarFallback className="bg-[#007AFF] font-bold text-white">
             U
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="w-48 bg-[#121212] border-[#1A1A1A] text-white mr-4"
+        className="mr-4 w-48 border-[#1A1A1A] bg-[#121212] text-white"
         align="end"
       >
         <DropdownMenuLabel className="text-zinc-400">
@@ -101,7 +101,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             asChild
-            className="cursor-pointer hover:bg-zinc-800/50 focus:bg-zinc-800/50"
+            className="cursor-pointer *:text-white hover:bg-zinc-800/50 focus:bg-zinc-800/50"
           >
             <Link href="/settings" className="flex items-center gap-2">
               <LuSettings className="text-lg text-zinc-400" />
@@ -116,9 +116,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => {
           <form action={logoutAction}>
             <DropdownMenuItem
               asChild
-              className="cursor-pointer hover:bg-[#FF3B30]/10 focus:bg-[#FF3B30]/10 text-[#FF3B30] focus:text-[#FF3B30]"
+              className="cursor-pointer text-[#FF3B30] hover:bg-[#FF3B30]/10 focus:bg-[#FF3B30]/10 focus:text-[#FF3B30]"
             >
-              <button type="submit" className="w-full flex items-center gap-2">
+              <button type="submit" className="flex w-full items-center gap-2">
                 <LuLogOut className="text-lg" />
                 <span>Sair da conta</span>
               </button>

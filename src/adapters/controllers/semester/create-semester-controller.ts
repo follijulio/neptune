@@ -7,7 +7,7 @@ export class CreateSemesterController {
     try {
       const validatedData = CreateSemesterSchema.parse(semesterData);
       const service = new CreateSemesterService();
-      
+
       return await service.create(validatedData);
     } catch (error) {
       throw new Error("Erro ao criar semestre", { cause: error });

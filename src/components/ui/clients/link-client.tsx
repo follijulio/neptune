@@ -100,16 +100,15 @@ export default function LinksClient({
   return (
     <MainLayout>
       <div className="w-full">
-        <header className="mb-10 border-b border-[#1A1A1A] pb-6 flex justify-between items-end">
-          <span />
+        <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold gap-2 rounded-xl h-12 px-6 group">
-                <LuPlus className="group-hover:rotate-90 transition-transform duration-300" />{" "}
+              <Button className="group h-12 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white hover:bg-[#005bb5]">
+                <LuPlus className="transition-transform duration-300 group-hover:rotate-90" />{" "}
                 Adicionar Link
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[#121212] border-[#1A1A1A] text-white sm:max-w-md rounded-2xl">
+            <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">
                   Adicionar
@@ -117,7 +116,7 @@ export default function LinksClient({
               </DialogHeader>
               <form onSubmit={handleCreate} className="space-y-5 pt-4">
                 {error && (
-                  <p className="text-[#FF3B30] text-sm font-medium">{error}</p>
+                  <p className="text-sm font-medium text-[#FF3B30]">{error}</p>
                 )}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-zinc-300">
@@ -126,7 +125,7 @@ export default function LinksClient({
                   <Input
                     name="title"
                     placeholder="Ex: SIGAA UFAL, Wolfram Alpha..."
-                    className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                   />
                 </div>
 
@@ -137,7 +136,7 @@ export default function LinksClient({
                   <Input
                     name="url"
                     placeholder="sigaa.ufal.br"
-                    className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                   />
                 </div>
 
@@ -153,10 +152,10 @@ export default function LinksClient({
                           key={iconName}
                           type="button"
                           onClick={() => setSelectedIcon(iconName)}
-                          className={`p-3 rounded-xl border transition-all ${
+                          className={`rounded-xl border p-3 transition-all ${
                             selectedIcon === iconName
-                              ? "bg-[#007AFF]/20 border-[#007AFF] text-[#007AFF]"
-                              : "bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                              ? "border-[#007AFF] bg-[#007AFF]/20 text-[#007AFF]"
+                              : "border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
                           }`}
                         >
                           <IconComponent className="h-6 w-6" />
@@ -169,7 +168,7 @@ export default function LinksClient({
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold h-12 rounded-xl mt-4"
+                  className="mt-4 h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
                 >
                   {loading ? "A guardar..." : "Guardar Link"}
                 </Button>
@@ -179,13 +178,13 @@ export default function LinksClient({
         </header>
 
         {links.length === 0 ? (
-          <div className="text-center py-24 border border-dashed border-[#1A1A1A] rounded-2xl bg-[#0A0A0A]">
-            <p className="text-zinc-500 text-lg">
+          <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-24 text-center">
+            <p className="text-lg text-zinc-500">
               Ainda não guardaste nenhum link.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {links.map((link) => {
               const Icon = ICON_MAP[link.icon] || LuGlobe;
               return (
@@ -194,24 +193,24 @@ export default function LinksClient({
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center gap-4 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-5 hover:border-[#007AFF]/50 hover:bg-[#007AFF]/5 transition-all duration-300 shadow-lg"
+                  className="group relative flex items-center gap-4 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 shadow-lg transition-all duration-300 hover:border-[#007AFF]/50 hover:bg-[#007AFF]/5"
                 >
-                  <div className="bg-black border border-zinc-800 p-3 rounded-xl group-hover:border-[#007AFF] group-hover:text-[#007AFF] transition-colors">
+                  <div className="rounded-xl border border-zinc-800 bg-black p-3 transition-colors group-hover:border-[#007AFF] group-hover:text-[#007AFF]">
                     <Icon className="h-6 w-6 text-zinc-300 group-hover:text-[#007AFF]" />
                   </div>
                   <div className="flex flex-col overflow-hidden">
-                    <span className="font-bold text-[#E0E0E0] truncate">
+                    <span className="truncate font-bold text-[#E0E0E0]">
                       {link.title}
                     </span>
-                    <span className="text-xs text-zinc-500 truncate flex items-center gap-1 mt-0.5">
+                    <span className="mt-0.5 flex items-center gap-1 truncate text-xs text-zinc-500">
                       {link.url.replace(/^https?:\/\//, "")}{" "}
-                      <LuExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <LuExternalLink className="h-3 w-3 opacity-0 transition-opacity group-hover:opacity-100" />
                     </span>
                   </div>
 
                   <button
                     onClick={(e) => handleDelete(e, link.id)}
-                    className="absolute top-4 right-4 text-zinc-600 hover:text-[#FF3B30] opacity-0 group-hover:opacity-100 transition-all p-1"
+                    className="absolute top-4 right-4 p-1 text-zinc-600 opacity-0 transition-all group-hover:opacity-100 hover:text-[#FF3B30]"
                     title="Remover link"
                   >
                     <LuTrash2 className="h-4 w-4" />

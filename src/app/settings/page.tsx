@@ -124,7 +124,7 @@ export default function SettingsClient({
 
   return (
     <MainLayout>
-      <main className="flex justify-center w-full">
+      <main className="flex w-full justify-center">
         <div className="w-full max-w-3xl">
           <form onSubmit={handleUpdate} className="space-y-8">
             <div className="space-y-3">
@@ -134,21 +134,21 @@ export default function SettingsClient({
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20 border border-zinc-800">
                   <AvatarImage src={user?.image || ""} alt={user?.name} />
-                  <AvatarFallback className="bg-[#007AFF] text-white font-bold text-2xl">
+                  <AvatarFallback className="bg-[#007AFF] text-2xl font-bold text-white">
                     {user?.name?.substring(0, 1) || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex gap-3">
                   <Button
                     type="button"
-                    className="bg-[#007AFF] hover:bg-[#005bb5] text-white px-4 py-2 rounded-lg font-medium text-sm h-10"
+                    className="h-10 rounded-lg bg-[#007AFF] px-4 py-2 text-sm font-medium text-white hover:bg-[#005bb5]"
                   >
                     Alterar foto
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
-                    className="text-red-500 hover:text-red-400 hover:bg-red-500/10 px-4 py-2 rounded-lg font-medium text-sm h-10"
+                    className="h-10 rounded-lg px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 hover:text-red-400"
                   >
                     Remover foto
                   </Button>
@@ -164,7 +164,7 @@ export default function SettingsClient({
                 name="name"
                 defaultValue={user?.name}
                 placeholder={user?.name || "Seu nome"}
-                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
               />
             </div>
 
@@ -173,14 +173,14 @@ export default function SettingsClient({
                 Username
               </label>
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 font-medium">
+                <span className="absolute top-1/2 left-4 -translate-y-1/2 font-medium text-zinc-500">
                   @
                 </span>
                 <Input
                   name="username"
                   defaultValue={user?.username}
                   placeholder={user?.username || "folli"}
-                  className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl pl-10 focus-visible:ring-[#007AFF]"
+                  className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 pl-10 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
             </div>
@@ -194,13 +194,13 @@ export default function SettingsClient({
                 defaultValue={user?.email}
                 type="email"
                 placeholder={user?.email || "Seu e-mail"}
-                className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
               />
             </div>
 
             {!isOAuth && (
               <>
-                <div className="pt-4 space-y-2">
+                <div className="space-y-2 pt-4">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-semibold text-zinc-300">
                       Senha atual
@@ -208,7 +208,7 @@ export default function SettingsClient({
                     <button
                       type="button"
                       onClick={handleStartPasswordReset}
-                      className="text-sm text-[#007AFF] hover:underline font-medium focus:outline-none"
+                      className="text-sm font-medium text-[#007AFF] hover:underline focus:outline-none"
                     >
                       Esqueci minha senha
                     </button>
@@ -217,7 +217,7 @@ export default function SettingsClient({
                     name="currentPassword"
                     type="password"
                     placeholder="Sua senha atual"
-                    className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                   />
                 </div>
 
@@ -229,7 +229,7 @@ export default function SettingsClient({
                     name="newPassword"
                     type="password"
                     placeholder="Sua nova senha"
-                    className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                   />
                 </div>
               </>
@@ -240,8 +240,8 @@ export default function SettingsClient({
                 variant={message.type === "error" ? "destructive" : "default"}
                 className={
                   message.type === "success"
-                    ? "bg-[#00FF88]/10 border-[#00FF88]/30 text-[#00FF88]"
-                    : "bg-red-900/10 border-red-900/50"
+                    ? "border-[#00FF88]/30 bg-[#00FF88]/10 text-[#00FF88]"
+                    : "border-red-900/50 bg-red-900/10"
                 }
               >
                 {message.type === "error" ? (
@@ -264,7 +264,7 @@ export default function SettingsClient({
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto bg-[#007AFF] hover:bg-[#005bb5] px-8 py-6 text-base font-bold rounded-xl text-white transition-colors disabled:opacity-50"
+                className="w-full rounded-xl bg-[#007AFF] px-8 py-6 text-base font-bold text-white transition-colors hover:bg-[#005bb5] disabled:opacity-50 sm:w-auto"
               >
                 {loading ? "Salvando..." : "Salvar alterações"}
               </Button>
@@ -272,7 +272,7 @@ export default function SettingsClient({
           </form>
 
           <Dialog open={isResetModalOpen} onOpenChange={setIsResetModalOpen}>
-            <DialogContent className="bg-[#121212] border-[#1A1A1A] text-white sm:max-w-md">
+            <DialogContent className="border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
               <DialogHeader>
                 <DialogTitle className="text-xl font-bold">
                   Recuperar Senha
@@ -286,7 +286,7 @@ export default function SettingsClient({
 
               <div className="space-y-4 py-4">
                 {resetError && (
-                  <p className="text-red-500 text-sm font-medium">
+                  <p className="text-sm font-medium text-red-500">
                     {resetError}
                   </p>
                 )}
@@ -301,7 +301,7 @@ export default function SettingsClient({
                       onChange={(e) => setTwoFaCode(e.target.value)}
                       maxLength={6}
                       placeholder="000000"
-                      className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl text-center text-2xl tracking-[0.5em] focus-visible:ring-[#007AFF]"
+                      className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-center text-2xl tracking-[0.5em] text-white focus-visible:ring-[#007AFF]"
                     />
                   </div>
                 ) : (
@@ -314,13 +314,13 @@ export default function SettingsClient({
                       value={newPasswordModal}
                       onChange={(e) => setNewPasswordModal(e.target.value)}
                       placeholder="Nova senha secreta"
-                      className="bg-zinc-900/50 border-zinc-800 text-white h-12 rounded-xl focus-visible:ring-[#007AFF]"
+                      className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                     />
                   </div>
                 )}
               </div>
 
-              <div className="flex justify-end gap-3 mt-4">
+              <div className="mt-4 flex justify-end gap-3">
                 <Button
                   variant="ghost"
                   onClick={() => setIsResetModalOpen(false)}
@@ -331,7 +331,7 @@ export default function SettingsClient({
                 <Button
                   onClick={handleConfirmPasswordReset}
                   disabled={resetLoading}
-                  className="bg-[#007AFF] hover:bg-[#005bb5] text-white font-bold"
+                  className="bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
                 >
                   {resetLoading
                     ? "Processando..."

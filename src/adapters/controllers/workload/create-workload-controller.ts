@@ -7,7 +7,7 @@ export class CreateWorkloadController {
     try {
       const validatedData = CreateWorkloadSchema.parse(workloadData);
       const service = new CreateWorkloadService();
-      
+
       return await service.create(validatedData);
     } catch (error) {
       throw new Error("Erro ao criar carga horária", { cause: error });

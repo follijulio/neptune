@@ -7,7 +7,7 @@ export class CreateSubjectController {
     try {
       const validatedData = CreateSubjectSchema.parse(subjectData);
       const service = new CreateSubjectService();
-      
+
       return await service.create(validatedData);
     } catch (error) {
       throw new Error("Erro ao criar disciplina", { cause: error });

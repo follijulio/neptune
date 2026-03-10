@@ -7,7 +7,7 @@ export class DeleteUserController {
     try {
       const validatedData = DeleteUserSchema.parse(userData);
       const service = new DeleteUserService();
-      
+
       return await service.delete(validatedData);
     } catch (error) {
       throw new Error("Erro ao apagar utilizador", { cause: error });

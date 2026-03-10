@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { updateEnrollmentAction } from "../../app/actions/enrollment-actions"; 
-import { UpdateEnrollmentDto, EnrollmentResponse } from "../../domain/enrollment.dto";
+import { updateEnrollmentAction } from "../../app/actions/enrollment-actions";
+import {
+  UpdateEnrollmentDto,
+  EnrollmentResponse,
+} from "../../domain/enrollment.dto";
 
 export function useEnrollmentUpdate() {
   const [isLoading, setIsLoading] = useState(false);
 
   const execute = async (
-    enrollmentData: UpdateEnrollmentDto
+    enrollmentData: UpdateEnrollmentDto,
   ): Promise<EnrollmentResponse> => {
     setIsLoading(true);
     try {

@@ -25,11 +25,11 @@ export const AverageRatingCard: React.FC<ChartLineLabelProps> = ({
   semesters_data,
 }) => {
   return (
-    <Card className="w-full h-96 p-4 rounded-3xl border border-white/50 bg-transparent text-white flex flex-col">
+    <Card className="flex h-96 w-full flex-col rounded-3xl border border-white/50 bg-transparent p-4 text-white">
       <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
         <IoMdTrendingUp className="inline" /> Evolução do Rendimento (Histórico)
       </h1>
-      <section className="flex-1 min-h-0 w-full">
+      <section className="min-h-0 w-full flex-1">
         <ChartLineLabel semesters_data={semesters_data} />
       </section>
     </Card>
@@ -49,7 +49,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
   semesters_data,
 }) => {
   return (
-    <CardContent className="p-0 h-full w-full">
+    <CardContent className="h-full w-full p-0">
       <ChartContainer config={chartConfig} className="h-full w-full">
         <AreaChart
           className="h-full"
@@ -104,7 +104,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             content={
               <ChartTooltipContent
                 indicator="line"
-                className="text-white bg-black"
+                className="bg-black text-white"
               />
             }
           />

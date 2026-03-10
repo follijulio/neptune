@@ -7,7 +7,7 @@ export class DeleteSemesterController {
     try {
       const validatedData = DeleteSemesterSchema.parse(semesterData);
       const service = new DeleteSemesterService();
-      
+
       return await service.delete(validatedData);
     } catch (error) {
       throw new Error("Erro ao deletar semestre", { cause: error });

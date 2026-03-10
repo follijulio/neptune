@@ -25,14 +25,14 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
     <Drawer direction="right">
       <DrawerTrigger asChild>
         <Button
-          className="p-1 cursor-pointer"
+          className="cursor-pointer p-1"
           aria-label="Abrir ações do curso"
         >
           <GoPlus className="text-lg" />
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent className="bg-black text-white px-5">
+      <DrawerContent className="bg-black px-5 text-white">
         <DrawerHeader>
           <DrawerTitle>{course.subject_name}</DrawerTitle>
           <DrawerDescription>{course.code}</DrawerDescription>

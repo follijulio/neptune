@@ -48,7 +48,6 @@ export async function deleteNoteAction(noteId: string) {
   }
 }
 
-
 export async function findNotesAction(userId: string) {
   const notes = await prisma.note.findMany({
     where: { userId: userId },
@@ -56,7 +55,6 @@ export async function findNotesAction(userId: string) {
   });
   return notes;
 }
-
 
 // todo: simplificar essa função, algo me diz que ela pode ser mais simples, por enquanto, ok. Mas quando for pra produção, é melhor otimizar isso
 export async function reorderNotesAction(orderedIds: string[]) {

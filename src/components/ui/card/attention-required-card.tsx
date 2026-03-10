@@ -61,7 +61,7 @@ export const AttentionRequiredCard: React.FC<AttentionRequiredCardProps> = ({
   const severityColor = getSeverityColor(subjects);
 
   return (
-    <div className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white flex flex-col gap-8">
+    <div className="flex h-72 w-full flex-col gap-8 rounded-3xl border border-white/50 bg-transparent p-4 text-white">
       <header className="flex items-center gap-2 font-semibold text-[#888888]">
         <RiErrorWarningLine className="inline" />
         Atenção Requerida

@@ -101,9 +101,9 @@ export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
   const progress = calculateProgress(hoursCompleted, hoursTotal);
 
   return (
-    <div className="w-full h-72 p-4 rounded-3xl border border-white/50 bg-transparent text-white">
-      <section className="w-full flex flex-row gap-4 h-full justify-between">
-        <div className="flex flex-col gap-8 w-2/3">
+    <div className="h-72 w-full rounded-3xl border border-white/50 bg-transparent p-4 text-white">
+      <section className="flex h-full w-full flex-row justify-between gap-4">
+        <div className="flex w-2/3 flex-col gap-8">
           <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
             <TbTargetArrow className="inline" /> Progresso do Curso
           </h1>

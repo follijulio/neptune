@@ -64,23 +64,23 @@ export default function DashboardClient({
   if (isLoading && !data) {
     return (
       <MainLayout>
-        <section className="h-full w-full px-10 gap-10 flex flex-col animate-pulse">
-          <div className="flex items-center justify-between w-full">
-            <div className="h-8 w-48 bg-zinc-800 rounded bg-linear-to-l" />
-            <div className="h-10 w-52 bg-zinc-800 rounded" />
+        <section className="flex h-full w-full animate-pulse flex-col gap-10 px-10">
+          <div className="flex w-full items-center justify-between">
+            <div className="h-8 w-48 rounded bg-zinc-800 bg-linear-to-l" />
+            <div className="h-10 w-52 rounded bg-zinc-800" />
           </div>
 
           <div className="grid grid-cols-3 gap-10">
-            <div className="h-48 bg-zinc-900 li rounded-lg border border-zinc-800" />
-            <div className="h-48 bg-zinc-900 rounded-lg border border-zinc-800" />
-            <div className="h-48 bg-zinc-900 rounded-lg border border-zinc-800" />
-            <div className="h-64 col-span-2 bg-zinc-900 rounded-lg border border-zinc-800" />
-            <div className="h-64 bg-zinc-900 rounded-lg border border-zinc-800" />
+            <div className="li h-48 rounded-lg border border-zinc-800 bg-zinc-900" />
+            <div className="h-48 rounded-lg border border-zinc-800 bg-zinc-900" />
+            <div className="h-48 rounded-lg border border-zinc-800 bg-zinc-900" />
+            <div className="col-span-2 h-64 rounded-lg border border-zinc-800 bg-zinc-900" />
+            <div className="h-64 rounded-lg border border-zinc-800 bg-zinc-900" />
           </div>
 
           <div className="flex flex-col gap-10">
-            <div className="h-80 bg-zinc-900 rounded-lg border border-zinc-800" />
-            <div className="h-64 bg-zinc-900 rounded-lg border border-zinc-800" />
+            <div className="h-80 rounded-lg border border-zinc-800 bg-zinc-900" />
+            <div className="h-64 rounded-lg border border-zinc-800 bg-zinc-900" />
           </div>
         </section>
       </MainLayout>
@@ -90,17 +90,17 @@ export default function DashboardClient({
   if (error) {
     return (
       <MainLayout>
-        <div className="bg-black text-white w-full h-full flex items-center justify-center p-4">
+        <div className="flex h-full w-full items-center justify-center bg-black p-4 text-white">
           <Alert
             variant="destructive"
-            className="flex max-w-lg bg-red-950/50 border border-red-900/50"
+            className="flex max-w-lg border border-red-900/50 bg-red-950/50"
           >
             <div className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg text-red-400 mb-2">
+                <h3 className="mb-2 text-lg font-semibold text-red-400">
                   Erro ao Carregar Dashboard
                 </h3>
-                <p className="text-sm text-zinc-400 font-mono bg-black/30 p-3 rounded border border-red-900/30 flex-wrap">
+                <p className="flex-wrap rounded border border-red-900/30 bg-black/30 p-3 font-mono text-sm text-zinc-400">
                   {error}
                 </p>
               </div>
@@ -114,7 +114,7 @@ export default function DashboardClient({
                   href="https://github.com/follijulio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                  className="text-blue-400 underline transition-colors hover:text-blue-300"
                 >
                   suporte técnico
                 </a>
@@ -131,8 +131,8 @@ export default function DashboardClient({
 
   return (
     <MainLayout>
-      <section className="h-full w-full px-10 gap-10 flex flex-col">
-        <div className="flex items-center justify-between w-full">
+      <section className="flex h-full w-full flex-col gap-10 px-10">
+        <div className="flex w-full items-center justify-between">
           <h2 className="text-2xl font-bold">
             <button
               className="clique para descobrir"
@@ -144,14 +144,14 @@ export default function DashboardClient({
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="gap-2 bg-[#121212] border-[#1A1A1A] hover:bg-[#1A1A1A] text-white hover:invert transition-all duration-300 hover:scale-105">
+              <Button className="gap-2 border-[#1A1A1A] bg-[#121212] text-white transition-all duration-300 hover:scale-105 hover:bg-[#1A1A1A] hover:invert">
                 <UploadCloud className="h-4 w-4" />
                 <DialogTitle className="text-sm">
                   Sincronizar Histórico
                 </DialogTitle>
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-[#000000] border-[#1A1A1A] text-white max-w-3xl p-0 border-none">
+            <DialogContent className="max-w-3xl border-none border-[#1A1A1A] bg-[#000000] p-0 text-white">
               <PdfUploader />
             </DialogContent>
           </Dialog>
@@ -170,7 +170,7 @@ export default function DashboardClient({
 
           <Cards.AttentionRequired subjects={data.coursesAttention} />
 
-          <div className="w-full h-full col-span-2">
+          <div className="col-span-2 h-full w-full">
             <Cards.AverageRating semesters_data={data.performanceChart} />
           </div>
 

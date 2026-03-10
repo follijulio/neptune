@@ -77,17 +77,17 @@ export default function AuthPage() {
   const switchView = (view: AuthView) => {
     setCurrentView(view);
     setError(null);
-    setShowTwoFactor(false); 
+    setShowTwoFactor(false);
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#000000] flex flex-col lg:flex-row items-center justify-center p-6 lg:p-24 gap-12 lg:gap-32">
-      <div className="flex flex-col items-center lg:items-start text-center lg:text-left w-full max-w-[400px]">
-        <LuHexagon className="text-[#007AFF] text-7xl lg:text-8xl mb-6" />
-        <h1 className="text-[#E0E0E0] text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-12 bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
+      <div className="flex w-full max-w-[400px] flex-col items-center text-center lg:items-start lg:text-left">
+        <LuHexagon className="mb-6 text-7xl text-[#007AFF] lg:text-8xl" />
+        <h1 className="mb-4 text-5xl font-bold tracking-tight text-[#E0E0E0] lg:text-6xl">
           Netuno
         </h1>
-        <p className="text-[#888888] text-lg lg:text-xl leading-relaxed mb-12 ">
+        <p className="mb-12 text-lg leading-relaxed text-[#888888] lg:text-xl">
           Seu dashboard acadêmico inteligente. Domine as disciplinas da
           Licenciatura e otimize sua rotina universitária com dados.{" "}
           <span className="text-xs">
@@ -102,10 +102,10 @@ export default function AuthPage() {
             </a>
           </span>
         </p>
-        <div className="grid w-full grid-cols-2 bg-[#121212] p-1.5 rounded-xl h-14">
+        <div className="grid h-14 w-full grid-cols-2 rounded-xl bg-[#121212] p-1.5">
           <button
             onClick={() => switchView("login")}
-            className={`transition-all duration-300 text-sm font-medium h-full rounded-lg flex items-center justify-center ${
+            className={`flex h-full items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 ${
               currentView === "login"
                 ? "bg-[#1A1A1A] text-[#E0E0E0]"
                 : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
@@ -115,7 +115,7 @@ export default function AuthPage() {
           </button>
           <button
             onClick={() => switchView("register")}
-            className={`transition-all duration-300 text-sm font-medium h-full rounded-lg flex items-center justify-center ${
+            className={`flex h-full items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 ${
               currentView === "register"
                 ? "bg-[#1A1A1A] text-[#E0E0E0]"
                 : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
@@ -129,14 +129,14 @@ export default function AuthPage() {
       <div className="w-full max-w-[450px]">
         {currentView === "login" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="bg-[#121212] border-0 text-[#E0E0E0] p-8 shadow-none rounded-2xl">
-              <CardHeader className="p-0 mb-8 space-y-2">
+            <Card className="rounded-2xl border-0 bg-[#121212] p-8 text-[#E0E0E0] shadow-none">
+              <CardHeader className="mb-8 space-y-2 p-0">
                 <CardTitle className="text-2xl font-bold tracking-wide">
                   {showTwoFactor
                     ? "Verificação de Segurança"
                     : "Bem-vindo de volta"}
                 </CardTitle>
-                <CardDescription className="text-[#888888] text-base">
+                <CardDescription className="text-base text-[#888888]">
                   {showTwoFactor
                     ? "Enviamos um código de 6 dígitos para o seu e-mail."
                     : "Insira suas credenciais para acessar seu painel."}
@@ -144,7 +144,7 @@ export default function AuthPage() {
               </CardHeader>
               <CardContent className="p-0">
                 {error && (
-                  <Alert className="mb-6 bg-[#FF3B30]/10 text-[#FF3B30] border-[#FF3B30]/20">
+                  <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 text-[#FF3B30]">
                     <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
                     <AlertTitle>Erro na autenticação</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
@@ -163,14 +163,14 @@ export default function AuthPage() {
                         placeholder="000000"
                         required
                         autoComplete="off"
-                        className="h-14 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg tracking-[1em] text-center text-2xl font-bold"
+                        className="h-14 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-center text-2xl font-bold tracking-[1em] text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                       />
                     </div>
 
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full h-12 text-base bg-[#007AFF] text-white hover:bg-[#007AFF]/80 transition-colors font-bold mt-8 rounded-lg"
+                      className="mt-8 h-12 w-full rounded-lg bg-[#007AFF] text-base font-bold text-white transition-colors hover:bg-[#007AFF]/80"
                     >
                       {isLoading ? "Verificando..." : "Confirmar Código"}
                     </Button>
@@ -178,7 +178,7 @@ export default function AuthPage() {
                     <button
                       type="button"
                       onClick={() => setShowTwoFactor(false)}
-                      className="w-full mt-4 text-sm text-[#888888] hover:text-[#E0E0E0] transition-colors"
+                      className="mt-4 w-full text-sm text-[#888888] transition-colors hover:text-[#E0E0E0]"
                     >
                       Voltar para o login normal
                     </button>
@@ -189,7 +189,7 @@ export default function AuthPage() {
                       <div className="space-y-3">
                         <Label
                           htmlFor="email"
-                          className="text-[#888888] text-sm font-medium"
+                          className="text-sm font-medium text-[#888888]"
                         >
                           E-mail
                         </Label>
@@ -200,20 +200,20 @@ export default function AuthPage() {
                           placeholder="folli@exemplo.com"
                           required
                           defaultValue={email}
-                          className="h-12 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg"
+                          className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                         />
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between">
                           <Label
                             htmlFor="password"
-                            className="text-[#888888] text-sm font-medium"
+                            className="text-sm font-medium text-[#888888]"
                           >
                             Senha
                           </Label>
                           <a
                             href="#"
-                            className="text-sm text-[#007AFF] hover:underline transition-colors"
+                            className="text-sm text-[#007AFF] transition-colors hover:underline"
                           >
                             Esqueceu a senha?
                           </a>
@@ -224,13 +224,13 @@ export default function AuthPage() {
                           type="password"
                           required
                           defaultValue={password}
-                          className="h-12 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg"
+                          className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                         />
                       </div>
                       <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-12 text-base bg-[#E0E0E0] text-[#000000] hover:bg-[#CCCCCC] transition-colors font-bold mt-8 rounded-lg"
+                        className="mt-8 h-12 w-full rounded-lg bg-[#E0E0E0] text-base font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC]"
                       >
                         {isLoading ? "Autenticando..." : "Entrar na plataforma"}
                       </Button>
@@ -251,7 +251,7 @@ export default function AuthPage() {
                         <Button
                           type="submit"
                           variant="outline"
-                          className="w-full h-12 bg-transparent border border-[#1A1A1A] text-[#E0E0E0] hover:bg-[#1A1A1A] hover:text-white transition-colors font-medium flex items-center justify-center gap-2 rounded-lg"
+                          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white"
                         >
                           <svg
                             role="img"
@@ -276,18 +276,18 @@ export default function AuthPage() {
 
         {currentView === "register" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="bg-[#121212] border-0 text-[#E0E0E0] p-8 shadow-none rounded-2xl">
-              <CardHeader className="p-0 mb-8 space-y-2">
+            <Card className="rounded-2xl border-0 bg-[#121212] p-8 text-[#E0E0E0] shadow-none">
+              <CardHeader className="mb-8 space-y-2 p-0">
                 <CardTitle className="text-2xl font-bold tracking-wide">
                   Criar uma conta
                 </CardTitle>
-                <CardDescription className="text-[#888888] text-base">
+                <CardDescription className="text-base text-[#888888]">
                   Comece a gerenciar sua grade curricular hoje mesmo.
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
                 {error && (
-                  <Alert className="mb-6 bg-[#FF3B30]/10 text-[#FF3B30] border-[#FF3B30]/20">
+                  <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 text-[#FF3B30]">
                     <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
                     <AlertTitle>Não foi possível cadastrar</AlertTitle>
                     <AlertDescription>{error}</AlertDescription>
@@ -297,7 +297,7 @@ export default function AuthPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="name"
-                      className="text-[#888888] text-sm font-medium"
+                      className="text-sm font-medium text-[#888888]"
                     >
                       Nome completo
                     </Label>
@@ -306,13 +306,13 @@ export default function AuthPage() {
                       name="name"
                       placeholder="Ex: Folli"
                       required
-                      className="h-12 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg"
+                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label
                       htmlFor="reg-email"
-                      className="text-[#888888] text-sm font-medium"
+                      className="text-sm font-medium text-[#888888]"
                     >
                       E-mail
                     </Label>
@@ -322,13 +322,13 @@ export default function AuthPage() {
                       type="email"
                       placeholder="seu@email.com"
                       required
-                      className="h-12 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg"
+                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label
                       htmlFor="reg-password"
-                      className="text-[#888888] text-sm font-medium"
+                      className="text-sm font-medium text-[#888888]"
                     >
                       Senha
                     </Label>
@@ -337,13 +337,13 @@ export default function AuthPage() {
                       name="password"
                       type="password"
                       required
-                      className="h-12 px-4 bg-[#000000] border border-[#1A1A1A] text-[#E0E0E0] focus-visible:ring-1 focus-visible:ring-[#007AFF] focus-visible:border-[#007AFF] transition-all rounded-lg"
+                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
                     />
                   </div>
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-12 text-base bg-[#E0E0E0] text-[#000000] hover:bg-[#CCCCCC] transition-colors font-bold mt-8 rounded-lg"
+                    className="mt-8 h-12 w-full rounded-lg bg-[#E0E0E0] text-base font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC]"
                   >
                     {isLoading ? "Criando conta..." : "Cadastrar e acessar"}
                   </Button>
@@ -364,7 +364,7 @@ export default function AuthPage() {
                     <Button
                       type="submit"
                       variant="outline"
-                      className="w-full h-12 bg-transparent border border-[#1A1A1A] text-[#E0E0E0] hover:bg-[#1A1A1A] hover:text-white transition-colors font-medium flex items-center justify-center gap-2 rounded-lg"
+                      className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white"
                     >
                       <svg
                         role="img"
@@ -381,8 +381,8 @@ export default function AuthPage() {
                   </form>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-center border-t border-[#1A1A1A] pt-6 mt-6 p-0">
-                <p className="text-sm text-[#555555] text-center leading-relaxed">
+              <CardFooter className="mt-6 flex justify-center border-t border-[#1A1A1A] p-0 pt-6">
+                <p className="text-center text-sm leading-relaxed text-[#555555]">
                   Ao se cadastrar, você concorda com nossos Termos de Serviço e
                   Política de Privacidade.
                 </p>
