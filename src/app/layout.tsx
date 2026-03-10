@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "./globals.css";
+import MainLayout from "@/src/components/ui/main-layout";
 
 const sansFont = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,9 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
 
   return (
     <html lang="en">
-      <body className={fontClasses}>{children}</body>
+      <body className={fontClasses}>
+        <MainLayout>{children}</MainLayout>
+      </body>
     </html>
   );
 }
