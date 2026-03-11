@@ -32,6 +32,7 @@ export type CalendarEventMinAggregateOutputType = {
   googleEventId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  color: string | null
   userId: string | null
 }
 
@@ -43,6 +44,7 @@ export type CalendarEventMaxAggregateOutputType = {
   googleEventId: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  color: string | null
   userId: string | null
 }
 
@@ -54,6 +56,7 @@ export type CalendarEventCountAggregateOutputType = {
   googleEventId: number
   createdAt: number
   updatedAt: number
+  color: number
   userId: number
   _all: number
 }
@@ -67,6 +70,7 @@ export type CalendarEventMinAggregateInputType = {
   googleEventId?: true
   createdAt?: true
   updatedAt?: true
+  color?: true
   userId?: true
 }
 
@@ -78,6 +82,7 @@ export type CalendarEventMaxAggregateInputType = {
   googleEventId?: true
   createdAt?: true
   updatedAt?: true
+  color?: true
   userId?: true
 }
 
@@ -89,6 +94,7 @@ export type CalendarEventCountAggregateInputType = {
   googleEventId?: true
   createdAt?: true
   updatedAt?: true
+  color?: true
   userId?: true
   _all?: true
 }
@@ -173,6 +179,7 @@ export type CalendarEventGroupByOutputType = {
   googleEventId: string | null
   createdAt: Date
   updatedAt: Date
+  color: string | null
   userId: string
   _count: CalendarEventCountAggregateOutputType | null
   _min: CalendarEventMinAggregateOutputType | null
@@ -205,6 +212,7 @@ export type CalendarEventWhereInput = {
   googleEventId?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  color?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   userId?: Prisma.StringFilter<"CalendarEvent"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -217,6 +225,7 @@ export type CalendarEventOrderByWithRelationInput = {
   googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -232,6 +241,7 @@ export type CalendarEventWhereUniqueInput = Prisma.AtLeast<{
   googleEventId?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  color?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   userId?: Prisma.StringFilter<"CalendarEvent"> | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -244,6 +254,7 @@ export type CalendarEventOrderByWithAggregationInput = {
   googleEventId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
   _count?: Prisma.CalendarEventCountOrderByAggregateInput
   _max?: Prisma.CalendarEventMaxOrderByAggregateInput
@@ -261,6 +272,7 @@ export type CalendarEventScalarWhereWithAggregatesInput = {
   googleEventId?: Prisma.StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CalendarEvent"> | Date | string
+  color?: Prisma.StringNullableWithAggregatesFilter<"CalendarEvent"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"CalendarEvent"> | string
 }
 
@@ -272,6 +284,7 @@ export type CalendarEventCreateInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
   user: Prisma.UserCreateNestedOneWithoutCalendarEventsInput
 }
 
@@ -283,6 +296,7 @@ export type CalendarEventUncheckedCreateInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
   userId: string
 }
 
@@ -294,6 +308,7 @@ export type CalendarEventUpdateInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutCalendarEventsNestedInput
 }
 
@@ -305,6 +320,7 @@ export type CalendarEventUncheckedUpdateInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -316,6 +332,7 @@ export type CalendarEventCreateManyInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
   userId: string
 }
 
@@ -327,6 +344,7 @@ export type CalendarEventUpdateManyMutationInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type CalendarEventUncheckedUpdateManyInput = {
@@ -337,6 +355,7 @@ export type CalendarEventUncheckedUpdateManyInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -358,6 +377,7 @@ export type CalendarEventCountOrderByAggregateInput = {
   googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -369,6 +389,7 @@ export type CalendarEventMaxOrderByAggregateInput = {
   googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -380,6 +401,7 @@ export type CalendarEventMinOrderByAggregateInput = {
   googleEventId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   userId?: Prisma.SortOrder
 }
 
@@ -433,6 +455,7 @@ export type CalendarEventCreateWithoutUserInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
 }
 
 export type CalendarEventUncheckedCreateWithoutUserInput = {
@@ -443,6 +466,7 @@ export type CalendarEventUncheckedCreateWithoutUserInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
 }
 
 export type CalendarEventCreateOrConnectWithoutUserInput = {
@@ -482,6 +506,7 @@ export type CalendarEventScalarWhereInput = {
   googleEventId?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CalendarEvent"> | Date | string
+  color?: Prisma.StringNullableFilter<"CalendarEvent"> | string | null
   userId?: Prisma.StringFilter<"CalendarEvent"> | string
 }
 
@@ -493,6 +518,7 @@ export type CalendarEventCreateManyUserInput = {
   googleEventId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  color?: string | null
 }
 
 export type CalendarEventUpdateWithoutUserInput = {
@@ -503,6 +529,7 @@ export type CalendarEventUpdateWithoutUserInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type CalendarEventUncheckedUpdateWithoutUserInput = {
@@ -513,6 +540,7 @@ export type CalendarEventUncheckedUpdateWithoutUserInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type CalendarEventUncheckedUpdateManyWithoutUserInput = {
@@ -523,6 +551,7 @@ export type CalendarEventUncheckedUpdateManyWithoutUserInput = {
   googleEventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -535,6 +564,7 @@ export type CalendarEventSelect<ExtArgs extends runtime.Types.Extensions.Interna
   googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  color?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -547,6 +577,7 @@ export type CalendarEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  color?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -559,6 +590,7 @@ export type CalendarEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  color?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["calendarEvent"]>
@@ -571,10 +603,11 @@ export type CalendarEventSelectScalar = {
   googleEventId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  color?: boolean
   userId?: boolean
 }
 
-export type CalendarEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "googleEventId" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["calendarEvent"]>
+export type CalendarEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "date" | "googleEventId" | "createdAt" | "updatedAt" | "color" | "userId", ExtArgs["result"]["calendarEvent"]>
 export type CalendarEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -598,6 +631,7 @@ export type $CalendarEventPayload<ExtArgs extends runtime.Types.Extensions.Inter
     googleEventId: string | null
     createdAt: Date
     updatedAt: Date
+    color: string | null
     userId: string
   }, ExtArgs["result"]["calendarEvent"]>
   composites: {}
@@ -1030,6 +1064,7 @@ export interface CalendarEventFieldRefs {
   readonly googleEventId: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly createdAt: Prisma.FieldRef<"CalendarEvent", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CalendarEvent", 'DateTime'>
+  readonly color: Prisma.FieldRef<"CalendarEvent", 'String'>
   readonly userId: Prisma.FieldRef<"CalendarEvent", 'String'>
 }
     

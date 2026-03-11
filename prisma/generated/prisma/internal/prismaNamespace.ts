@@ -396,7 +396,9 @@ export const ModelName = {
   TwoFactorToken: 'TwoFactorToken',
   TwoFactorConfirmation: 'TwoFactorConfirmation',
   CalendarEvent: 'CalendarEvent',
-  Link: 'Link'
+  Link: 'Link',
+  SubjectNote: 'SubjectNote',
+  Exam: 'Exam'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "verificationToken" | "session" | "workload" | "note" | "account" | "semester" | "subject" | "enrollment" | "twoFactorToken" | "twoFactorConfirmation" | "calendarEvent" | "link"
+    modelProps: "user" | "verificationToken" | "session" | "workload" | "note" | "account" | "semester" | "subject" | "enrollment" | "twoFactorToken" | "twoFactorConfirmation" | "calendarEvent" | "link" | "subjectNote" | "exam"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1378,6 +1380,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SubjectNote: {
+      payload: Prisma.$SubjectNotePayload<ExtArgs>
+      fields: Prisma.SubjectNoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubjectNoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubjectNoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        findFirst: {
+          args: Prisma.SubjectNoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubjectNoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        findMany: {
+          args: Prisma.SubjectNoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>[]
+        }
+        create: {
+          args: Prisma.SubjectNoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        createMany: {
+          args: Prisma.SubjectNoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubjectNoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>[]
+        }
+        delete: {
+          args: Prisma.SubjectNoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        update: {
+          args: Prisma.SubjectNoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        deleteMany: {
+          args: Prisma.SubjectNoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubjectNoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubjectNoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>[]
+        }
+        upsert: {
+          args: Prisma.SubjectNoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectNotePayload>
+        }
+        aggregate: {
+          args: Prisma.SubjectNoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubjectNote>
+        }
+        groupBy: {
+          args: Prisma.SubjectNoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubjectNoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubjectNoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubjectNoteCountAggregateOutputType> | number
+        }
+      }
+    }
+    Exam: {
+      payload: Prisma.$ExamPayload<ExtArgs>
+      fields: Prisma.ExamFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExamFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExamFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        findFirst: {
+          args: Prisma.ExamFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExamFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        findMany: {
+          args: Prisma.ExamFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>[]
+        }
+        create: {
+          args: Prisma.ExamCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        createMany: {
+          args: Prisma.ExamCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ExamCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>[]
+        }
+        delete: {
+          args: Prisma.ExamDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        update: {
+          args: Prisma.ExamUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        deleteMany: {
+          args: Prisma.ExamDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExamUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ExamUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>[]
+        }
+        upsert: {
+          args: Prisma.ExamUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamPayload>
+        }
+        aggregate: {
+          args: Prisma.ExamAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExam>
+        }
+        groupBy: {
+          args: Prisma.ExamGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExamCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1564,6 +1714,7 @@ export const CalendarEventScalarFieldEnum = {
   googleEventId: 'googleEventId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  color: 'color',
   userId: 'userId'
 } as const
 
@@ -1581,6 +1732,32 @@ export const LinkScalarFieldEnum = {
 } as const
 
 export type LinkScalarFieldEnum = (typeof LinkScalarFieldEnum)[keyof typeof LinkScalarFieldEnum]
+
+
+export const SubjectNoteScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  subjectId: 'subjectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubjectNoteScalarFieldEnum = (typeof SubjectNoteScalarFieldEnum)[keyof typeof SubjectNoteScalarFieldEnum]
+
+
+export const ExamScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  examDate: 'examDate',
+  subjectId: 'subjectId',
+  eventId: 'eventId',
+  googleEventId: 'googleEventId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1797,6 +1974,8 @@ export type GlobalOmitConfig = {
   twoFactorConfirmation?: Prisma.TwoFactorConfirmationOmit
   calendarEvent?: Prisma.CalendarEventOmit
   link?: Prisma.LinkOmit
+  subjectNote?: Prisma.SubjectNoteOmit
+  exam?: Prisma.ExamOmit
 }
 
 /* Types for Logging */
