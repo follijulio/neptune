@@ -18,7 +18,6 @@ import { useFilterParam } from "@/src/hooks/useFilterParam";
 import { cn } from "@/src/lib/utils";
 
 interface Subject {
-  id: string;
   subject_name: string;
   code: string;
   status: string;
@@ -189,7 +188,7 @@ const SemesterAccordion: React.FC<{ semesters: Semester[] }> = ({
             </AccordionTrigger>
             <AccordionContent className="grid grid-cols-4 gap-4 border-t border-white/15 pt-4 pb-2 leading-relaxed text-gray-300">
               {semester.data.map((subject, i) => (
-                <SubjectCard key={i} subject={subject}  />
+                <SubjectCard key={i} subject={subject} />
               ))}
             </AccordionContent>
           </AccordionItem>
@@ -204,7 +203,7 @@ interface SubjectCardProps {
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
-  const { subject_name, code, partial_grade, id } = subject;
+  const { subject_name, code, partial_grade } = subject;
   const isFailing = partial_grade !== null && partial_grade < PASSING_GRADE;
 
   const gradeColorClass = isFailing
@@ -234,12 +233,12 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
         </section>
         <section className="mt-4 flex flex-row gap-4 font-bold">
           <SubjectLink
-            href={`/materiais/${id}`}
+            href={`/materiais/${subject_name}`}
             icon={MdOutlineFolder}
             label="Materiais"
           />
           <SubjectLink
-            href={`/ementas/${id}`}
+            href={`/ementas/${subject_name}`}
             icon={FaListOl}
             label="Ementa"
           />

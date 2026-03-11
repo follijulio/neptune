@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent,useState } from "react";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
 import {
@@ -28,14 +28,19 @@ import {
 } from "@/src/components/shadcn-ui/dialog";
 import { Input } from "@/src/components/shadcn-ui/input";
 
-export default function SettingsClient({
-  user,
-  isOAuth,
-}: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any;
+interface SettingsUser {
+  name?: string | null;
+  username?: string | null;
+  email?: string | null;
+  image?: string | null;
+}
+
+interface SettingsClientProps {
+  user: SettingsUser | null;
   isOAuth: boolean;
-}) {
+}
+
+export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -52,7 +57,7 @@ export default function SettingsClient({
   const [twoFaCode, setTwoFaCode] = useState("");
   const [newPasswordModal, setNewPasswordModal] = useState("");
 
-  async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
+  async function handleUpdate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
@@ -133,7 +138,7 @@ export default function SettingsClient({
               </label>
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20 border border-zinc-800">
-                  <AvatarImage src={user?.image || ""} alt={user?.name} />
+                  <AvatarImage src={user?.image || ""} alt={user?.name ?? ""} />
                   <AvatarFallback className="bg-[#007AFF] text-2xl font-bold text-white">
                     {user?.name?.substring(0, 1) || "U"}
                   </AvatarFallback>
@@ -162,7 +167,7 @@ export default function SettingsClient({
               </label>
               <Input
                 name="name"
-                defaultValue={user?.name}
+                defaultValue={user?.name ?? ""}
                 placeholder={user?.name || "Seu nome"}
                 className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
               />
@@ -178,7 +183,7 @@ export default function SettingsClient({
                 </span>
                 <Input
                   name="username"
-                  defaultValue={user?.username}
+                  defaultValue={user?.username ?? ""}
                   placeholder={user?.username || "folli"}
                   className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 pl-10 text-white focus-visible:ring-[#007AFF]"
                 />
@@ -191,7 +196,7 @@ export default function SettingsClient({
               </label>
               <Input
                 name="email"
-                defaultValue={user?.email}
+                defaultValue={user?.email ?? ""}
                 type="email"
                 placeholder={user?.email || "Seu e-mail"}
                 className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"

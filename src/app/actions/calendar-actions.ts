@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { revalidatePath } from "next/cache";
@@ -6,12 +5,23 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
+interface CalendarActionSession {
+  user?: {
+    id?: string | null;
+  } | null;
+  accessToken?: string | null;
+}
+
+interface GoogleCalendarEventResponse {
+  id: string;
+}
+
 export async function createFullCalendarEventAction(data: {
   title: string;
   description: string;
   date: string; // Vem do frontend no formato ISO
 }) {
-  const session: any = await auth();
+  const session = (await auth()) as CalendarActionSession | null;
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 
@@ -55,7 +65,7 @@ export async function createFullCalendarEventAction(data: {
       );
 
       if (response.ok) {
-        const result = await response.json();
+        const result: GoogleCalendarEventResponse = await response.json();
         await prisma.calendarEvent.update({
           where: { id: newEvent.id },
           data: { googleEventId: result.id },
@@ -72,7 +82,7 @@ export async function createFullCalendarEventAction(data: {
 }
 
 export async function deleteCalendarEventAction(eventId: string) {
-  const session: any = await auth();
+  const session = (await auth()) as CalendarActionSession | null;
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 

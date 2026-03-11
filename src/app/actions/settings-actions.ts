@@ -3,6 +3,7 @@
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
+import { Prisma } from "@/prisma/generated/prisma/client";
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
@@ -26,8 +27,10 @@ export async function updateAccountAction(data: {
   const isOAuth = currentUser.accounts.length > 0;
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateData: any = { name: data.name, username: data.username };
+    const updateData: Prisma.UserUpdateInput = {
+      name: data.name,
+      username: data.username,
+    };
 
     if (data.email && data.email !== currentUser.email) {
       const emailExists = await prisma.user.findUnique({

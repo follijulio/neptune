@@ -104,10 +104,7 @@ export async function saveExtractedSubjectsAction(
     const userId = await getUserId();
     if (!userId) return { error: "Usuário não autenticado." };
 
-    const { totalCompletedHours} = await processSubjects(
-      subjects,
-      userId,
-    );
+    const { totalCompletedHours } = await processSubjects(subjects, userId);
 
     await updateWorkload(userId, totalCompletedHours);
 

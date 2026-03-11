@@ -83,7 +83,6 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
         <PieChart>
           <ChartTooltip
             cursor={false}
-            active
             content={
               <ChartTooltipContent
                 hideLabel
