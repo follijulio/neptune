@@ -54,8 +54,8 @@ const navigateSemester = (
 
 const getStatusColor = (status: string): string => {
   const statusColors: Record<string, string> = {
-    Aprovado: "text-green-600",
-    Reprovado: "text-red-600",
+    aprovado: "text-green-600",
+    reprovado: "text-red-600",
   };
   return statusColors[status] ?? "text-[#FFB020]";
 };
@@ -177,7 +177,7 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
         <p
           className={cn(
             "flex flex-row items-center gap-2 text-base font-semibold",
-            getStatusColor(course.status),
+            getStatusColor(course.status.toLowerCase()),
           )}
         >
           <FaCircle className="text-xs" />

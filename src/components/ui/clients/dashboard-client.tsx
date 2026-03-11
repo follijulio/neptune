@@ -130,7 +130,7 @@ export default function DashboardClient({
 
   return (
     <section>
-      <section className="flex h-full w-full flex-col gap-10 px-10">
+      <section className="flex h-full w-full flex-col gap-10 px-10 pt-4">
         <div className="flex w-full items-center justify-between">
           <h2 className="text-2xl font-bold">
             <button

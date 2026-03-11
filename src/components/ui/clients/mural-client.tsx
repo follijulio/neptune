@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LuCheck, LuGripHorizontal, LuPlus, LuTrash2 } from "react-icons/lu";
+import ReactMarkdown from "react-markdown";
 import {
   closestCenter,
   DndContext,
@@ -107,9 +108,9 @@ function SortableNoteCard({
         <h3 className="mb-4 pr-8 text-2xl leading-tight font-bold text-[#E0E0E0]">
           {note.title}
         </h3>
-        <p className="flex-1 text-base leading-relaxed whitespace-pre-wrap text-[#A0A0A0]">
-          {note.content}
-        </p>
+        <div className="prose prose-sm prose-invert prose-p:leading-relaxed prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800 line-clamp-4 max-w-none text-zinc-400">
+          <ReactMarkdown>{note.content}</ReactMarkdown>
+        </div>
 
         <div className="mt-8 flex items-center justify-between border-t border-[#1A1A1A] pt-4 text-sm font-medium text-zinc-600">
           <span>{new Date(note.createdAt).toLocaleDateString("pt-BR")}</span>

@@ -20,6 +20,7 @@ import { logoutAction } from "@/src/app/actions/auth-action";
 
 interface NavBarProps {
   profileImageUrl?: string;
+  firstLetter: string;
 }
 
 interface NavItem {
@@ -34,17 +35,43 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Links", href: "/links" },
   { label: "Semestre", href: "/semester" },
   { label: "Pomodoro", href: "/pomodoro" },
-  { label: <LuSettings className="text-xl" />, href: "/settings" },
+  { label: "Configurações", href: "/settings" },
 ];
 
-export const NavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => {
-  const pathname = usePathname();
-  const isNavPage = NAV_ITEMS.some((item) => pathname?.startsWith(item.href));
+const HIDDEN_ROUTES = ["/login", "/onboarding"];
 
-  if (isNavPage) {
-    return <PrivateNavBar profileImageUrl={profileImageUrl} />;
+export const NavBar: React.FC<NavBarProps> = ({
+  profileImageUrl,
+  firstLetter,
+}) => {
+  const pathname = usePathname();
+
+  if (!pathname) return null;
+
+  const isHiddenRoute = HIDDEN_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+
+  if (isHiddenRoute) return null;
+
+  if (pathname === "/") {
+    return <PublicNavBar />;
   }
-  return <PublicNavBar />;
+
+  const isPrivateRoute = NAV_ITEMS.some(
+    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+  );
+
+  if (isPrivateRoute) {
+    return (
+      <PrivateNavBar
+        profileImageUrl={profileImageUrl}
+        firstLetter={firstLetter}
+      />
+    );
+  }
+
+  return null;
 };
 
 const PublicNavBar = () => (
@@ -71,7 +98,10 @@ const PublicNavBar = () => (
   </header>
 );
 
-const PrivateNavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => (
+const PrivateNavBar: React.FC<NavBarProps> = ({
+  profileImageUrl,
+  firstLetter,
+}) => (
   <nav className="sticky top-0 z-50 grid h-16 w-full grid-cols-3 items-center justify-between border-b border-white/30 px-8 backdrop-blur-md">
     <section className="flex w-full justify-start">
       <Logo />
@@ -80,13 +110,13 @@ const PrivateNavBar: React.FC<NavBarProps> = ({ profileImageUrl }) => (
       <NavLinks />
     </section>
     <section className="flex w-full justify-end">
-      <UserMenu profileImageUrl={profileImageUrl} />
+      <UserMenu profileImageUrl={profileImageUrl} firstLetter={firstLetter} />
     </section>
   </nav>
 );
 
 const Logo = () => (
-  <Link href="/dashboard" className="flex items-center text-2xl select-none">
+  <Link href="/" className="flex items-center text-2xl select-none">
     <span className="flex items-center gap-2 font-bold tracking-wider text-white">
       <LuHexagon className="inline text-2xl text-[#007AFF]" />
       <p>Netuno</p>
@@ -98,7 +128,7 @@ const NavLinks = () => {
   const pathname = usePathname();
 
   return (
-    <div className="hidden items-center gap-4 md:flex">
+    <div className="items-center gap-4 sm:flex">
       {NAV_ITEMS.map((item) => (
         <NavLink key={item.href} item={item} pathname={pathname} />
       ))}
@@ -129,12 +159,21 @@ const NavLink: React.FC<NavLinkProps> = ({ item, pathname }) => {
 
 interface UserMenuProps {
   profileImageUrl?: string;
+  firstLetter: string;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ profileImageUrl }) => (
+const UserMenu: React.FC<UserMenuProps> = ({
+  profileImageUrl,
+  firstLetter,
+}) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <UserAvatar profileImageUrl={profileImageUrl} />
+    <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]">
+      <Avatar className="cursor-pointer border border-[#1A1A1A] transition-colors hover:border-zinc-700">
+        <AvatarImage src={profileImageUrl} alt="Perfil do usuário" />
+        <AvatarFallback className="bg-[#007AFF] font-bold text-white">
+          {firstLetter}
+        </AvatarFallback>
+      </Avatar>
     </DropdownMenuTrigger>
 
     <DropdownMenuContent

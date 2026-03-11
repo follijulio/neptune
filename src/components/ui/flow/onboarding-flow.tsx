@@ -5,6 +5,7 @@ import {
   LuArrowLeft,
   LuArrowRight,
   LuGraduationCap,
+  LuHexagon,
   LuTarget,
 } from "react-icons/lu";
 import { UploadCloud } from "lucide-react";
@@ -30,7 +31,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
   const firstName = userName.split(" ")[0];
 
   return (
-    <div className="flex w-full max-w-3xl flex-col items-center">
+    <div className="flex flex-col items-center">
       <div className="relative mb-12 flex w-full items-center justify-between">
         <div className="absolute top-1/2 left-0 -z-10 h-1 w-full -translate-y-1/2 rounded-full bg-[#1A1A1A]">
           <div
@@ -59,11 +60,12 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         ))}
       </div>
 
-      <div className="relative flex min-h-[400px] w-full flex-col overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8 shadow-2xl">
+      <div className="relative flex min-h-100 w-full flex-col overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-8 shadow-2xl">
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-right-8 flex flex-1 flex-col justify-center text-center duration-500">
-            <h1 className="mb-4 text-4xl font-bold text-[#E0E0E0]">
-              Bem-vindo ao Netuno, {firstName}! 🌊
+            <h1 className="mb-4 flex items-center justify-center gap-2 text-4xl font-bold text-[#E0E0E0]">
+              Bem-vindo ao Netuno, {firstName}!{" "}
+              <LuHexagon className="inline text-3xl text-[#007AFF]" />
             </h1>
             <p className="mx-auto mb-8 max-w-xl text-lg text-[#888888]">
               Estamos preparando o seu novo ambiente acadêmico. O Netuno vai te
