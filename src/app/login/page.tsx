@@ -83,7 +83,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-12 bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
+    <div className="flex w-full h-full flex-row items-center justify-center gap-12 bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
       <div className="flex w-full max-w-100 flex-col items-center text-center lg:items-start lg:text-left">
         <LuHexagon className="mb-6 text-7xl text-[#007AFF] lg:text-8xl" />
         <h1 className="mb-4 text-5xl font-bold tracking-tight text-[#E0E0E0] lg:text-6xl">

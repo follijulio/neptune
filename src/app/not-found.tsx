@@ -73,7 +73,7 @@ function NotFoundContent() {
 
 export default function NotFound() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#000000] text-white">
+    <div className="relative flex h-full flex-col items-center justify-center overflow-hidden bg-[#000000] text-white">
       <StarField />
       <OrbitRing />
       <NotFoundContent />

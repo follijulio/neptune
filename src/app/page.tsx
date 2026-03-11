@@ -97,7 +97,7 @@ const benefits = [
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
+    <div className="flex h-full w-full flex-col bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
       <main className="flex flex-1 flex-col items-center">
         <section className="mx-auto flex w-full max-w-7xl flex-col items-center gap-8 px-6 py-24 text-center lg:py-40">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-sm font-medium text-[#007AFF]">

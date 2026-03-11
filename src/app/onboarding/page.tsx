@@ -11,7 +11,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#000000] p-6">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-[#000000] p-6">
       <OnboardingFlow userName={session.user.name || "Aluno"} />
     </div>
   );

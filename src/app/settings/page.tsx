@@ -1,7 +1,10 @@
 "use client";
 
-import { type FormEvent,useState } from "react";
+import { type FormEvent, useState } from "react";
 import { AlertCircle, CheckCircle } from "lucide-react";
+
+import { useRouter } from "next/navigation"; // Adicione isso
+import { updateUserImageAction } from "@/src/app/actions/user-actions"; // Ajuste o caminho se necessário
 
 import {
   resetPasswordWith2FAAction,
@@ -27,6 +30,7 @@ import {
   DialogTitle,
 } from "@/src/components/shadcn-ui/dialog";
 import { Input } from "@/src/components/shadcn-ui/input";
+import { UploadButton } from "@/src/components/ui/upload-button";
 
 interface SettingsUser {
   name?: string | null;
@@ -41,6 +45,7 @@ interface SettingsClientProps {
 }
 
 export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -77,6 +82,18 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
     else if (result?.success)
       setMessage({ type: "success", text: result.success });
 
+    setLoading(false);
+  }
+
+  async function handleRemovePhoto() {
+    setLoading(true);
+    const result = await updateUserImageAction("");
+    if (result?.error) {
+      setMessage({ type: "error", text: result.error });
+    } else {
+      setMessage({ type: "success", text: "Foto removida com sucesso!" });
+      router.refresh();
+    }
     setLoading(false);
   }
 
@@ -143,17 +160,53 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                     {user?.name?.substring(0, 1) || "U"}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    className="h-10 rounded-lg bg-[#007AFF] px-4 py-2 text-sm font-medium text-white hover:bg-[#005bb5]"
-                  >
-                    Alterar foto
-                  </Button>
+
+                <div className="flex items-center gap-3">
+                  <UploadButton
+                    endpoint="profilePicture"
+                    onUploadBegin={() => {
+                      setLoading(true);
+                      setMessage(null);
+                    }}
+                    onClientUploadComplete={async (res) => {
+                      if (res && res[0]) {
+                        await updateUserImageAction(res[0].ufsUrl);
+                        setMessage({
+                          type: "success",
+                          text: "Foto atualizada com sucesso!",
+                        });
+                        router.refresh();
+                      }
+                      setLoading(false);
+                    }}
+                    onUploadError={(error: Error) => {
+                      setMessage({
+                        type: "error",
+                        text: `Erro: ${error.message}`,
+                      });
+                      setLoading(false);
+                    }}
+                    appearance={{
+                      button:
+                        "h-10 rounded-lg bg-[#007AFF] px-4 py-2 text-sm font-medium text-white hover:bg-[#005bb5] focus-within:ring-[#007AFF] ut-uploading:opacity-50 ut-uploading:cursor-not-allowed m-0 w-auto",
+                      allowedContent: "hidden",
+                      container: "w-auto flex-row m-0",
+                    }}
+                    content={{
+                      button({ ready, isUploading }) {
+                        if (isUploading) return "Enviando...";
+                        if (ready) return "Alterar foto";
+                        return "Carregando...";
+                      },
+                    }}
+                  />
+
                   <Button
                     type="button"
                     variant="ghost"
-                    className="h-10 rounded-lg px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 hover:text-red-400"
+                    onClick={handleRemovePhoto}
+                    disabled={loading || !user?.image}
+                    className="h-10 rounded-lg px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
                   >
                     Remover foto
                   </Button>
