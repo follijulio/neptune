@@ -118,10 +118,12 @@ model Subject {
   semesterId String
   semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  notes       Note[]
-  enrollments Enrollment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  notes        Note[]
+  enrollments  Enrollment[]
+  subjectNotes SubjectNote[]
+  exams        Exam[]
 }
 
 model Enrollment {
@@ -161,6 +163,7 @@ model CalendarEvent {
   googleEventId String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  color         String?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -176,6 +179,33 @@ model Link {
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SubjectNote {
+  id      String @id @default(uuid())
+  title   String
+  content String @db.Text
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Exam {
+  id       String   @id @default(uuid())
+  title    String
+  examDate DateTime
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  eventId       String?
+  googleEventId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum SemesterStatus {
