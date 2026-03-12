@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LuCheck, LuGripHorizontal, LuPlus, LuTrash2 } from "react-icons/lu";
+import {
+  LuCheck,
+  LuGripHorizontal,
+  LuPlus,
+  LuTrash2,
+  LuPencil,
+} from "react-icons/lu"; 
 import ReactMarkdown from "react-markdown";
 import {
   closestCenter,
@@ -26,6 +32,7 @@ import {
   createNoteAction,
   deleteNoteAction,
   reorderNotesAction,
+  updateNoteAction,
 } from "@/src/app/actions/notes-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
@@ -59,11 +66,13 @@ const NOTE_COLORS = [
 function SortableNoteCard({
   note,
   onDelete,
+  onEdit,
   isDeleting,
   index,
 }: {
   note: Note;
   onDelete: (id: string) => void;
+  onEdit: (note: Note) => void; 
   isDeleting: boolean;
   index: number;
 }) {
@@ -114,17 +123,31 @@ function SortableNoteCard({
 
         <div className="mt-8 flex items-center justify-between border-t border-[#1A1A1A] pt-4 text-sm font-medium text-zinc-600">
           <span>{new Date(note.createdAt).toLocaleDateString("pt-BR")}</span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(note.id);
-            }}
-            disabled={isDeleting}
-            className="relative z-10 -mr-2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50"
-            title="Apagar anotação"
-          >
-            <LuTrash2 className="h-5 w-5" />
-          </button>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(note);
+              }}
+              className="relative z-10 rounded-lg p-2 text-zinc-500 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#007AFF]/10 hover:text-[#007AFF]"
+              title="Editar anotação"
+            >
+              <LuPencil className="h-5 w-5" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(note.id);
+              }}
+              disabled={isDeleting}
+              className="relative z-10 -mr-2 rounded-lg p-2 text-zinc-500 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50"
+              title="Apagar anotação"
+            >
+              <LuTrash2 className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -142,6 +165,10 @@ export default function MuralClient({
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteContent, setNoteContent] = useState("");
   const [selectedColor, setSelectedColor] = useState(NOTE_COLORS[0].value);
 
   useEffect(() => {
@@ -177,31 +204,75 @@ export default function MuralClient({
     setIsDeleting(null);
   }
 
-  async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
+  function openEditModal(note: Note) {
+    setEditingNote(note);
+    setNoteTitle(note.title);
+    setNoteContent(note.content);
+    setSelectedColor(note.color || NOTE_COLORS[0].value);
+    setError(null);
+    setIsOpen(true);
+  }
+
+  function openCreateModal() {
+    setEditingNote(null);
+    setNoteTitle("");
+    setNoteContent("");
+    setSelectedColor(NOTE_COLORS[0].value);
+    setError(null);
+    setIsOpen(true);
+  }
+
+  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      title: formData.get("title") as string,
-      content: formData.get("content") as string,
-      color: selectedColor,
-    };
-
-    if (!data.title || !data.content) {
+    if (!noteTitle || !noteContent) {
       setError("Preencha o título e o conteúdo da anotação.");
       setIsSaving(false);
       return;
     }
 
-    const result = await createNoteAction(data);
-    if (result.error) {
-      setError(result.error);
+    if (editingNote) {
+      const result = await updateNoteAction({
+        id: editingNote.id,
+        title: noteTitle,
+        content: noteContent,
+        color: selectedColor,
+      });
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setNotes((prev) =>
+          prev.map((n) =>
+            n.id === editingNote.id
+              ? {
+                  ...n,
+                  title: noteTitle,
+                  content: noteContent,
+                  color: selectedColor,
+                }
+              : n,
+          ),
+        );
+        setIsOpen(false);
+      }
     } else {
-      setIsOpen(false);
-      router.refresh();
+      const result = await createNoteAction({
+        title: noteTitle,
+        content: noteContent,
+        color: selectedColor,
+      });
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setIsOpen(false);
+        router.refresh();
+      }
     }
+
     setIsSaving(false);
   }
 
@@ -210,7 +281,10 @@ export default function MuralClient({
       <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="h-12 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white hover:bg-[#005bb5]">
+            <Button
+              onClick={openCreateModal}
+              className="h-12 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white hover:bg-[#005bb5]"
+            >
               <LuPlus className="h-5 w-5" /> Novo Post-it
             </Button>
           </DialogTrigger>
@@ -218,33 +292,38 @@ export default function MuralClient({
           <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold">
-                Criar Anotação
+                {editingNote ? "Editar Anotação" : "Criar Anotação"}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleCreate} className="space-y-6 pt-4">
+            <form onSubmit={handleSave} className="space-y-6 pt-4">
               {error && (
                 <p className="text-sm font-medium text-red-500">{error}</p>
               )}
+
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-zinc-300">
                   Título
                 </label>
                 <Input
-                  name="title"
-                  placeholder="prova de ..."
+                  value={noteTitle}
+                  onChange={(e) => setNoteTitle(e.target.value)}
+                  placeholder="Ex: Prova de..."
                   className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-zinc-300">
                   Conteúdo
                 </label>
                 <Textarea
-                  name="content"
-                  placeholder="a prova vai ter questões sobre..."
+                  value={noteContent}
+                  onChange={(e) => setNoteContent(e.target.value)}
+                  placeholder="Resumo, ideias..."
                   className="min-h-30 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
                 />
               </div>
+
               <div className="space-y-3">
                 <label className="text-sm font-semibold text-zinc-300">
                   Cor da Tag
@@ -266,12 +345,17 @@ export default function MuralClient({
                   ))}
                 </div>
               </div>
+
               <Button
                 type="submit"
                 disabled={isSaving}
                 className="h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
               >
-                {isSaving ? "Salvando..." : "Salvar Post-it"}
+                {isSaving
+                  ? "Salvando..."
+                  : editingNote
+                    ? "Salvar Alterações"
+                    : "Salvar Post-it"}
               </Button>
             </form>
           </DialogContent>
@@ -296,6 +380,7 @@ export default function MuralClient({
                   note={note}
                   index={index}
                   onDelete={handleDelete}
+                  onEdit={openEditModal}
                   isDeleting={isDeleting === note.id}
                 />
               ))}
