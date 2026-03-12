@@ -398,7 +398,8 @@ export const ModelName = {
   CalendarEvent: 'CalendarEvent',
   Link: 'Link',
   SubjectNote: 'SubjectNote',
-  Exam: 'Exam'
+  Exam: 'Exam',
+  SubjectMaterial: 'SubjectMaterial'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "verificationToken" | "session" | "workload" | "note" | "account" | "semester" | "subject" | "enrollment" | "twoFactorToken" | "twoFactorConfirmation" | "calendarEvent" | "link" | "subjectNote" | "exam"
+    modelProps: "user" | "verificationToken" | "session" | "workload" | "note" | "account" | "semester" | "subject" | "enrollment" | "twoFactorToken" | "twoFactorConfirmation" | "calendarEvent" | "link" | "subjectNote" | "exam" | "subjectMaterial"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1528,6 +1529,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SubjectMaterial: {
+      payload: Prisma.$SubjectMaterialPayload<ExtArgs>
+      fields: Prisma.SubjectMaterialFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SubjectMaterialFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SubjectMaterialFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        findFirst: {
+          args: Prisma.SubjectMaterialFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SubjectMaterialFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        findMany: {
+          args: Prisma.SubjectMaterialFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>[]
+        }
+        create: {
+          args: Prisma.SubjectMaterialCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        createMany: {
+          args: Prisma.SubjectMaterialCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SubjectMaterialCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>[]
+        }
+        delete: {
+          args: Prisma.SubjectMaterialDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        update: {
+          args: Prisma.SubjectMaterialUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        deleteMany: {
+          args: Prisma.SubjectMaterialDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SubjectMaterialUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SubjectMaterialUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>[]
+        }
+        upsert: {
+          args: Prisma.SubjectMaterialUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SubjectMaterialPayload>
+        }
+        aggregate: {
+          args: Prisma.SubjectMaterialAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSubjectMaterial>
+        }
+        groupBy: {
+          args: Prisma.SubjectMaterialGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubjectMaterialGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SubjectMaterialCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SubjectMaterialCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1760,6 +1835,19 @@ export const ExamScalarFieldEnum = {
 export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
 
 
+export const SubjectMaterialScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  size: 'size',
+  subjectId: 'subjectId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SubjectMaterialScalarFieldEnum = (typeof SubjectMaterialScalarFieldEnum)[keyof typeof SubjectMaterialScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1976,6 +2064,7 @@ export type GlobalOmitConfig = {
   link?: Prisma.LinkOmit
   subjectNote?: Prisma.SubjectNoteOmit
   exam?: Prisma.ExamOmit
+  subjectMaterial?: Prisma.SubjectMaterialOmit
 }
 
 /* Types for Logging */

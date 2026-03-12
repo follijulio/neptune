@@ -116,3 +116,8 @@ export type SubjectNote = Prisma.SubjectNoteModel
  * 
  */
 export type Exam = Prisma.ExamModel
+/**
+ * Model SubjectMaterial
+ * 
+ */
+export type SubjectMaterial = Prisma.SubjectMaterialModel

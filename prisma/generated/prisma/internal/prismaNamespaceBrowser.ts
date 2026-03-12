@@ -65,7 +65,8 @@ export const ModelName = {
   CalendarEvent: 'CalendarEvent',
   Link: 'Link',
   SubjectNote: 'SubjectNote',
-  Exam: 'Exam'
+  Exam: 'Exam',
+  SubjectMaterial: 'SubjectMaterial'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -275,6 +276,19 @@ export const ExamScalarFieldEnum = {
 } as const
 
 export type ExamScalarFieldEnum = (typeof ExamScalarFieldEnum)[keyof typeof ExamScalarFieldEnum]
+
+
+export const SubjectMaterialScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  size: 'size',
+  subjectId: 'subjectId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SubjectMaterialScalarFieldEnum = (typeof SubjectMaterialScalarFieldEnum)[keyof typeof SubjectMaterialScalarFieldEnum]
 
 
 export const SortOrder = {
