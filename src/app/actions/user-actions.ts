@@ -15,6 +15,8 @@ export async function updateUserImageAction(imageUrl: string) {
     });
 
     revalidatePath("/dashboard");
+    revalidatePath("/settings");
+    revalidatePath("/", "layout");
     return { success: true };
   } catch (error) {
     console.error("Erro ao atualizar foto:", error);
