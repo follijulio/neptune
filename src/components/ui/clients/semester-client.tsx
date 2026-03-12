@@ -5,10 +5,10 @@ import {
   LuBookX,
   LuFolderOpen,
   LuGraduationCap,
+  LuPencil,
   LuPlus,
   LuSave,
   LuTrash,
-  LuPencil,
 } from "react-icons/lu";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,8 +17,8 @@ import {
   createSubjectAction,
   deleteSubjectAction,
   updateSubjectAbsencesAction,
-  updateSubjectGradesAction,
   updateSubjectBaseAction,
+  updateSubjectGradesAction,
 } from "@/src/app/actions/subject-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {

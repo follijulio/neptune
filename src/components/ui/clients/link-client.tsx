@@ -8,9 +8,9 @@ import {
   LuExternalLink,
   LuGlobe,
   LuGraduationCap,
+  LuPencil,
   LuPlus,
   LuTrash2,
-  LuPencil,
 } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
