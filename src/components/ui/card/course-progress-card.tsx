@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { TbTargetArrow } from "react-icons/tb";
 import {
   Label,
@@ -31,13 +30,42 @@ const CHART_CONFIG = {
   },
 } satisfies ChartConfig;
 
-const CHART_STYLE = {
-  startAngle: 90,
-  innerRadius: 60, // Adjusted for mobile
-  outerRadius: 90, // Adjusted for mobile
-  barSize: 20, // Adjusted for mobile
-  polarRadius: [70, 58] as [number, number], // Adjusted for mobile
+type ChartStyle = {
+  startAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  barSize: number;
+  polarRadius: [number, number];
 };
+
+const getResponsiveChartStyle = (): ChartStyle => {
+  if (typeof window === "undefined") {
+    return {
+      startAngle: 90,
+      innerRadius: 70,
+      outerRadius: 100,
+      barSize: 35,
+      polarRadius: [76, 64],
+    };
+  }
+
+  const vw = window.innerWidth;
+  const scale = Math.min(Math.max(vw / 1440, 0.65), 1); // 65% -> 100%
+
+  const innerRadius = Math.round(70 * scale);
+  const outerRadius = Math.round(100 * scale);
+  const barSize = Math.round(35 * scale);
+
+  return {
+    startAngle: 90,
+    innerRadius,
+    outerRadius,
+    barSize,
+    polarRadius: [Math.round(76 * scale), Math.round(64 * scale)],
+  };
+};
+
+const CHART_STYLE = getResponsiveChartStyle();
 
 const calculateProgress = (completed: number, total: number): number => {
   return total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -46,17 +74,11 @@ const calculateProgress = (completed: number, total: number): number => {
 const RadialProgressChart: React.FC<RadialProgressChartProps> = ({
   progress,
 }) => {
-  const chartData = useMemo(() => [{ progress, fill: "#007AFF" }], [progress]);
-  const endAngle = useMemo(
-    () => CHART_STYLE.startAngle - (360 * progress) / 100,
-    [progress],
-  );
+  const chartData = [{ progress, fill: "#007AFF" }];
+  const endAngle = CHART_STYLE.startAngle - (360 * progress) / 100;
 
   return (
-    <ChartContainer
-      config={CHART_CONFIG}
-      className="mx-auto aspect-square w-full max-w-50 sm:max-w-none"
-    >
+    <ChartContainer config={CHART_CONFIG} className="mx-auto aspect-square">
       <RadialBarChart
         data={chartData}
         startAngle={CHART_STYLE.startAngle}
@@ -83,7 +105,16 @@ const RadialProgressChart: React.FC<RadialProgressChartProps> = ({
                     y={viewBox.cy}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                  />
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-white font-medium"
+                      style={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
+                    >
+                      {progress}%
+                    </tspan>
+                  </text>
                 );
               }
             }}
@@ -98,33 +129,24 @@ export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
   hoursTotal,
   hoursCompleted,
 }) => {
-  const progress = useMemo(
-    () => calculateProgress(hoursCompleted, hoursTotal),
-    [hoursCompleted, hoursTotal],
-  );
+  const progress = calculateProgress(hoursCompleted, hoursTotal);
 
   return (
-    <div className="flex h-64 w-full flex-col rounded-2xl border border-white/50 bg-transparent p-4 text-white sm:h-72 sm:rounded-3xl sm:p-5">
-      <h1 className="mb-2 flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-[#888888] uppercase sm:mb-4 sm:gap-2 sm:text-sm">
-        <TbTargetArrow className="inline shrink-0 text-sm sm:text-base" />
-        <span className="truncate">Progresso do Curso</span>
-      </h1>
-
-      <section className="flex h-full w-full flex-row items-center justify-between gap-4 sm:gap-8">
-        <div className="flex flex-col justify-center gap-2 sm:gap-4">
-          <span className="text-5xl leading-none font-light sm:text-6xl">
-            {progress}%
-          </span>
-          <span className="flex flex-col gap-0.5 text-[10px] font-medium text-[#888888] sm:flex-row sm:gap-2 sm:text-sm">
+    <div className="h-72 w-full rounded-3xl border border-white/50 bg-transparent p-4 text-white">
+      <section className="flex h-full w-full flex-row justify-between gap-4">
+        <div className="flex w-2/3 flex-col gap-8">
+          <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
+            <TbTargetArrow className="inline" /> Progresso do Curso
+          </h1>
+          <span className="text-6xl font-light">{progress}%</span>
+          <span className="flex gap-2 text-[#888888]">
             <span>
               {hoursCompleted}/{hoursTotal}
             </span>
-            <span className="hidden sm:inline">horas</span>
-            <span className="sm:hidden">hrs</span>
+            horas
           </span>
         </div>
-
-        <div className="flex h-full max-h-40 flex-1 items-center justify-center sm:max-h-full">
+        <div className="w-1/3">
           <RadialProgressChart progress={progress} />
         </div>
       </section>

@@ -101,7 +101,7 @@ export default function LandingPage() {
   return (
     <div className="flex h-full w-full flex-col overflow-x-hidden bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
       <main className="flex flex-1 flex-col items-center">
-        <section className="mx-auto flex w-full max-w-7xl flex-col items-center gap-6 px-4 py-16 text-center sm:gap-8 sm:px-6 sm:py-24 lg:py-40">
+        <section className="mx-auto flex w-full flex-col items-center gap-6 px-4 py-16 text-center sm:gap-8 sm:px-6 sm:py-24 lg:py-40">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:px-4 sm:py-1.5 sm:text-sm">
             <LuGraduationCap className="shrink-0 text-sm sm:text-base" />
             <span className="truncate">
@@ -131,7 +131,7 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full border-y border-[#007AFF]/20 bg-linear-to-br from-[#007AFF]/10 via-[#000000] to-[#000000] py-16 sm:py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mx-auto w-full px-4 sm:px-6">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
               <div className="order-2 flex flex-col gap-5 sm:gap-6 lg:order-1">
                 <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[#007AFF]/30 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:text-sm">
@@ -189,7 +189,7 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full bg-[#000000] py-16 sm:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mx-auto w-full px-4 sm:px-6">
             <div className="mb-12 flex flex-col items-center gap-3 text-center sm:mb-16 sm:gap-4">
               <h2 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
                 Tudo que você precisa em um só lugar
@@ -229,7 +229,7 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full border-y border-[#1A1A1A] bg-[#121212] py-16 sm:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mx-auto w-full px-4 sm:px-6">
             <div className="mb-12 flex flex-col items-center gap-3 text-center sm:mb-16 sm:gap-4">
               <h2 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
                 Como funciona
@@ -278,7 +278,7 @@ export default function LandingPage() {
         </section>
 
         <section className="w-full bg-[#000000] py-16 sm:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mx-auto w-full px-4 sm:px-6">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col gap-4 text-center sm:gap-6 lg:text-left">
                 <h2 className="text-3xl leading-tight font-bold sm:text-4xl lg:text-5xl">

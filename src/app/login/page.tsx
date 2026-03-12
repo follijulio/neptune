@@ -100,7 +100,7 @@ export default function Page() {
   }, [error, currentView]);
 
   return (
-    <div className="flex min-h-[100dvh] w-full flex-col items-center justify-center gap-10 overflow-y-auto bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-10 overflow-y-auto bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
       <div className="flex w-full max-w-md flex-col items-center text-center lg:items-start lg:text-left">
         <LuHexagon className="mb-4 text-6xl text-[#007AFF] lg:mb-6 lg:text-8xl" />
         <h1 className="mb-2 text-4xl font-bold tracking-tight text-[#E0E0E0] lg:mb-4 lg:text-6xl">

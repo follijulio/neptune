@@ -652,7 +652,7 @@ export default function SemesterClient({
 
   return (
     <section className="pb-8">
-      <div className="mx-auto w-full max-w-7xl">
+      <div className="mx-auto w-full w-full">
         <SemesterHeader
           semesters={initialSemesters}
           activeSemesterId={activeSemesterId}
