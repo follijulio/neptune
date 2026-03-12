@@ -131,3 +131,34 @@ export async function updateSubjectNoteAction(data: {
     return { error: "Falha ao atualizar a anotação." };
   }
 }
+
+export async function updateExamAction(data: {
+  id: string;
+  title: string;
+  examDate: Date;
+  color: string;
+}) {
+  try {
+    const existingExam = await prisma.exam.findUnique({
+      where: { id: data.id },
+      select: { googleEventId: true },
+    });
+
+    const updatedExam = await prisma.exam.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+        examDate: data.examDate,
+        color: data.color,
+      },
+    });
+
+    // TODO: google.
+    if (existingExam?.googleEventId) {}
+
+    return { success: true, exam: updatedExam };
+  } catch (error) {
+    console.error("Erro ao atualizar prova:", error);
+    return { error: "Falha ao atualizar a prova." };
+  }
+}

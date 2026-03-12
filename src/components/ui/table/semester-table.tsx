@@ -187,14 +187,14 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
             {subject_name}
           </h3>
         </section>
-        <section className="mt-4 flex flex-row gap-4 font-bold">
+        {/* <section className="mt-4 flex flex-row gap-4 font-bold">
           <SubjectLink
             href={`/materiais/${id}`}
             icon={MdOutlineFolder}
             label="Materiais"
           />
           <SubjectLink href={`/ementas/${id}`} icon={FaListOl} label="Ementa" />
-        </section>
+        </section> */}
       </div>
       <div>
         <Badge

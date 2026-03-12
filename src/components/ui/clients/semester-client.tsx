@@ -8,6 +8,7 @@ import {
   LuPlus,
   LuSave,
   LuTrash,
+  LuPencil, // <-- O Lápis
 } from "react-icons/lu";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ import {
   deleteSubjectAction,
   updateSubjectAbsencesAction,
   updateSubjectGradesAction,
+  updateSubjectBaseAction, // <-- Nossa nova action!
 } from "@/src/app/actions/subject-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
@@ -160,86 +162,92 @@ function SemesterSelector({
   );
 }
 
-function AddSubjectForm({
+// Transformado num Modal inteligente (Criar/Editar)
+function SubjectFormModal({
+  isOpen,
+  onOpenChange,
   activeSemesterTitle,
-  isAdding,
-  addError,
+  isSaving,
+  error,
+  editingSubject,
   onSubmit,
 }: {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
   activeSemesterTitle?: string;
-  isAdding: boolean;
-  addError: string | null;
+  isSaving: boolean;
+  error: string | null;
+  editingSubject: Subject | null;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }) {
   return (
-    <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#0A0A0A] text-white sm:max-w-md">
-      <DialogHeader>
-        <DialogTitle className="text-xl font-bold">
-          Nova Disciplina em {activeSemesterTitle}
-        </DialogTitle>
-      </DialogHeader>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#0A0A0A] text-white sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold">
+            {editingSubject
+              ? "Editar Disciplina"
+              : `Nova Disciplina em ${activeSemesterTitle}`}
+          </DialogTitle>
+        </DialogHeader>
 
-      <form onSubmit={onSubmit} className="space-y-4 pt-4">
-        {addError && (
-          <p className="rounded-lg bg-[#FF3B30]/10 p-3 text-sm font-medium text-[#FF3B30]">
-            {addError}
-          </p>
-        )}
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-zinc-400">
-            Nome da Disciplina
-          </label>
-          <Input
-            name="name"
-            placeholder="Ex: Algoritmos"
-            className="rounded-xl border-zinc-800 bg-zinc-900 text-white focus-visible:ring-[#007AFF]"
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-semibold text-zinc-400">
-            Carga Horária Total
-          </label>
-          <Input
-            name="workload"
-            type="number"
-            defaultValue={60}
-            min={15}
-            step={15}
-            className="[appearance:textfield] rounded-xl border-zinc-800 bg-zinc-900 text-white focus-visible:ring-[#007AFF] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-          />
-        </div>
-        <Button
-          type="submit"
-          disabled={isAdding}
-          className="mt-2 h-11 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
-        >
-          {isAdding ? "A salvar..." : "Adicionar"}
-        </Button>
-      </form>
-    </DialogContent>
+        <form onSubmit={onSubmit} className="space-y-4 pt-4">
+          {error && (
+            <p className="rounded-lg bg-[#FF3B30]/10 p-3 text-sm font-medium text-[#FF3B30]">
+              {error}
+            </p>
+          )}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-zinc-400">
+              Nome da Disciplina
+            </label>
+            <Input
+              name="name"
+              defaultValue={editingSubject?.name || ""}
+              placeholder="Ex: Algoritmos"
+              className="rounded-xl border-zinc-800 bg-zinc-900 text-white focus-visible:ring-[#007AFF]"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-zinc-400">
+              Carga Horária Total
+            </label>
+            <Input
+              name="workload"
+              type="number"
+              defaultValue={editingSubject?.workload || 60}
+              min={15}
+              step={15}
+              className="[appearance:textfield] rounded-xl border-zinc-800 bg-zinc-900 text-white focus-visible:ring-[#007AFF] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={isSaving}
+            className="mt-2 h-11 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
+          >
+            {isSaving
+              ? "A salvar..."
+              : editingSubject
+                ? "Salvar Alterações"
+                : "Adicionar"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
 function SemesterHeader({
   semesters,
   activeSemesterId,
-  activeSemesterTitle,
-  isAddModalOpen,
-  isAdding,
-  addError,
   onSemesterChange,
-  onAddModalChange,
-  onAddSubject,
+  onOpenCreate,
 }: {
   semesters: Semester[];
   activeSemesterId: string;
-  activeSemesterTitle?: string;
-  isAddModalOpen: boolean;
-  isAdding: boolean;
-  addError: string | null;
   onSemesterChange: (id: string) => void;
-  onAddModalChange: (value: boolean) => void;
-  onAddSubject: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  onOpenCreate: () => void;
 }) {
   return (
     <header className="mb-10 flex flex-row gap-6 border-b border-[#1A1A1A] pb-6 md:flex-row md:items-end md:justify-between">
@@ -251,20 +259,12 @@ function SemesterHeader({
         />
       </div>
 
-      <Dialog open={isAddModalOpen} onOpenChange={onAddModalChange}>
-        <DialogTrigger asChild>
-          <Button className="h-11 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-all hover:bg-[#005bb5]">
-            <LuPlus className="h-5 w-5" /> Nova Disciplina
-          </Button>
-        </DialogTrigger>
-
-        <AddSubjectForm
-          activeSemesterTitle={activeSemesterTitle}
-          isAdding={isAdding}
-          addError={addError}
-          onSubmit={onAddSubject}
-        />
-      </Dialog>
+      <Button
+        onClick={onOpenCreate}
+        className="h-11 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-all hover:bg-[#005bb5]"
+      >
+        <LuPlus className="h-5 w-5" /> Nova Disciplina
+      </Button>
     </header>
   );
 }
@@ -389,7 +389,6 @@ function SubjectCardFooter({
   neededForFinal,
   isSaving,
 }: {
-  subjectId: string;
   status: SubjectStatus;
   currentAverage: number;
   neededForFinal: number;
@@ -435,17 +434,19 @@ function SubjectCard({
   subject,
   loadingId,
   isDeletingId,
-  onSave,
+  onSaveGrades,
   onDelete,
+  onEdit, // <-- Prop nova para abrir o modal de edição
 }: {
   subject: Subject;
   loadingId: string | null;
   isDeletingId: string | null;
-  onSave: (
+  onSaveGrades: (
     e: React.FormEvent<HTMLFormElement>,
     subjectId: string,
   ) => Promise<void>;
   onDelete: (subjectId: string) => Promise<void>;
+  onEdit: (subject: Subject) => void;
 }) {
   const { status, currentAverage, neededForFinal } = calculateUFALStatus(
     subject.ab1,
@@ -461,28 +462,44 @@ function SubjectCard({
 
   return (
     <form
-      onSubmit={(e) => onSave(e, subject.id)}
-      className="flex flex-col gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-2xl transition-colors hover:border-zinc-800"
+      onSubmit={(e) => onSaveGrades(e, subject.id)}
+      className="group flex flex-col gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-2xl transition-colors hover:border-zinc-800"
     >
       <div className="flex items-start justify-between">
-        <h3
-          className="truncate pr-2 text-lg leading-tight font-bold text-white"
-          title={subject.name}
-        >
-          {subject.name}
-        </h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col">
+          <h3
+            className="truncate pr-2 text-lg leading-tight font-bold text-white"
+            title={subject.name}
+          >
+            {subject.name}
+          </h3>
+          <span className="text-xs font-medium text-zinc-500">
+            {subject.workload}h • Máx {subject.maxAbsences} faltas
+          </span>
+        </div>
+        <div className="flex items-center gap-1">
           <div
-            className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 ${UI.bg} ${UI.color} text-xs font-bold whitespace-nowrap`}
+            className={`mr-2 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 ${UI.bg} ${UI.color} text-xs font-bold whitespace-nowrap`}
           >
             <StatusIcon className="h-3.5 w-3.5" />
             {UI.label}
           </div>
+
+          {/* BOTÃO DE EDITAR */}
+          <button
+            type="button"
+            onClick={() => onEdit(subject)}
+            className="rounded-md p-1.5 text-zinc-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#007AFF]/10 hover:text-[#007AFF]"
+            title="Editar Disciplina"
+          >
+            <LuPencil className="h-4 w-4" />
+          </button>
+
           <button
             type="button"
             onClick={() => onDelete(subject.id)}
             disabled={isDeletingId === subject.id}
-            className="rounded-md p-1.5 text-zinc-600 transition-all hover:bg-[#FF3B30]/10 hover:text-[#FF3B30]"
+            className="rounded-md p-1.5 text-zinc-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50"
             title="Apagar Disciplina"
           >
             <LuTrash className="h-4 w-4" />
@@ -494,55 +511,14 @@ function SubjectCard({
         currentAbsences={subject.currentAbsences}
         maxAbsences={subject.maxAbsences}
       />
-
       <GradeInputs subject={subject} status={status} />
-
       <SubjectCardFooter
-        subjectId={subject.id}
         status={status}
         currentAverage={currentAverage}
         neededForFinal={neededForFinal}
         isSaving={loadingId === subject.id}
       />
     </form>
-  );
-}
-
-function SubjectGrid({
-  subjects,
-  loadingId,
-  isDeletingId,
-  onSave,
-  onDelete,
-  onAddFirst,
-}: {
-  subjects: Subject[];
-  loadingId: string | null;
-  isDeletingId: string | null;
-  onSave: (
-    e: React.FormEvent<HTMLFormElement>,
-    subjectId: string,
-  ) => Promise<void>;
-  onDelete: (subjectId: string) => Promise<void>;
-  onAddFirst: () => void;
-}) {
-  if (!subjects.length) {
-    return <EmptySubjectsState onAdd={onAddFirst} />;
-  }
-
-  return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      {subjects.map((subject) => (
-        <SubjectCard
-          key={subject.id}
-          subject={subject}
-          loadingId={loadingId}
-          isDeletingId={isDeletingId}
-          onSave={onSave}
-          onDelete={onDelete}
-        />
-      ))}
-    </div>
   );
 }
 
@@ -557,9 +533,12 @@ export default function SemesterClient({
   const [activeSemesterId, setActiveSemesterId] = useState<string>(
     initialSemesters[0]?.id ?? "",
   );
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
-  const [addError, setAddError] = useState<string | null>(null);
+
+  // ESTADOS DO MODAL INTELIGENTE (CRIAR / EDITAR)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingSubject, setEditingSubject] = useState<Subject | null>(null);
+  const [isSavingBase, setIsSavingBase] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const activeSemester = initialSemesters.find(
     (s) => s.id === activeSemesterId,
@@ -569,13 +548,13 @@ export default function SemesterClient({
     return <EmptySemestersState />;
   }
 
-  async function handleSaveSubject(
+  // GUARDA NOTAS E FALTAS (O que já estava pronto)
+  async function handleSaveGrades(
     e: React.FormEvent<HTMLFormElement>,
     subjectId: string,
   ) {
     e.preventDefault();
     setLoadingId(subjectId);
-
     const formData = new FormData(e.currentTarget);
     const absences = Number(formData.get("absences"));
     const grades = extractGradesFromForm(formData);
@@ -589,41 +568,66 @@ export default function SemesterClient({
     setLoadingId(null);
   }
 
-  async function handleAddSubject(e: React.FormEvent<HTMLFormElement>) {
+  function openCreateModal() {
+    setEditingSubject(null);
+    setFormError(null);
+    setIsModalOpen(true);
+  }
+
+  function openEditModal(subject: Subject) {
+    setEditingSubject(subject);
+    setFormError(null);
+    setIsModalOpen(true);
+  }
+
+  // FUNÇÃO ÚNICA PARA SALVAR DADOS BASE (CRIAR OU EDITAR)
+  async function handleSaveBaseSubject(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!activeSemester) return;
 
-    setIsAdding(true);
-    setAddError(null);
+    setIsSavingBase(true);
+    setFormError(null);
 
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const workload = Number(formData.get("workload"));
 
     if (!name || !workload) {
-      setAddError("Preencha todos os campos.");
-      setIsAdding(false);
+      setFormError("Preencha todos os campos.");
+      setIsSavingBase(false);
       return;
     }
 
-    const result = await createSubjectAction({
-      name,
-      workload,
-      semesterId: activeSemester.id,
-    });
-
-    if (result.error) {
-      setAddError(result.error);
+    if (editingSubject) {
+      // MODO: EDITAR
+      const result = await updateSubjectBaseAction(editingSubject.id, {
+        name,
+        workload,
+      });
+      if (result.error) {
+        setFormError(result.error);
+      } else {
+        setIsModalOpen(false);
+        router.refresh();
+      }
     } else {
-      setIsAddModalOpen(false);
-      router.refresh();
+      // MODO: CRIAR
+      const result = await createSubjectAction({
+        name,
+        workload,
+        semesterId: activeSemester.id,
+      });
+      if (result.error) {
+        setFormError(result.error);
+      } else {
+        setIsModalOpen(false);
+        router.refresh();
+      }
     }
-
-    setIsAdding(false);
+    setIsSavingBase(false);
   }
 
   async function handleDeleteSubject(subjectId: string) {
-    // TODO: Substituir por um modal de confirmação mais bonitin
     const confirmed = window.confirm(
       "Tem certeza que deseja apagar esta disciplina? Todas as notas e faltas serão perdidas.",
     );
@@ -641,22 +645,36 @@ export default function SemesterClient({
         <SemesterHeader
           semesters={initialSemesters}
           activeSemesterId={activeSemesterId}
-          activeSemesterTitle={activeSemester?.title}
-          isAddModalOpen={isAddModalOpen}
-          isAdding={isAdding}
-          addError={addError}
           onSemesterChange={setActiveSemesterId}
-          onAddModalChange={setIsAddModalOpen}
-          onAddSubject={handleAddSubject}
+          onOpenCreate={openCreateModal} // Passamos a função de abrir modal de criação
         />
 
-        <SubjectGrid
-          subjects={activeSemester?.subjects ?? []}
-          loadingId={loadingId}
-          isDeletingId={isDeletingId}
-          onSave={handleSaveSubject}
-          onDelete={handleDeleteSubject}
-          onAddFirst={() => setIsAddModalOpen(true)}
+        {!activeSemester?.subjects.length ? (
+          <EmptySubjectsState onAdd={openCreateModal} />
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {activeSemester.subjects.map((subject) => (
+              <SubjectCard
+                key={subject.id}
+                subject={subject}
+                loadingId={loadingId}
+                isDeletingId={isDeletingId}
+                onSaveGrades={handleSaveGrades}
+                onDelete={handleDeleteSubject}
+                onEdit={openEditModal} // Passamos a função de abrir modal de edição
+              />
+            ))}
+          </div>
+        )}
+
+        <SubjectFormModal
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          activeSemesterTitle={activeSemester?.title}
+          isSaving={isSavingBase}
+          error={formError}
+          editingSubject={editingSubject}
+          onSubmit={handleSaveBaseSubject}
         />
       </div>
     </section>

@@ -8,6 +8,7 @@ import {
   LuChevronLeft,
   LuChevronRight,
   LuClock,
+  LuPencil,
 } from "react-icons/lu";
 import {
   addMonths,
@@ -30,6 +31,7 @@ import { useRouter } from "next/navigation";
 import {
   createFullCalendarEventAction,
   deleteCalendarEventAction,
+  updateFullCalendarEventAction,
 } from "@/src/app/actions/calendar-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
@@ -46,6 +48,7 @@ type CalendarEvent = {
   title: string;
   description: string | null;
   date: Date | string;
+  color?: string | null;
 };
 
 function MonthNavigator({
@@ -230,13 +233,14 @@ function UpcomingEventsList({
   );
 }
 
-function CreateEventModal({
+function EventFormModal({
   isOpen,
   selectedDate,
   time,
   descCount,
   loading,
   error,
+  editingEvent,
   onTimeChange,
   onDescCountChange,
   onSubmit,
@@ -248,6 +252,7 @@ function CreateEventModal({
   descCount: number;
   loading: boolean;
   error: string | null;
+  editingEvent: CalendarEvent | null;
   onTimeChange: (value: string) => void;
   onDescCountChange: (value: number) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -258,7 +263,8 @@ function CreateEventModal({
       <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold">
-            <LuCalendarPlus className="text-[#007AFF]" /> Novo Evento
+            <LuCalendarPlus className="text-[#007AFF]" />
+            {editingEvent ? "Editar Evento" : "Novo Evento"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-5 pt-4">
@@ -267,9 +273,7 @@ function CreateEventModal({
           )}
           <div className="rounded-lg border border-zinc-800 bg-black/50 p-3 text-center text-sm font-medium text-zinc-300 capitalize">
             {selectedDate
-              ? format(selectedDate, "dd 'de' MMMM 'de' yyyy", {
-                  locale: ptBR,
-                })
+              ? format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
               : ""}
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -279,6 +283,7 @@ function CreateEventModal({
               </label>
               <Input
                 name="title"
+                defaultValue={editingEvent?.title || ""}
                 placeholder="Ex: Prova de Geometria"
                 className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
               />
@@ -309,6 +314,7 @@ function CreateEventModal({
             <Textarea
               name="description"
               maxLength={100}
+              defaultValue={editingEvent?.description || ""}
               onChange={(e) => onDescCountChange(e.target.value.length)}
               placeholder="Anotações para o evento..."
               className="min-h-25 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
@@ -319,7 +325,11 @@ function CreateEventModal({
             disabled={loading}
             className="mt-4 h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
           >
-            {loading ? "Salvando e Sincronizando..." : "Salvar Evento"}
+            {loading
+              ? "Processando..."
+              : editingEvent
+                ? "Salvar Alterações"
+                : "Salvar Evento"}
           </Button>
         </form>
       </DialogContent>
@@ -332,12 +342,14 @@ function EventDetailsModal({
   event,
   onOpenChange,
   onDelete,
+  onEdit,
   isDeleting,
 }: {
   isOpen: boolean;
   event: CalendarEvent | null;
   onOpenChange: (open: boolean) => void;
   onDelete: (id: string) => void;
+  onEdit: (event: CalendarEvent) => void;
   isDeleting: boolean;
 }) {
   return (
@@ -393,15 +405,25 @@ function EventDetailsModal({
         )}
 
         <div className="mt-2 flex items-center justify-between border-t border-[#1A1A1A] pt-6">
-          <Button
-            variant="ghost"
-            onClick={() => event && onDelete(event.id)}
-            disabled={isDeleting}
-            className="flex items-center gap-2 rounded-lg text-[#FF3B30] transition-colors hover:bg-[#FF3B30] hover:text-white"
-          >
-            <Trash2 className="h-4 w-4" />
-            {isDeleting ? "Excluindo..." : "Excluir"}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => event && onDelete(event.id)}
+              disabled={isDeleting}
+              className="flex items-center gap-2 rounded-lg text-[#FF3B30] transition-colors hover:bg-[#FF3B30] hover:text-white"
+            >
+              <Trash2 className="h-4 w-4" />
+              {isDeleting ? "A excluir..." : "Excluir"}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => event && onEdit(event)}
+              className="flex items-center gap-2 rounded-lg text-[#007AFF] transition-colors hover:bg-[#007AFF] hover:text-white"
+            >
+              <LuPencil className="h-4 w-4" />
+              Editar
+            </Button>
+          </div>
           <Button
             variant="ghost"
             onClick={() => onOpenChange(false)}
@@ -429,10 +451,12 @@ export default function CalendarClient({
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(
     null,
   );
+
+  const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [time, setTime] = useState("14:00");
@@ -453,7 +477,20 @@ export default function CalendarClient({
 
   function handleDayClick(day: Date) {
     setSelectedDate(day);
-    setIsCreateModalOpen(true);
+    setEditingEvent(null);
+    setTime("14:00");
+    setDescCount(0);
+    setIsFormModalOpen(true);
+    setError(null);
+  }
+
+  function handleEditClick(event: CalendarEvent) {
+    setSelectedEvent(null);
+    setEditingEvent(event);
+    setSelectedDate(new Date(event.date));
+    setTime(format(new Date(event.date), "HH:mm"));
+    setDescCount(event.description?.length || 0);
+    setIsFormModalOpen(true);
     setError(null);
   }
 
@@ -474,7 +511,7 @@ export default function CalendarClient({
     setSelectedEvent(event);
   }
 
-  async function handleCreateEvent(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSaveEvent(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedDate) return;
     setLoading(true);
@@ -494,17 +531,32 @@ export default function CalendarClient({
     const finalDateTime = new Date(selectedDate);
     finalDateTime.setHours(hours, minutes, 0, 0);
 
-    const result = await createFullCalendarEventAction({
-      title,
-      description,
-      date: finalDateTime.toISOString(),
-    });
+    let result;
 
-    if (result.error) setError(result.error);
-    else {
-      setIsCreateModalOpen(false);
+    if (editingEvent) {
+      result = await updateFullCalendarEventAction({
+        id: editingEvent.id,
+        title,
+        description,
+        date: finalDateTime.toISOString(),
+        color: editingEvent.color || undefined,
+      });
+    } else {
+      result = await createFullCalendarEventAction({
+        title,
+        description,
+        date: finalDateTime.toISOString(),
+      });
+    }
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setIsFormModalOpen(false);
+      setEditingEvent(null);
       router.refresh();
     }
+
     setLoading(false);
   }
 
@@ -536,17 +588,21 @@ export default function CalendarClient({
         </div>
       </div>
 
-      <CreateEventModal
-        isOpen={isCreateModalOpen}
+      <EventFormModal
+        isOpen={isFormModalOpen}
         selectedDate={selectedDate}
         time={time}
         descCount={descCount}
         loading={loading}
         error={error}
+        editingEvent={editingEvent}
         onTimeChange={setTime}
         onDescCountChange={setDescCount}
-        onSubmit={handleCreateEvent}
-        onOpenChange={setIsCreateModalOpen}
+        onSubmit={handleSaveEvent}
+        onOpenChange={(open) => {
+          setIsFormModalOpen(open);
+          if (!open) setEditingEvent(null);
+        }}
       />
 
       <EventDetailsModal
@@ -554,6 +610,7 @@ export default function CalendarClient({
         event={selectedEvent}
         onOpenChange={(open) => !open && setSelectedEvent(null)}
         onDelete={handleDeleteEvent}
+        onEdit={handleEditClick}
         isDeleting={isDeleting}
       />
     </section>
