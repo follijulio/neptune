@@ -250,7 +250,6 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
               </div>
             </div>
 
-            {/* O RESTO DO SEU FORMULÁRIO CONTINUA AQUI... */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-zinc-300">
                 Nome
@@ -362,7 +361,6 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
             </div>
           </form>
 
-          {/* MODAL DE RECUPERAR SENHA CONTINUA IGUAL */}
           <Dialog open={isResetModalOpen} onOpenChange={setIsResetModalOpen}>
             <DialogContent className="border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
               <DialogHeader>

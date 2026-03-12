@@ -142,7 +142,6 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
     setIsSaving(true);
 
     if (editingNoteId) {
-      // MODO EDIÇÃO
       const res = await updateSubjectNoteAction({
         id: editingNoteId,
         title: noteTitle,
@@ -150,7 +149,6 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
       });
 
       if (res.success) {
-        // Atualiza a lista trocando a nota velha pela nova
         setNotes((prev) =>
           prev.map((n) => (n.id === editingNoteId ? res.note : n)),
         );
