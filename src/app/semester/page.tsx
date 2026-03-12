@@ -6,7 +6,10 @@ import SemesterClient from "@/src/components/ui/clients/semester-client";
 
 export default async function Page() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
 
   const semesters = await prisma.semester.findMany({
     where: { userId: session.user.id },

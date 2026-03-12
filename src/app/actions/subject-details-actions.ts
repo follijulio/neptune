@@ -154,7 +154,8 @@ export async function updateExamAction(data: {
     });
 
     // TODO: google.
-    if (existingExam?.googleEventId) {}
+    if (existingExam?.googleEventId) {
+    }
 
     return { success: true, exam: updatedExam };
   } catch (error) {

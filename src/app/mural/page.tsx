@@ -11,7 +11,12 @@ export default async function Page() {
   if (!session?.user?.id) {
     redirect("/login");
   }
+
   const notes = await findNotesAction(session.user.id);
 
-  return <MuralClient initialNotes={notes} />;
+  return (
+    <div className="mx-auto w-full max-w-7xl px-0 sm:px-4">
+      <MuralClient initialNotes={notes} />
+    </div>
+  );
 }

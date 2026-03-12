@@ -16,5 +16,9 @@ export default async function Page() {
     orderBy: { date: "asc" },
   });
 
-  return <CalendarClient initialEvents={events} />;
+  return (
+    <div className="mx-auto w-full max-w-7xl px-0 sm:px-4">
+      <CalendarClient initialEvents={events} />
+    </div>
+  );
 }

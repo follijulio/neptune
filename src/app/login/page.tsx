@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { LuHexagon } from "react-icons/lu";
 
@@ -82,17 +82,34 @@ export default function Page() {
     setShowTwoFactor(false);
   };
 
+  const errorAlert = useMemo(() => {
+    if (!error) return null;
+    return (
+      <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 p-3 text-[#FF3B30] sm:p-4">
+        <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
+        <AlertTitle className="text-xs font-bold sm:text-sm">
+          {currentView === "login"
+            ? "Erro na autenticação"
+            : "Não foi possível cadastrar"}
+        </AlertTitle>
+        <AlertDescription className="text-[10px] sm:text-xs">
+          {error}
+        </AlertDescription>
+      </Alert>
+    );
+  }, [error, currentView]);
+
   return (
-    <div className="flex h-full w-full flex-row items-center justify-center gap-12 bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
-      <div className="flex w-full max-w-100 flex-col items-center text-center lg:items-start lg:text-left">
-        <LuHexagon className="mb-6 text-7xl text-[#007AFF] lg:text-8xl" />
-        <h1 className="mb-4 text-5xl font-bold tracking-tight text-[#E0E0E0] lg:text-6xl">
+    <div className="flex min-h-[100dvh] w-full flex-col items-center justify-center gap-10 overflow-y-auto bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
+      <div className="flex w-full max-w-md flex-col items-center text-center lg:items-start lg:text-left">
+        <LuHexagon className="mb-4 text-6xl text-[#007AFF] lg:mb-6 lg:text-8xl" />
+        <h1 className="mb-2 text-4xl font-bold tracking-tight text-[#E0E0E0] lg:mb-4 lg:text-6xl">
           Netuno
         </h1>
-        <p className="mb-12 text-lg leading-relaxed text-[#888888] lg:text-xl">
+        <p className="mb-8 text-base leading-relaxed text-[#888888] lg:mb-12 lg:text-xl">
           Seu dashboard acadêmico inteligente. Domine as disciplinas da
           Licenciatura e otimize sua rotina universitária com dados.{" "}
-          <span className="text-xs">
+          <span className="mt-2 block text-[10px] opacity-50 lg:inline lg:text-xs">
             Desenvolvido por{" "}
             <a
               href="https://github.com/follijulio"
@@ -104,12 +121,12 @@ export default function Page() {
             </a>
           </span>
         </p>
-        <div className="grid h-14 w-full grid-cols-2 rounded-xl bg-[#121212] p-1.5">
+        <div className="grid h-12 w-full grid-cols-2 rounded-xl bg-[#121212] p-1 lg:h-14 lg:p-1.5">
           <button
             onClick={() => switchView("login")}
-            className={`flex h-full items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 ${
+            className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
               currentView === "login"
-                ? "bg-[#1A1A1A] text-[#E0E0E0]"
+                ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
                 : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
             }`}
           >
@@ -117,9 +134,9 @@ export default function Page() {
           </button>
           <button
             onClick={() => switchView("register")}
-            className={`flex h-full items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 ${
+            className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
               currentView === "register"
-                ? "bg-[#1A1A1A] text-[#E0E0E0]"
+                ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
                 : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
             }`}
           >
@@ -128,32 +145,29 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="w-full max-w-112.5">
+      <div className="w-full max-w-md lg:max-w-lg">
         {currentView === "login" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="rounded-2xl border-0 bg-[#121212] p-8 text-[#E0E0E0] shadow-none">
-              <CardHeader className="mb-8 space-y-2 p-0">
-                <CardTitle className="text-2xl font-bold tracking-wide">
+            <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
+              <CardHeader className="mb-6 space-y-1 p-0 sm:mb-8 sm:space-y-2">
+                <CardTitle className="text-xl font-bold tracking-wide sm:text-2xl">
                   {showTwoFactor
                     ? "Verificação de Segurança"
                     : "Bem-vindo de volta"}
                 </CardTitle>
-                <CardDescription className="text-base text-[#888888]">
+                <CardDescription className="text-sm text-[#888888] sm:text-base">
                   {showTwoFactor
                     ? "Enviamos um código de 6 dígitos para o seu e-mail."
                     : "Insira suas credenciais para acessar seu painel."}
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
-                {error && (
-                  <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 text-[#FF3B30]">
-                    <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
-                    <AlertTitle>Erro na autenticação</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
+                {errorAlert}
                 {showTwoFactor ? (
-                  <form onSubmit={handleLogin} className="space-y-6">
+                  <form
+                    onSubmit={handleLogin}
+                    className="space-y-4 sm:space-y-6"
+                  >
                     <input type="hidden" name="email" value={email} />
                     <input type="hidden" name="password" value={password} />
 
@@ -164,14 +178,14 @@ export default function Page() {
                         placeholder="000000"
                         required
                         autoComplete="off"
-                        className="h-14 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-center text-2xl font-bold tracking-[1em] text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                        className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-2 text-center text-xl font-bold tracking-[0.5em] text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-14 sm:text-2xl sm:tracking-[1em]"
                       />
                     </div>
 
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="mt-8 h-12 w-full rounded-lg bg-[#007AFF] text-base font-bold text-white transition-colors hover:bg-[#007AFF]/80"
+                      className="mt-4 h-10 w-full rounded-lg bg-[#007AFF] text-sm font-bold text-white transition-colors hover:bg-[#007AFF]/80 sm:mt-8 sm:h-12 sm:text-base"
                     >
                       {isLoading ? "Verificando..." : "Confirmar Código"}
                     </Button>
@@ -179,18 +193,21 @@ export default function Page() {
                     <button
                       type="button"
                       onClick={() => setShowTwoFactor(false)}
-                      className="mt-4 w-full text-sm text-[#888888] transition-colors hover:text-[#E0E0E0]"
+                      className="mt-2 w-full text-xs text-[#888888] transition-colors hover:text-[#E0E0E0] sm:mt-4 sm:text-sm"
                     >
                       Voltar para o login normal
                     </button>
                   </form>
                 ) : (
                   <>
-                    <form onSubmit={handleLogin} className="space-y-6">
-                      <div className="space-y-3">
+                    <form
+                      onSubmit={handleLogin}
+                      className="space-y-4 sm:space-y-6"
+                    >
+                      <div className="space-y-2">
                         <Label
                           htmlFor="email"
-                          className="text-sm font-medium text-[#888888]"
+                          className="text-xs font-medium text-[#888888] sm:text-sm"
                         >
                           E-mail
                         </Label>
@@ -198,23 +215,23 @@ export default function Page() {
                           id="email"
                           name="email"
                           type="email"
-                          placeholder="folli@exemplo.com"
+                          placeholder="seu@email.com"
                           required
                           defaultValue={email}
-                          className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                         />
                       </div>
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Label
                             htmlFor="password"
-                            className="text-sm font-medium text-[#888888]"
+                            className="text-xs font-medium text-[#888888] sm:text-sm"
                           >
                             Senha
                           </Label>
                           <a
                             href="#"
-                            className="text-sm text-[#007AFF] transition-colors hover:underline"
+                            className="text-xs text-[#007AFF] transition-colors hover:underline sm:text-sm"
                           >
                             Esqueceu a senha?
                           </a>
@@ -225,13 +242,13 @@ export default function Page() {
                           type="password"
                           required
                           defaultValue={password}
-                          className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                         />
                       </div>
                       <Button
                         type="submit"
                         disabled={isLoading}
-                        className="mt-8 h-12 w-full rounded-lg bg-[#E0E0E0] text-base font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC]"
+                        className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
                       >
                         {isLoading ? "Autenticando..." : "Entrar na plataforma"}
                       </Button>
@@ -241,23 +258,26 @@ export default function Page() {
                         <div className="absolute inset-0 flex items-center">
                           <span className="w-full border-t border-[#1A1A1A]" />
                         </div>
-                        <div className="relative flex justify-center text-xs uppercase">
+                        <div className="relative flex justify-center text-[10px] uppercase sm:text-xs">
                           <span className="bg-[#121212] px-2 text-[#888888]">
                             Ou continue com
                           </span>
                         </div>
                       </div>
 
-                      <form action={loginWithGoogleAction} className="mt-6">
+                      <form
+                        action={loginWithGoogleAction}
+                        className="mt-4 sm:mt-6"
+                      >
                         <Button
                           type="submit"
                           variant="outline"
-                          className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white"
+                          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent text-xs font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white sm:h-12 sm:text-sm"
                         >
                           <svg
                             role="img"
                             viewBox="0 0 24 24"
-                            className="h-5 w-5"
+                            className="h-4 w-4 sm:h-5 sm:w-5"
                             fill="currentColor"
                             xmlns="http://www.w3.org/2000/svg"
                           >
@@ -277,43 +297,40 @@ export default function Page() {
 
         {currentView === "register" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="rounded-2xl border-0 bg-[#121212] p-8 text-[#E0E0E0] shadow-none">
-              <CardHeader className="mb-8 space-y-2 p-0">
-                <CardTitle className="text-2xl font-bold tracking-wide">
+            <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
+              <CardHeader className="mb-6 space-y-1 p-0 sm:mb-8 sm:space-y-2">
+                <CardTitle className="text-xl font-bold tracking-wide sm:text-2xl">
                   Criar uma conta
                 </CardTitle>
-                <CardDescription className="text-base text-[#888888]">
+                <CardDescription className="text-sm text-[#888888] sm:text-base">
                   Comece a gerenciar sua grade curricular hoje mesmo.
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
-                {error && (
-                  <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 text-[#FF3B30]">
-                    <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
-                    <AlertTitle>Não foi possível cadastrar</AlertTitle>
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-                <form onSubmit={handleRegister} className="space-y-5">
-                  <div className="space-y-2">
+                {errorAlert}
+                <form
+                  onSubmit={handleRegister}
+                  className="space-y-4 sm:space-y-5"
+                >
+                  <div className="space-y-1.5 sm:space-y-2">
                     <Label
                       htmlFor="name"
-                      className="text-sm font-medium text-[#888888]"
+                      className="text-xs font-medium text-[#888888] sm:text-sm"
                     >
                       Nome completo
                     </Label>
                     <Input
                       id="name"
                       name="name"
-                      placeholder="Ex: Folli"
+                      placeholder="Ex: João Silva"
                       required
-                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 sm:space-y-2">
                     <Label
                       htmlFor="reg-email"
-                      className="text-sm font-medium text-[#888888]"
+                      className="text-xs font-medium text-[#888888] sm:text-sm"
                     >
                       E-mail
                     </Label>
@@ -323,13 +340,13 @@ export default function Page() {
                       type="email"
                       placeholder="seu@email.com"
                       required
-                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5 sm:space-y-2">
                     <Label
                       htmlFor="reg-password"
-                      className="text-sm font-medium text-[#888888]"
+                      className="text-xs font-medium text-[#888888] sm:text-sm"
                     >
                       Senha
                     </Label>
@@ -338,13 +355,13 @@ export default function Page() {
                       name="password"
                       type="password"
                       required
-                      className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF]"
+                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                     />
                   </div>
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="mt-8 h-12 w-full rounded-lg bg-[#E0E0E0] text-base font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC]"
+                    className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
                   >
                     {isLoading ? "Criando conta..." : "Cadastrar e acessar"}
                   </Button>
@@ -354,23 +371,23 @@ export default function Page() {
                     <div className="absolute inset-0 flex items-center">
                       <span className="w-full border-t border-[#1A1A1A]" />
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase">
+                    <div className="relative flex justify-center text-[10px] uppercase sm:text-xs">
                       <span className="bg-[#121212] px-2 text-[#888888]">
                         Ou continue com
                       </span>
                     </div>
                   </div>
 
-                  <form action={loginWithGoogleAction} className="mt-6">
+                  <form action={loginWithGoogleAction} className="mt-4 sm:mt-6">
                     <Button
                       type="submit"
                       variant="outline"
-                      className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white"
+                      className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent text-xs font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white sm:h-12 sm:text-sm"
                     >
                       <svg
                         role="img"
                         viewBox="0 0 24 24"
-                        className="h-5 w-5"
+                        className="h-4 w-4 sm:h-5 sm:w-5"
                         fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg"
                       >
@@ -382,8 +399,8 @@ export default function Page() {
                   </form>
                 </div>
               </CardContent>
-              <CardFooter className="mt-6 flex justify-center border-t border-[#1A1A1A] p-0 pt-6">
-                <p className="text-center text-sm leading-relaxed text-[#555555]">
+              <CardFooter className="mt-4 flex justify-center border-t border-[#1A1A1A] p-0 pt-4 sm:mt-6 sm:pt-6">
+                <p className="text-center text-[10px] leading-relaxed text-[#555555] sm:text-xs">
                   Ao se cadastrar, você concorda com nossos Termos de Serviço e
                   Política de Privacidade.
                 </p>

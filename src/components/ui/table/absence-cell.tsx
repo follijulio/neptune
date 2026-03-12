@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { cn } from "@/src/lib/utils";
 
@@ -31,8 +31,11 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
   const [barGhostPct, setBarGhostPct] = useState<number | null>(null);
   const barRef = useRef<HTMLDivElement>(null);
 
-  const ratio = Math.min(absences / maxAbsences, 1);
-  const { tw: barTw, hex: barHex } = getBarColor(ratio);
+  const ratio = useMemo(
+    () => Math.min(absences / maxAbsences, 1),
+    [absences, maxAbsences],
+  );
+  const { tw: barTw, hex: barHex } = useMemo(() => getBarColor(ratio), [ratio]);
 
   function commitAbsences() {
     const val = Math.max(0, Math.min(parseInt(tempAbsences) || 0, maxAbsences));
@@ -65,107 +68,110 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
 
   return (
     <div
-      className="flex items-center gap-3"
+      className="flex w-full items-center justify-between gap-2 sm:w-auto sm:gap-3"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
         setBarGhostPct(null);
       }}
     >
-      <div
-        ref={barRef}
-        onClick={handleBarClick}
-        onMouseMove={handleBarMove}
-        onMouseLeave={() => setBarGhostPct(null)}
-        className="relative h-1.25 w-24 flex-shrink-0 cursor-crosshair overflow-hidden rounded-full bg-white/10"
-      >
-        {barGhostPct !== null && (
-          <div
-            className="absolute inset-y-0 left-0 rounded-full opacity-20"
-            style={{ width: `${barGhostPct * 100}%`, background: barHex }}
-          />
-        )}
+      <div className="flex items-center gap-2 sm:gap-3">
         <div
-          className={cn(
-            "relative z-10 h-full rounded-full transition-all duration-300",
-            barTw,
+          ref={barRef}
+          onClick={handleBarClick}
+          onMouseMove={handleBarMove}
+          onMouseLeave={() => setBarGhostPct(null)}
+          className="relative h-1.5 w-16 shrink-0 cursor-crosshair overflow-hidden rounded-full bg-white/10 sm:h-1.25 sm:w-24"
+        >
+          {barGhostPct !== null && (
+            <div
+              className="absolute inset-y-0 left-0 rounded-full opacity-20"
+              style={{ width: `${barGhostPct * 100}%`, background: barHex }}
+            />
           )}
-          style={{ width: `${ratio * 100}%` }}
-        />
-      </div>
-      <div className="flex min-w-13 items-center gap-0.5 font-mono text-sm">
-        {editingAbsences ? (
-          <input
-            autoFocus
-            value={tempAbsences}
-            onChange={(e) => setTempAbsences(e.target.value)}
-            onBlur={commitAbsences}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") commitAbsences();
-              if (e.key === "Escape") {
+          <div
+            className={cn(
+              "relative z-10 h-full rounded-full transition-all duration-300",
+              barTw,
+            )}
+            style={{ width: `${ratio * 100}%` }}
+          />
+        </div>
+        <div className="flex min-w-10 items-center gap-0.5 font-mono text-xs sm:min-w-13 sm:text-sm">
+          {editingAbsences ? (
+            <input
+              autoFocus
+              value={tempAbsences}
+              onChange={(e) => setTempAbsences(e.target.value)}
+              onBlur={commitAbsences}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") commitAbsences();
+                if (e.key === "Escape") {
+                  setTempAbsences(String(absences));
+                  setEditingAbsences(false);
+                }
+              }}
+              className="w-6 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-xs outline-none sm:w-8 sm:text-sm"
+              style={{ color: barHex }}
+            />
+          ) : (
+            <span
+              onClick={() => {
+                setEditingAbsences(true);
                 setTempAbsences(String(absences));
-                setEditingAbsences(false);
-              }
-            }}
-            className="w-8 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-sm outline-none"
-            style={{ color: barHex }}
-          />
-        ) : (
-          <span
-            onClick={() => {
-              setEditingAbsences(true);
-              setTempAbsences(String(absences));
-            }}
-            className="cursor-pointer rounded px-1 py-px transition-colors hover:bg-white/10"
-            style={{ color: barHex }}
-            title="Clique para editar faltas"
-          >
-            {absences}
-          </span>
-        )}
+              }}
+              className="cursor-pointer rounded px-0.5 py-px transition-colors hover:bg-white/10 sm:px-1"
+              style={{ color: barHex }}
+              title="Clique para editar faltas"
+            >
+              {absences}
+            </span>
+          )}
 
-        <span className="text-white/25">/</span>
+          <span className="text-white/25">/</span>
 
-        {editingMax ? (
-          <input
-            autoFocus
-            value={tempMax}
-            onChange={(e) => setTempMax(e.target.value)}
-            onBlur={commitMax}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") commitMax();
-              if (e.key === "Escape") {
+          {editingMax ? (
+            <input
+              autoFocus
+              value={tempMax}
+              onChange={(e) => setTempMax(e.target.value)}
+              onBlur={commitMax}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") commitMax();
+                if (e.key === "Escape") {
+                  setTempMax(String(maxAbsences));
+                  setEditingMax(false);
+                }
+              }}
+              className="w-6 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-xs text-white/60 outline-none sm:w-8 sm:text-sm"
+            />
+          ) : (
+            <span
+              onClick={() => {
+                setEditingMax(true);
                 setTempMax(String(maxAbsences));
-                setEditingMax(false);
-              }
-            }}
-            className="w-8 rounded border border-white/20 bg-white/10 px-0.5 py-px text-center font-mono text-sm text-white/60 outline-none"
-          />
-        ) : (
-          <span
-            onClick={() => {
-              setEditingMax(true);
-              setTempMax(String(maxAbsences));
-            }}
-            className="cursor-pointer rounded px-1 py-px text-white/40 transition-colors hover:bg-white/10 hover:text-white/70"
-            title="Clique para editar máximo"
-          >
-            {maxAbsences}
-          </span>
-        )}
+              }}
+              className="cursor-pointer rounded px-0.5 py-px text-white/40 transition-colors hover:bg-white/10 hover:text-white/70 sm:px-1"
+              title="Clique para editar máximo"
+            >
+              {maxAbsences}
+            </span>
+          )}
+        </div>
       </div>
+
       <div
         className={cn(
-          "flex items-center gap-1.5 transition-all duration-200",
+          "flex items-center gap-1 transition-all duration-200 sm:gap-1.5",
           hovered
             ? "pointer-events-auto translate-x-0 opacity-100"
-            : "pointer-events-none -translate-x-1 opacity-0",
+            : "pointer-events-none translate-x-1 opacity-0 md:-translate-x-1",
         )}
       >
         <button
           onClick={() => onUpdate({ absences: Math.max(0, absences - 1) })}
           disabled={absences === 0}
-          className="flex h-6 w-6 items-center justify-center rounded border border-white/15 text-sm leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
+          className="flex h-5 w-5 items-center justify-center rounded border border-white/15 text-xs leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20 sm:h-6 sm:w-6 sm:text-sm"
         >
           −
         </button>
@@ -174,7 +180,7 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
             onUpdate({ absences: Math.min(maxAbsences, absences + 1) })
           }
           disabled={absences >= maxAbsences}
-          className="flex h-6 w-6 items-center justify-center rounded border border-white/15 text-sm leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20"
+          className="flex h-5 w-5 items-center justify-center rounded border border-white/15 text-xs leading-none text-white/50 transition-all hover:border-white/40 hover:bg-white/5 hover:text-white disabled:cursor-not-allowed disabled:opacity-20 sm:h-6 sm:w-6 sm:text-sm"
         >
           +
         </button>

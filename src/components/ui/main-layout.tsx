@@ -11,30 +11,25 @@ interface MainLayoutProps {
 
 const MainLayoutContent = ({ children }: MainLayoutProps) => {
   return (
-    <main className="h-full w-full flex-1 overflow-scroll p-4">{children}</main>
+    <main className="h-full w-full flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 md:p-8">
+      {children}
+    </main>
   );
 };
 
 const MainLayoutContainer = ({ children }: MainLayoutProps) => {
   return (
-    <div className="flex h-screen w-screen flex-col bg-black text-white">
+    <div className="flex h-dvh w-full flex-col bg-black text-white">
       {children}
     </div>
   );
 };
 
-// const Footer = () => (
-//   <footer className="bg-black py-4 text-center">
-//     <p className="text-sm text-zinc-500">
-//       &copy; 2026 Netuno. Todos os direitos reservados.
-//     </p>
-//   </footer>
-// );
-
 export default async function MainLayout({ children }: MainLayoutProps) {
   const session = await auth();
 
   const firstLetter = session?.user?.name?.charAt(0).toUpperCase() ?? "N";
+
   const dbImageUrl = session?.user?.id
     ? ((
         await prisma.user.findUnique({

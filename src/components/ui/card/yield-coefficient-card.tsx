@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { IoMdTrendingUp } from "react-icons/io";
 import { RiArrowRightDownLine, RiArrowRightUpLine } from "react-icons/ri";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
@@ -55,7 +56,7 @@ const YieldCoefficientChart = ({
 }) => {
   if (semesters.length <= 1) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-[#888888]">
+      <div className="flex h-full items-center justify-center text-xs text-[#888888] sm:text-sm">
         Sem dados suficientes para gerar o gráfico...
       </div>
     );
@@ -70,13 +71,14 @@ const YieldCoefficientChart = ({
           tickLine={false}
           axisLine={false}
           tickMargin={8}
+          tick={{ fontSize: 12 }}
         />
         <ChartTooltip
           cursor={false}
           content={
             <ChartTooltipContent
               indicator="line"
-              className="bg-black text-white"
+              className="bg-black text-xs text-white sm:text-sm"
             />
           }
         />
@@ -97,27 +99,37 @@ export const YieldCoefficientCard = ({
   previousValue,
   semesters,
 }: YieldCoefficientCardProps) => {
-  const difference = calculateDifference(currentValue, previousValue);
+  const difference = useMemo(
+    () => calculateDifference(currentValue, previousValue),
+    [currentValue, previousValue],
+  );
+
   const TrendIcon = difference.isPositive
     ? RiArrowRightUpLine
     : RiArrowRightDownLine;
   const trendColor = difference.isPositive ? COLORS.positive : COLORS.negative;
 
   return (
-    <Card className="h-72 w-full rounded-3xl border border-white/50 bg-transparent p-4 text-white">
-      <section className="flex h-1/3 w-full flex-col gap-2">
-        <h1 className="flex items-center gap-2 font-semibold text-[#888888]">
-          <IoMdTrendingUp className="inline" /> Coeficiente de Rendimento
+    <Card className="flex h-64 w-full flex-col rounded-2xl border border-white/50 bg-transparent p-4 text-white sm:h-72 sm:rounded-3xl sm:p-5">
+      <section className="mb-2 flex shrink-0 flex-col gap-1 sm:mb-4 sm:gap-2">
+        <h1 className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-[#888888] uppercase sm:gap-2 sm:text-sm">
+          <IoMdTrendingUp className="inline text-sm sm:text-base" /> Coeficiente
+          de Rendimento
         </h1>
 
         <div className="flex items-end gap-2">
-          <span className="text-6xl font-light">{currentValue}</span>
+          <span className="text-4xl leading-none font-light sm:text-5xl md:text-6xl">
+            {currentValue}
+          </span>
 
           {difference.formatted && (
-            <div className="flex flex-row items-center">
-              <TrendIcon className="text-lg" style={{ color: trendColor }} />
+            <div className="mb-0.5 flex flex-row items-center sm:mb-1">
+              <TrendIcon
+                className="text-base sm:text-lg"
+                style={{ color: trendColor }}
+              />
               <span
-                className="text-base font-semibold"
+                className="text-sm font-semibold sm:text-base"
                 style={{ color: trendColor }}
               >
                 {difference.formatted}
@@ -127,7 +139,7 @@ export const YieldCoefficientCard = ({
         </div>
       </section>
 
-      <section className="h-2/3 w-full">
+      <section className="min-h-0 w-full flex-1">
         <YieldCoefficientChart semesters={semesters} />
       </section>
     </Card>

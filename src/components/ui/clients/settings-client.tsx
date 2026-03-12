@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useMemo, useState } from "react";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
 import {
@@ -59,6 +59,33 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
 
   const [twoFaCode, setTwoFaCode] = useState("");
   const [newPasswordModal, setNewPasswordModal] = useState("");
+
+  const fallbackLetter = useMemo(
+    () => user?.name?.substring(0, 1).toUpperCase() || "U",
+    [user?.name],
+  );
+
+  const alertDetails = useMemo<{
+    variant: "default" | "destructive";
+    className: string;
+    title: string;
+    Icon: typeof CheckCircle;
+    iconColor?: string;
+    descClassName: string;
+  } | null>(() => {
+    if (!message) return null;
+    const isSuccess = message.type === "success";
+    return {
+      variant: isSuccess ? "default" : "destructive",
+      className: isSuccess
+        ? "border-[#00FF88]/30 bg-[#00FF88]/10 text-[#00FF88]"
+        : "border-red-900/50 bg-red-900/10",
+      title: isSuccess ? "Sucesso!" : "Erro ao salvar",
+      Icon: isSuccess ? CheckCircle : AlertCircle,
+      iconColor: isSuccess ? "#00FF88" : undefined,
+      descClassName: isSuccess ? "text-white" : "",
+    };
+  }, [message]);
 
   async function handleUpdate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -164,23 +191,23 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
   }
 
   return (
-    <section>
+    <section className="px-4 py-6 sm:px-6 sm:py-8 md:px-8">
       <main className="flex w-full justify-center">
         <div className="w-full max-w-3xl">
-          <form onSubmit={handleUpdate} className="space-y-8">
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-zinc-300">
+          <form onSubmit={handleUpdate} className="space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
+              <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                 Foto de perfil
               </label>
-              <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20 border border-zinc-800">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+                <Avatar className="h-16 w-16 border border-zinc-800 sm:h-20 sm:w-20">
                   <AvatarImage src={user?.image || ""} alt={user?.name ?? ""} />
-                  <AvatarFallback className="bg-[#007AFF] text-2xl font-bold text-white">
-                    {user?.name?.substring(0, 1) || "U"}
+                  <AvatarFallback className="bg-[#007AFF] text-xl font-bold text-white sm:text-2xl">
+                    {fallbackLetter}
                   </AvatarFallback>
                 </Avatar>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   <UploadButton
                     endpoint="profilePicture"
                     onUploadBegin={() => {
@@ -224,7 +251,7 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                     }}
                     appearance={{
                       button:
-                        "h-10 rounded-lg bg-[#007AFF] px-4 py-2 text-sm font-medium text-white hover:bg-[#005bb5] focus-within:ring-[#007AFF] ut-uploading:opacity-50 ut-uploading:cursor-not-allowed m-0 w-auto",
+                        "h-9 sm:h-10 rounded-lg bg-[#007AFF] px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-white hover:bg-[#005bb5] focus-within:ring-[#007AFF] ut-uploading:opacity-50 ut-uploading:cursor-not-allowed m-0 w-full sm:w-auto",
                       allowedContent: "hidden",
                       container: "w-auto flex-row m-0",
                     }}
@@ -242,7 +269,7 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                     variant="ghost"
                     onClick={handleRemovePhoto}
                     disabled={loading || !user?.image}
-                    className="h-10 rounded-lg px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+                    className="h-9 w-full rounded-lg px-3 py-2 text-xs font-medium text-red-500 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50 sm:h-10 sm:w-auto sm:px-4 sm:text-sm"
                   >
                     Remover foto
                   </Button>
@@ -250,33 +277,32 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-zinc-300">
+            <div className="space-y-1.5 sm:space-y-2">
+              <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                 Nome
               </label>
               <Input
                 name="name"
                 defaultValue={user?.name ?? ""}
                 placeholder={user?.name || "Seu nome"}
-                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-zinc-300">
+            <div className="space-y-1.5 sm:space-y-2">
+              <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                 Username
               </label>
-
               <Input
                 name="username"
                 defaultValue={`@${user?.username || ""}`}
                 placeholder={`@${user?.username || ""}`}
-                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-zinc-300">
+            <div className="space-y-1.5 sm:space-y-2">
+              <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                 E-mail
               </label>
               <Input
@@ -284,21 +310,21 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                 defaultValue={user?.email ?? ""}
                 type="email"
                 placeholder={user?.email || "Seu e-mail"}
-                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
               />
             </div>
 
             {!isOAuth && (
               <>
-                <div className="space-y-2 pt-4">
-                  <div className="flex items-center justify-between">
-                    <label className="block text-sm font-semibold text-zinc-300">
+                <div className="space-y-1.5 pt-2 sm:space-y-2 sm:pt-4">
+                  <div className="flex flex-row items-center justify-between">
+                    <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                       Senha atual
                     </label>
                     <button
                       type="button"
                       onClick={handleStartPasswordReset}
-                      className="text-sm font-medium text-[#007AFF] hover:underline focus:outline-none"
+                      className="text-xs font-medium text-[#007AFF] hover:underline focus:outline-none sm:text-sm"
                     >
                       Esqueci minha senha
                     </button>
@@ -307,54 +333,49 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                     name="currentPassword"
                     type="password"
                     placeholder="Sua senha atual"
-                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                    className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-zinc-300">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label className="block text-xs font-semibold text-zinc-300 sm:text-sm">
                     Nova senha
                   </label>
                   <Input
                     name="newPassword"
                     type="password"
                     placeholder="Sua nova senha"
-                    className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                    className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                   />
                 </div>
               </>
             )}
 
-            {message && (
+            {alertDetails && message && (
               <Alert
-                variant={message.type === "error" ? "destructive" : "default"}
-                className={
-                  message.type === "success"
-                    ? "border-[#00FF88]/30 bg-[#00FF88]/10 text-[#00FF88]"
-                    : "border-red-900/50 bg-red-900/10"
-                }
+                variant={alertDetails.variant || "default"}
+                className={alertDetails.className}
               >
-                {message.type === "error" ? (
-                  <AlertCircle className="h-4 w-4" />
-                ) : (
-                  <CheckCircle className="h-4 w-4" color="#00FF88" />
-                )}
-                <AlertTitle className="font-bold">
-                  {message.type === "error" ? "Erro ao salvar" : "Sucesso!"}
+                <alertDetails.Icon
+                  className="h-4 w-4"
+                  color={alertDetails.iconColor}
+                />
+                <AlertTitle className="text-sm font-bold sm:text-base">
+                  {alertDetails.title}
                 </AlertTitle>
                 <AlertDescription
-                  className={message.type === "success" ? "text-white" : ""}
+                  className={`text-xs sm:text-sm ${alertDetails.descClassName}`}
                 >
                   {message.text}
                 </AlertDescription>
               </Alert>
             )}
 
-            <div className="pt-6">
+            <div className="pt-4 sm:pt-6">
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-[#007AFF] px-8 py-6 text-base font-bold text-white transition-colors hover:bg-[#005bb5] disabled:opacity-50 sm:w-auto"
+                className="w-full rounded-xl bg-[#007AFF] px-6 py-5 text-sm font-bold text-white transition-colors hover:bg-[#005bb5] disabled:opacity-50 sm:w-auto sm:px-8 sm:py-6 sm:text-base"
               >
                 {loading ? "Salvando..." : "Salvar alterações"}
               </Button>
@@ -362,27 +383,27 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
           </form>
 
           <Dialog open={isResetModalOpen} onOpenChange={setIsResetModalOpen}>
-            <DialogContent className="border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
+            <DialogContent className="w-[95vw] max-w-100 rounded-xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
               <DialogHeader>
-                <DialogTitle className="text-xl font-bold">
+                <DialogTitle className="text-lg font-bold sm:text-xl">
                   Recuperar Senha
                 </DialogTitle>
-                <DialogDescription className="text-zinc-400">
+                <DialogDescription className="text-xs text-zinc-400 sm:text-sm">
                   {resetStep === "VERIFY_CODE"
                     ? "Enviamos um código de segurança para o seu e-mail."
                     : "Digite sua nova senha abaixo."}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-4 py-4">
+              <div className="space-y-3 py-3 sm:space-y-4 sm:py-4">
                 {resetError && (
-                  <p className="text-sm font-medium text-red-500">
+                  <p className="text-xs font-medium text-red-500 sm:text-sm">
                     {resetError}
                   </p>
                 )}
                 {resetStep === "VERIFY_CODE" ? (
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-zinc-300">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
                       Código de 6 dígitos
                     </label>
                     <Input
@@ -390,12 +411,12 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                       onChange={(e) => setTwoFaCode(e.target.value)}
                       maxLength={6}
                       placeholder="000000"
-                      className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-center text-2xl tracking-[0.5em] text-white focus-visible:ring-[#007AFF]"
+                      className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-center text-lg tracking-[0.3em] text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-2xl sm:tracking-[0.5em]"
                     />
                   </div>
                 ) : (
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-zinc-300">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
                       Sua nova senha
                     </label>
                     <Input
@@ -403,24 +424,24 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                       value={newPasswordModal}
                       onChange={(e) => setNewPasswordModal(e.target.value)}
                       placeholder="Nova senha secreta"
-                      className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                      className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                     />
                   </div>
                 )}
               </div>
 
-              <div className="mt-4 flex justify-end gap-3">
+              <div className="mt-2 flex flex-col justify-end gap-2 sm:mt-4 sm:flex-row sm:gap-3">
                 <Button
                   variant="ghost"
                   onClick={() => setIsResetModalOpen(false)}
-                  className="hover:bg-zinc-800 hover:text-white"
+                  className="order-2 h-10 w-full hover:bg-zinc-800 hover:text-white sm:order-1 sm:h-10 sm:w-auto"
                 >
                   Cancelar
                 </Button>
                 <Button
                   onClick={handleConfirmPasswordReset}
                   disabled={resetLoading}
-                  className="bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
+                  className="order-1 h-10 w-full bg-[#007AFF] font-bold text-white hover:bg-[#005bb5] sm:order-2 sm:h-10 sm:w-auto"
                 >
                   {resetLoading
                     ? "Processando..."

@@ -11,14 +11,16 @@ export default async function SettingsPage() {
     redirect("/login");
   }
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { name: true, username: true, email: true, image: true },
-  });
+  const [dbUser, account] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { name: true, username: true, email: true, image: true },
+    }),
+    prisma.account.findFirst({
+      where: { userId: session.user.id },
+    }),
+  ]);
 
-  const account = await prisma.account.findFirst({
-    where: { userId: session.user.id },
-  });
   const isOAuth = !!account;
 
   return <SettingsClient user={dbUser} isOAuth={isOAuth} />;

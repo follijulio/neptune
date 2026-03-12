@@ -206,7 +206,7 @@ export async function updateFullCalendarEventAction(data: {
 
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
-    
+
     return { success: "Evento atualizado com sucesso!" };
   } catch (error) {
     console.error("Erro interno ao atualizar:", error);

@@ -23,7 +23,7 @@ export async function createLinkAction(data: {
         userId: session.user.id,
       },
     });
-    
+
     revalidatePath("/links");
 
     return { success: "Link adicionado!" };
