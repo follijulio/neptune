@@ -46,7 +46,6 @@ export default function DashboardClient({
     const filterCurriculum = searchParams.get("filterCurriculum") || undefined;
 
     if (semester !== prevSemester.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadingTarget("semester");
     } else if (filterCurriculum !== prevCurriculum.current) {
       setLoadingTarget("curriculum");
@@ -130,7 +129,7 @@ export default function DashboardClient({
 
   return (
     <section>
-      <section className="flex h-full w-full flex-col gap-10 px-10 pt-4">
+      <section className="flex h-full w-full flex-col gap-10 px-10">
         <div className="flex w-full items-center justify-between">
           <h2 className="text-2xl font-bold">
             <button

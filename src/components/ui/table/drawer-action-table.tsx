@@ -9,7 +9,13 @@ import {
   LuLoader,
   LuArrowLeft,
   LuCheck,
+  LuPaperclip,
+  LuDownload,
+  LuChevronDown,
+  LuChevronRight,
 } from "react-icons/lu";
+
+import { UploadButton } from "@/src/components/ui/upload-button";
 
 import {
   Select,
@@ -52,11 +58,13 @@ interface CourseDrawerActionProps {
 }
 
 type ViewState = "list" | "add-note" | "add-exam";
+
 interface NoteColor {
   name: string;
   value: string;
   code: string;
 }
+
 const NOTE_COLORS: NoteColor[] = [
   { name: "Azul Netuno", value: "#007AFF", code: "9" },
   { name: "Vermelho Urgente", value: "#FF3B30", code: "11" },
@@ -66,9 +74,6 @@ const NOTE_COLORS: NoteColor[] = [
   { name: "Cinza Neutro", value: "#8E8E93", code: "8" },
 ];
 
-// todo: refatorar esses useState's
-// acho que tem muito useState
-// mas depois arrumo isso
 const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<ViewState>("list");
@@ -77,6 +82,15 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
 
   const [notes, setNotes] = useState<any[]>([]);
   const [exams, setExams] = useState<any[]>([]);
+  const [materials, setMaterials] = useState<any[]>([]);
+  const [isUploadingPDF, setIsUploadingPDF] = useState(false);
+
+  // ESTADO PARA AS SECÇÕES COLAPSÁVEIS (Accordion)
+  const [openSections, setOpenSections] = useState({
+    exams: true,
+    materials: true,
+    notes: true,
+  });
 
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
@@ -84,7 +98,6 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   const [examDate, setExamDate] = useState("");
   const [selectedColor, setSelectedColor] = useState<NoteColor>(NOTE_COLORS[0]);
   const [examDateObj, setExamDateObj] = useState<Date | undefined>(undefined);
-  const [examTime, setExamTime] = useState("08:00");
   const [examHour, setExamHour] = useState("08");
   const [examMinute, setExamMinute] = useState("00");
 
@@ -95,6 +108,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
         if (res.success) {
           setNotes(res.notes || []);
           setExams(res.exams || []);
+          setMaterials(res.materials || []);
         }
         setIsLoading(false);
       });
@@ -116,6 +130,8 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
       setNoteTitle("");
       setNoteContent("");
       setView("list");
+      // Se a aba estiver fechada, abre automaticamente ao adicionar nova nota
+      setOpenSections((prev) => ({ ...prev, notes: true }));
     }
     setIsSaving(false);
   };
@@ -125,8 +141,6 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
     if (!examDateObj) return;
 
     setIsSaving(true);
-
-    const [hours, minutes] = examTime.split(":").map(Number);
     const finalDate = new Date(examDateObj);
     finalDate.setHours(parseInt(examHour), parseInt(examMinute), 0, 0);
 
@@ -149,9 +163,13 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
       setExamHour("08");
       setExamMinute("00");
       setView("list");
+      setOpenSections((prev) => ({ ...prev, exams: true }));
     }
-
     setIsSaving(false);
+  };
+
+  const toggleSection = (section: keyof typeof openSections) => {
+    setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   return (
@@ -169,7 +187,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                 {course.subject_name}
               </DrawerTitle>
               <DrawerDescription className="mt-1 text-zinc-500">
-                {course.code}
+                Situação: <span>{course.status.toLowerCase()}</span>
               </DrawerDescription>
             </div>
             {view !== "list" && (
@@ -191,12 +209,20 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
               <LuLoader className="h-8 w-8 animate-spin" />
             </div>
           ) : view === "list" ? (
-            <div className="space-y-8">
-              <section>
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-400 uppercase">
-                    <LuCalendar className="h-4 w-4" /> Provas Agendadas
-                  </h3>
+            <div className="space-y-6">
+              <section className="rounded-xl border border-zinc-900 bg-[#121212]/50 p-4">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => toggleSection("exams")}
+                    className="flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-400 uppercase transition-colors hover:text-white"
+                  >
+                    {openSections.exams ? (
+                      <LuChevronDown className="text-lg" />
+                    ) : (
+                      <LuChevronRight className="text-lg" />
+                    )}
+                    <LuCalendar className="h-4 w-4" /> Provas
+                  </button>
                   <Button
                     size="sm"
                     onClick={() => setView("add-exam")}
@@ -205,39 +231,153 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                     + Adicionar
                   </Button>
                 </div>
-                {exams.length === 0 ? (
-                  <p className="text-sm text-zinc-600 italic">
-                    Nenhuma prova marcada.
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {exams.map((exam) => (
-                      <div
-                        key={exam.id}
-                        className="flex flex-col gap-1 rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-3"
-                      >
-                        <span className="text-sm font-semibold">
-                          {exam.title}
-                        </span>
-                        <span className="text-xs font-medium text-[#007AFF]">
-                          {new Date(exam.examDate).toLocaleDateString("pt-BR", {
-                            weekday: "short",
-                            day: "2-digit",
-                            month: "long",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </span>
+
+                {openSections.exams && (
+                  <div className="animate-in fade-in-0 slide-in-from-top-2 mt-4 duration-200">
+                    {exams.length === 0 ? (
+                      <p className="text-sm text-zinc-600 italic">
+                        Nenhuma prova marcada.
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {exams.map((exam) => (
+                          <div
+                            key={exam.id}
+                            className="flex flex-col gap-1 rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-3"
+                          >
+                            <span className="text-sm font-semibold">
+                              {exam.title}
+                            </span>
+                            <span className="text-xs font-medium text-[#007AFF]">
+                              {new Date(exam.examDate).toLocaleDateString(
+                                "pt-BR",
+                                {
+                                  weekday: "short",
+                                  day: "2-digit",
+                                  month: "long",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
               </section>
-              <section>
-                <div className="mb-4 flex items-center justify-between">
-                  <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-400 uppercase">
-                    <LuFileText className="h-4 w-4" /> Caderno de Notas
-                  </h3>
+
+              <section className="rounded-xl border border-zinc-900 bg-[#121212]/50 p-4">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => toggleSection("materials")}
+                    className="flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-400 uppercase transition-colors hover:text-white"
+                  >
+                    {openSections.materials ? (
+                      <LuChevronDown className="text-lg" />
+                    ) : (
+                      <LuChevronRight className="text-lg" />
+                    )}
+                    <LuPaperclip className="h-4 w-4" /> Materiais
+                  </button>
+
+                  <UploadButton
+                    endpoint="subjectMaterial"
+                    input={{ subjectId: course.subjectId }}
+                    onUploadBegin={() => {
+                      setIsUploadingPDF(true);
+                      setOpenSections((prev) => ({ ...prev, materials: true }));
+                    }}
+                    onClientUploadComplete={async (res) => {
+                      if (res && res[0]) {
+                        const updated = await getSubjectDetailsAction(
+                          course.subjectId,
+                        );
+                        if (updated.success)
+                          setMaterials(updated.materials || []);
+                      }
+                      setIsUploadingPDF(false);
+                    }}
+                    onUploadError={(error: Error) => {
+                      alert(error.message);
+                      setIsUploadingPDF(false);
+                    }}
+                    appearance={{
+                      button:
+                        "h-7 px-3 bg-[#007AFF]/10 text-xs text-[#007AFF] hover:bg-[#007AFF]/20 font-semibold rounded-md border-none w-auto m-0",
+                      allowedContent: "hidden",
+                      container: "w-auto m-0 flex-row",
+                    }}
+                    content={{
+                      button({ ready, isUploading }) {
+                        if (isUploading) return "Enviando...";
+                        if (ready) return "+ Anexar PDF";
+                        return "Carregando...";
+                      },
+                    }}
+                  />
+                </div>
+
+                {openSections.materials && (
+                  <div className="animate-in fade-in-0 slide-in-from-top-2 mt-4 duration-200">
+                    {materials.length === 0 && !isUploadingPDF ? (
+                      <p className="text-sm text-zinc-600 italic">
+                        Nenhum material anexado.
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {isUploadingPDF && (
+                          <div className="flex animate-pulse items-center gap-3 rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-3">
+                            <LuLoader className="h-4 w-4 animate-spin text-[#007AFF]" />
+                            <span className="text-xs text-zinc-400">
+                              A processar documento...
+                            </span>
+                          </div>
+                        )}
+                        {materials.map((mat) => (
+                          <a
+                            key={mat.id}
+                            href={mat.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center justify-between rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-3 transition-colors hover:border-[#007AFF]/50 hover:bg-zinc-800/80"
+                          >
+                            <div className="flex flex-col gap-1 overflow-hidden pr-4">
+                              <span className="truncate text-sm font-semibold text-zinc-200 group-hover:text-white">
+                                {mat.name}
+                              </span>
+                              <span className="text-[10px] font-medium text-zinc-500">
+                                {(mat.size / 1024 / 1024).toFixed(2)} MB •{" "}
+                                {new Date(mat.createdAt).toLocaleDateString(
+                                  "pt-BR",
+                                )}
+                              </span>
+                            </div>
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-colors group-hover:bg-[#007AFF] group-hover:text-white">
+                              <LuDownload className="h-4 w-4" />
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </section>
+
+              <section className="rounded-xl border border-zinc-900 bg-[#121212]/50 p-4">
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => toggleSection("notes")}
+                    className="flex items-center gap-2 text-sm font-bold tracking-wider text-zinc-400 uppercase transition-colors hover:text-white"
+                  >
+                    {openSections.notes ? (
+                      <LuChevronDown className="text-lg" />
+                    ) : (
+                      <LuChevronRight className="text-lg" />
+                    )}
+                    <LuFileText className="h-4 w-4" /> Caderno
+                  </button>
                   <Button
                     size="sm"
                     onClick={() => setView("add-note")}
@@ -246,25 +386,30 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                     + Nova Nota
                   </Button>
                 </div>
-                {notes.length === 0 ? (
-                  <p className="text-sm text-zinc-600 italic">
-                    O seu caderno está vazio.
-                  </p>
-                ) : (
-                  <div className="space-y-3">
-                    {notes.map((note) => (
-                      <div
-                        key={note.id}
-                        className="rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-4"
-                      >
-                        <h4 className="mb-2 text-sm font-semibold">
-                          {note.title}
-                        </h4>
-                        <div className="prose prose-sm prose-invert prose-p:leading-relaxed prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800 line-clamp-4 max-w-none text-zinc-400">
-                          <ReactMarkdown>{note.content}</ReactMarkdown>
-                        </div>
+
+                {openSections.notes && (
+                  <div className="animate-in fade-in-0 slide-in-from-top-2 mt-4 duration-200">
+                    {notes.length === 0 ? (
+                      <p className="text-sm text-zinc-600 italic">
+                        O seu caderno está vazio.
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {notes.map((note) => (
+                          <div
+                            key={note.id}
+                            className="rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-4"
+                          >
+                            <h4 className="mb-2 text-sm font-semibold">
+                              {note.title}
+                            </h4>
+                            <div className="prose prose-sm prose-invert prose-p:leading-relaxed prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800 line-clamp-4 max-w-none text-zinc-400">
+                              <ReactMarkdown>{note.content}</ReactMarkdown>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
                 )}
               </section>
@@ -283,7 +428,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                 className="border-zinc-800 bg-zinc-900"
               />
               <textarea
-                placeholder="Escreva aqui os seus resumos, links, ou pensamentos... (Suporte a Markdown em breve)"
+                placeholder="Escreva aqui os seus resumos, links, ou pensamentos... (Suporta formatação Markdown)"
                 value={noteContent}
                 onChange={(e) => setNoteContent(e.target.value)}
                 required
@@ -345,10 +490,10 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                   </Popover>
                   <div className="flex shrink-0 items-center gap-1">
                     <Select value={examHour} onValueChange={setExamHour}>
-                      <SelectTrigger className="w-[65px] border-zinc-800 bg-zinc-900 focus:ring-[#007AFF]">
+                      <SelectTrigger className="w-16.25 border-zinc-800 bg-zinc-900 focus:ring-[#007AFF]">
                         <SelectValue placeholder="HH" />
                       </SelectTrigger>
-                      <SelectContent className="max-h-[200px] border-zinc-800 bg-[#0A0A0A] text-white">
+                      <SelectContent className="max-h-50 border-zinc-800 bg-[#0A0A0A] text-white">
                         {Array.from({ length: 24 }).map((_, i) => {
                           const val = i.toString().padStart(2, "0");
                           return (
@@ -363,14 +508,12 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                         })}
                       </SelectContent>
                     </Select>
-
                     <span className="font-bold text-zinc-500">:</span>
-
                     <Select value={examMinute} onValueChange={setExamMinute}>
                       <SelectTrigger className="w-[65px] border-zinc-800 bg-zinc-900 focus:ring-[#007AFF]">
                         <SelectValue placeholder="MM" />
                       </SelectTrigger>
-                      <SelectContent className="max-h-[200px] border-zinc-800 bg-[#0A0A0A] text-white">
+                      <SelectContent className="max-h-50 border-zinc-800 bg-[#0A0A0A] text-white">
                         {[
                           "00",
                           "05",

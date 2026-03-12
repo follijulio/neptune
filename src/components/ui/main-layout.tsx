@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { NavBar } from "./nav-bar";
 import { auth } from "@/src/auth";
 import { redirect } from "next/navigation";
+import { prisma } from "@/prisma/lib/prisma";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -10,7 +11,7 @@ interface MainLayoutProps {
 
 const MainLayoutContent = ({ children }: MainLayoutProps) => {
   return (
-    <main className="bacl h-full w-full flex-1 overflow-scroll px-4">
+    <main className="h-full w-full flex-1 overflow-scroll p-4">
       {children}
     </main>
   );
@@ -33,14 +34,19 @@ const Footer = () => (
 export default async function MainLayout({ children }: MainLayoutProps) {
   const session = await auth();
 
-  const firstLetter = session?.user?.name
-    ? session.user.name.charAt(0).toUpperCase()
-    : "N";
-
+  const firstLetter = session?.user?.name?.charAt(0).toUpperCase() ?? "N";
+  const dbImageUrl = session?.user?.id
+    ? ((
+        await prisma.user.findUnique({
+          where: { id: session.user.id },
+          select: { image: true },
+        })
+      )?.image ?? undefined)
+    : undefined;
 
   return (
     <MainLayoutContainer>
-      <NavBar firstLetter={firstLetter} profileImageUrl={session?.user?.image || ""} />
+      <NavBar firstLetter={firstLetter} profileImageUrl={dbImageUrl} />
       <MainLayoutContent>{children}</MainLayoutContent>
     </MainLayoutContainer>
   );

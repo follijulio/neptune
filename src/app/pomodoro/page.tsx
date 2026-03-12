@@ -59,7 +59,7 @@ export default function Page() {
             );
             audio
               .play()
-              .catch(() => console.log("Áudio bloqueado pelo navegador"));
+              .catch(() => console.error("Áudio bloqueado pelo navegador"));
             return 0;
           }
           return prev - 1;

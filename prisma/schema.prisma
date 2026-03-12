@@ -24,6 +24,7 @@ model User {
   notes                 Note[]
   calendarEvents        CalendarEvent[]
   links                 Link[]
+  subjectMaterials      SubjectMaterial[]
 }
 
 model VerificationToken {
@@ -118,12 +119,13 @@ model Subject {
   semesterId String
   semester   Semester @relation(fields: [semesterId], references: [id], onDelete: Cascade)
 
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  notes        Note[]
-  enrollments  Enrollment[]
-  subjectNotes SubjectNote[]
-  exams        Exam[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  notes            Note[]
+  enrollments      Enrollment[]
+  subjectNotes     SubjectNote[]
+  exams            Exam[]
+  subjectMaterials SubjectMaterial[]
 }
 
 model Enrollment {
@@ -206,6 +208,21 @@ model Exam {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model SubjectMaterial {
+  id   String @id @default(uuid())
+  name String
+  url  String
+  size Int
+
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 enum SemesterStatus {

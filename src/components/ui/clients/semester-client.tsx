@@ -242,7 +242,7 @@ function SemesterHeader({
   onAddSubject: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }) {
   return (
-    <header className="mb-10 flex flex-col gap-6 border-b border-[#1A1A1A] pb-6 md:flex-row md:items-end md:justify-between">
+    <header className="mb-10 flex flex-row gap-6 border-b border-[#1A1A1A] pb-6 md:flex-row md:items-end md:justify-between">
       <div className="flex flex-col gap-2">
         <SemesterSelector
           semesters={semesters}
@@ -623,6 +623,7 @@ export default function SemesterClient({
   }
 
   async function handleDeleteSubject(subjectId: string) {
+    // TODO: Substituir por um modal de confirmação mais bonitin
     const confirmed = window.confirm(
       "Tem certeza que deseja apagar esta disciplina? Todas as notas e faltas serão perdidas.",
     );

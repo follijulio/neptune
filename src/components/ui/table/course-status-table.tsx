@@ -26,7 +26,6 @@ export interface CourseStatusCardProps {
   id: string;
   subjectId: string;
   subject_name: string;
-  code: string;
   status: string;
   absences: number | null;
   maxAbsences: number | null;
@@ -161,14 +160,6 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
           <LuBookMarked className="text-lg text-[#888888]" />
           <div className="ml-4">
             <p className="text-base font-semibold">{course.subject_name}</p>
-            <p
-              className={cn(
-                "text-sm font-light text-[#888888]",
-                course.code === "N/A" ? "text-xs font-thin italic" : "",
-              )}
-            >
-              {course.code}
-            </p>
           </div>
         </div>
       </TableCell>

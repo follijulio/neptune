@@ -517,7 +517,7 @@ export default function CalendarClient({
           onNextMonth={() => setCurrentMonth(addMonths(currentMonth, 1))}
         />
       </header>
-      <div className="flex flex-col gap-8 xl:flex-row">
+      <div className="flex flex-row gap-8 xl:flex-row">
         <div className="min-w-0 flex-1">
           <CalendarGrid
             calendarDays={calendarDays}

@@ -19,7 +19,6 @@ import {
 } from "@/src/components/shadcn-ui/card";
 
 interface ParsedSubject {
-  code?: string;
   name: string;
   grade?: string;
   status: string;
@@ -125,7 +124,6 @@ function SubjectItem({ subject }: { subject: ParsedSubject }) {
     <div className="flex items-center justify-between rounded-lg border border-[#1A1A1A] bg-[#000000] p-3">
       <div className="flex flex-col">
         <span className="text-sm font-medium text-[#E0E0E0]">
-          {subject.code ? `${subject.code} - ` : ""}
           {subject.name}
         </span>
         <span className="mt-1 text-xs text-[#888888]">

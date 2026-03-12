@@ -18,8 +18,8 @@ import { useFilterParam } from "@/src/hooks/useFilterParam";
 import { cn } from "@/src/lib/utils";
 
 interface Subject {
+  id: string;
   subject_name: string;
-  code: string;
   status: string;
   partial_grade: number | null;
 }
@@ -43,42 +43,6 @@ const CURRICULUM_FILTERS: FilterOption[] = [
 
 const DEFAULT_FILTER = "all";
 const PASSING_GRADE = 6;
-
-// const SubjectCardSkeleton = () => (
-//   <Card className="flex flex-row justify-between rounded-[2px] border border-white/10 bg-transparent p-4">
-//     <div className="flex w-full flex-col justify-between gap-4">
-//       <section className="space-y-2">
-//         <div className="h-5 w-3/4 animate-pulse rounded bg-white/10" />
-//         <div className="h-3 w-1/4 animate-pulse rounded bg-white/10" />
-//       </section>
-//       <section className="flex flex-row gap-4">
-//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-//       </section>
-//     </div>
-//     <div>
-//       <div className="h-6 w-14 animate-pulse rounded-full bg-white/10" />
-//     </div>
-//   </Card>
-// );
-
-// const SemesterAccordionSkeleton = () => (
-//   <div className="flex w-full flex-col gap-3">
-//     {[1, 2].map((i) => (
-//       <Card
-//         key={i}
-//         className="min-h-20 justify-center border border-white/20 bg-black p-4 shadow-lg"
-//       >
-//         <div className="mb-4 h-6 w-32 animate-pulse rounded bg-white/10" />
-//         <div className="grid grid-cols-4 gap-4">
-//           {[1, 2, 3, 4].map((j) => (
-//             <SubjectCardSkeleton key={j} />
-//           ))}
-//         </div>
-//       </Card>
-//     ))}
-//   </div>
-// );
 
 const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   data,
@@ -203,7 +167,7 @@ interface SubjectCardProps {
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
-  const { subject_name, code, partial_grade } = subject;
+  const { subject_name, partial_grade, id } = subject;
   const isFailing = partial_grade !== null && partial_grade < PASSING_GRADE;
 
   const gradeColorClass = isFailing
@@ -222,26 +186,14 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
           >
             {subject_name}
           </h3>
-          <p
-            className={
-              (cn("text-sm text-white/60"),
-              code === "N/A" ? "text-xs font-thin italic" : "")
-            }
-          >
-            {code}
-          </p>
         </section>
         <section className="mt-4 flex flex-row gap-4 font-bold">
           <SubjectLink
-            href={`/materiais/${subject_name}`}
+            href={`/materiais/${id}`}
             icon={MdOutlineFolder}
             label="Materiais"
           />
-          <SubjectLink
-            href={`/ementas/${subject_name}`}
-            icon={FaListOl}
-            label="Ementa"
-          />
+          <SubjectLink href={`/ementas/${id}`} icon={FaListOl} label="Ementa" />
         </section>
       </div>
       <div>

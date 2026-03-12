@@ -50,6 +50,7 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
+    error?: Object;
   } | null>(null);
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -68,12 +69,16 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
     setMessage(null);
 
     const formData = new FormData(e.currentTarget);
+
+    const rawUsername = (formData.get("username") as string) ?? "";
+    const username = rawUsername.trim().replace(/^@+/, "");
+
     const data = {
-      name: formData.get("name") as string,
-      username: formData.get("username") as string,
-      email: formData.get("email") as string,
-      currentPassword: formData.get("currentPassword") as string,
-      newPassword: formData.get("newPassword") as string,
+      name: ((formData.get("name") as string) ?? "").trim(),
+      username,
+      email: ((formData.get("email") as string) ?? "").trim(),
+      currentPassword: (formData.get("currentPassword") as string) ?? "",
+      newPassword: (formData.get("newPassword") as string) ?? "",
     };
 
     const result = await updateAccountAction(data);
@@ -87,13 +92,30 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
 
   async function handleRemovePhoto() {
     setLoading(true);
-    const result = await updateUserImageAction("");
-    if (result?.error) {
-      setMessage({ type: "error", text: result.error });
+    setMessage(null);
+
+    try {
+      const result = await updateUserImageAction("");
+
+      if (result?.error) {
+        setMessage({ type: "error", text: result.error });
+      } else {
+        setMessage({ type: "success", text: "Foto removida com sucesso!" });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      setMessage({
+        type: "error",
+        text: "Ocorreu um erro interno ao remover a foto.",
+        error:
+          error instanceof Error
+            ? { message: error.message, stack: error.stack }
+            : { error },
+      });
+    } finally {
       setLoading(false);
-    } else {
-      // Tem que forçar... essa porra
-      window.location.reload();
     }
   }
 
@@ -170,15 +192,35 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                     }}
                     onClientUploadComplete={async (res) => {
                       if (res && res[0]) {
-                        await updateUserImageAction(res[0].ufsUrl);
-                        // Tem que forçar DNV... essa porra
-                        window.location.reload();
+                        try {
+                          const result = await updateUserImageAction(
+                            res[0].ufsUrl,
+                          );
+
+                          if (result?.error) {
+                            setMessage({ type: "error", text: result.error });
+                          } else {
+                            setMessage({
+                              type: "success",
+                              text: "Foto atualizada com sucesso!",
+                            });
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1000);
+                          }
+                        } catch (error) {
+                          setMessage({
+                            type: "error",
+                            text: "Erro ao comunicar com o servidor.",
+                          });
+                        }
                       }
+                      setLoading(false);
                     }}
                     onUploadError={(error: Error) => {
                       setMessage({
                         type: "error",
-                        text: `Erro: ${error.message}`,
+                        text: `Erro no envio: ${error.message}`,
                       });
                       setLoading(false);
                     }}
@@ -227,17 +269,13 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
               <label className="block text-sm font-semibold text-zinc-300">
                 Username
               </label>
-              <div className="relative">
-                <span className="absolute top-1/2 left-4 -translate-y-1/2 font-medium text-zinc-500">
-                  @
-                </span>
-                <Input
-                  name="username"
-                  defaultValue={user?.username ?? ""}
-                  placeholder={user?.username || "folli"}
-                  className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 pl-10 text-white focus-visible:ring-[#007AFF]"
-                />
-              </div>
+
+              <Input
+                name="username"
+                defaultValue={`@${user?.username || ""}`}
+                placeholder={`@${user?.username || ""}`}
+                className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+              />
             </div>
 
             <div className="space-y-2">
