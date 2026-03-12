@@ -194,15 +194,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
   </DropdownMenu>
 );
 
-const UserAvatar: React.FC<UserMenuProps> = ({ profileImageUrl }) => (
-  <Avatar className="cursor-pointer border border-[#1A1A1A] transition-colors hover:border-zinc-700">
-    <AvatarImage src={profileImageUrl} alt="Perfil do usuário" />
-    <AvatarFallback className="bg-[#007AFF] font-bold text-white">
-      U
-    </AvatarFallback>
-  </Avatar>
-);
-
 const SettingsMenuGroup = () => (
   <DropdownMenuGroup>
     <DropdownMenuItem

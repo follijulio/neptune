@@ -22,7 +22,6 @@ export async function createFullCalendarEventAction(data: {
   date: string;
   color?: string;
 }) {
-
   const session = (await auth()) as CalendarActionSession | null;
 
   if (!session?.user?.id) return { error: "Não autorizado" };
@@ -40,11 +39,10 @@ export async function createFullCalendarEventAction(data: {
 
     let googleId = null;
 
-   
     if (session.accessToken) {
       const startDate = new Date(data.date);
       const endDate = new Date(startDate);
-      endDate.setHours(startDate.getHours() + 2); 
+      endDate.setHours(startDate.getHours() + 2);
 
       const eventColor = data.color ? data.color.substring(0, 2) : "11";
 
@@ -55,9 +53,9 @@ export async function createFullCalendarEventAction(data: {
           dateTime: startDate.toISOString(),
           timeZone: "America/Sao_Paulo",
         },
-        end: { 
-          dateTime: endDate.toISOString(), 
-          timeZone: "America/Sao_Paulo" 
+        end: {
+          dateTime: endDate.toISOString(),
+          timeZone: "America/Sao_Paulo",
         },
         colorId: eventColor,
       };
@@ -76,8 +74,8 @@ export async function createFullCalendarEventAction(data: {
 
       if (response.ok) {
         const result: GoogleCalendarEventResponse = await response.json();
-        googleId = result.id; 
-        
+        googleId = result.id;
+
         await prisma.calendarEvent.update({
           where: { id: newEvent.id },
           data: { googleEventId: googleId },
@@ -87,12 +85,13 @@ export async function createFullCalendarEventAction(data: {
       }
     }
 
-    return { 
-      success: googleId ? "Evento criado no Netuno e sincronizado com o Google!" : "Evento criado apenas no Netuno.", 
-      internalId: newEvent.id, 
-      googleId: googleId 
+    return {
+      success: googleId
+        ? "Evento criado no Netuno e sincronizado com o Google!"
+        : "Evento criado apenas no Netuno.",
+      internalId: newEvent.id,
+      googleId: googleId,
     };
-
   } catch (error) {
     console.error("Erro interno:", error);
     return { error: "Erro ao salvar o evento." };

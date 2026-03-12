@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/src/auth";
+
 import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
 import SettingsClient from "@/src/components/ui/clients/settings-client";
 
 export default async function SettingsPage() {

@@ -1,32 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
-import ReactMarkdown from "react-markdown";
 import {
-  LuCalendar,
-  LuFileText,
-  LuLoader,
   LuArrowLeft,
+  LuCalendar,
   LuCheck,
-  LuPaperclip,
-  LuDownload,
   LuChevronDown,
   LuChevronRight,
+  LuDownload,
+  LuFileText,
+  LuLoader,
+  LuPaperclip,
 } from "react-icons/lu";
-
-import { UploadButton } from "@/src/components/ui/upload-button";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../shadcn-ui/select";
+import ReactMarkdown from "react-markdown";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import { Button } from "../../shadcn-ui/button";
-import { Input } from "../../shadcn-ui/input";
+import { Calendar } from "../../shadcn-ui/calendar";
 import {
   Drawer,
   DrawerContent,
@@ -35,23 +27,29 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../shadcn-ui/drawer";
-
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Calendar } from "../../shadcn-ui/calendar";
+import { Input } from "../../shadcn-ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "../../shadcn-ui/popover";
-import { cn } from "@/src/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../shadcn-ui/select";
 
 import { CourseStatusCardProps } from "./course-status-table";
+
 import {
-  createSubjectNoteAction,
   createExamAction,
+  createSubjectNoteAction,
   getSubjectDetailsAction,
 } from "@/src/app/actions/subject-details-actions";
+import { UploadButton } from "@/src/components/ui/upload-button";
+import { cn } from "@/src/lib/utils";
 
 interface CourseDrawerActionProps {
   course: CourseStatusCardProps;
@@ -63,6 +61,26 @@ interface NoteColor {
   name: string;
   value: string;
   code: string;
+}
+
+interface SubjectNote {
+  id: string;
+  title: string;
+  content: string;
+}
+
+interface SubjectExam {
+  id: string;
+  title: string;
+  examDate: string | Date;
+}
+
+interface SubjectMaterial {
+  id: string;
+  name: string;
+  url: string;
+  size: number;
+  createdAt: string | Date;
 }
 
 const NOTE_COLORS: NoteColor[] = [
@@ -80,9 +98,9 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [notes, setNotes] = useState<any[]>([]);
-  const [exams, setExams] = useState<any[]>([]);
-  const [materials, setMaterials] = useState<any[]>([]);
+  const [notes, setNotes] = useState<SubjectNote[]>([]);
+  const [exams, setExams] = useState<SubjectExam[]>([]);
+  const [materials, setMaterials] = useState<SubjectMaterial[]>([]);
   const [isUploadingPDF, setIsUploadingPDF] = useState(false);
 
   // ESTADO PARA AS SECÇÕES COLAPSÁVEIS (Accordion)
@@ -95,7 +113,6 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
   const [examTitle, setExamTitle] = useState("");
-  const [examDate, setExamDate] = useState("");
   const [selectedColor, setSelectedColor] = useState<NoteColor>(NOTE_COLORS[0]);
   const [examDateObj, setExamDateObj] = useState<Date | undefined>(undefined);
   const [examHour, setExamHour] = useState("08");
@@ -103,6 +120,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
 
   useEffect(() => {
     if (isOpen && course.subjectId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
       getSubjectDetailsAction(course.subjectId).then((res) => {
         if (res.success) {
@@ -117,7 +135,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
     }
   }, [isOpen, course.subjectId]);
 
-  const handleAddNote = async (e: React.FormEvent) => {
+  const handleAddNote = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
     const res = await createSubjectNoteAction({
@@ -130,13 +148,12 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
       setNoteTitle("");
       setNoteContent("");
       setView("list");
-      // Se a aba estiver fechada, abre automaticamente ao adicionar nova nota
       setOpenSections((prev) => ({ ...prev, notes: true }));
     }
     setIsSaving(false);
   };
 
-  const handleAddExam = async (e: React.FormEvent) => {
+  const handleAddExam = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!examDateObj) return;
 
@@ -484,7 +501,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                         mode="single"
                         selected={examDateObj}
                         onSelect={setExamDateObj}
-                        initialFocus
+                        autoFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -510,7 +527,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                     </Select>
                     <span className="font-bold text-zinc-500">:</span>
                     <Select value={examMinute} onValueChange={setExamMinute}>
-                      <SelectTrigger className="w-[65px] border-zinc-800 bg-zinc-900 focus:ring-[#007AFF]">
+                      <SelectTrigger className="w-16.25 border-zinc-800 bg-zinc-900 focus:ring-[#007AFF]">
                         <SelectValue placeholder="MM" />
                       </SelectTrigger>
                       <SelectContent className="max-h-50 border-zinc-800 bg-[#0A0A0A] text-white">

@@ -1,8 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { revalidatePath } from "next/cache";
 
 export async function updateUserImageAction(imageUrl: string) {
   const session = await auth();

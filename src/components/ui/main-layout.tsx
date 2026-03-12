@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
 import { NavBar } from "./nav-bar";
-import { auth } from "@/src/auth";
-import { redirect } from "next/navigation";
+
 import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -11,9 +11,7 @@ interface MainLayoutProps {
 
 const MainLayoutContent = ({ children }: MainLayoutProps) => {
   return (
-    <main className="h-full w-full flex-1 overflow-scroll p-4">
-      {children}
-    </main>
+    <main className="h-full w-full flex-1 overflow-scroll p-4">{children}</main>
   );
 };
 
@@ -25,11 +23,13 @@ const MainLayoutContainer = ({ children }: MainLayoutProps) => {
   );
 };
 
-const Footer = () => (
-  <footer className="bg-black py-4 text-center">
-    <p>&copy; 2026 Netuno. Todos os direitos reservados.</p>
-  </footer>
-);
+// const Footer = () => (
+//   <footer className="bg-black py-4 text-center">
+//     <p className="text-sm text-zinc-500">
+//       &copy; 2026 Netuno. Todos os direitos reservados.
+//     </p>
+//   </footer>
+// );
 
 export default async function MainLayout({ children }: MainLayoutProps) {
   const session = await auth();

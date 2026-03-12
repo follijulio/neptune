@@ -1,8 +1,9 @@
-import { prisma } from "@/prisma/lib/prisma";
-import { auth } from "@/src/auth";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { z } from "zod";
+
+import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
 
 const f = createUploadthing();
 

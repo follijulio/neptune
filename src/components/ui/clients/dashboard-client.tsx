@@ -46,6 +46,7 @@ export default function DashboardClient({
     const filterCurriculum = searchParams.get("filterCurriculum") || undefined;
 
     if (semester !== prevSemester.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadingTarget("semester");
     } else if (filterCurriculum !== prevCurriculum.current) {
       setLoadingTarget("curriculum");

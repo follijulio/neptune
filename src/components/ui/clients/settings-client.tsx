@@ -3,14 +3,12 @@
 import { type FormEvent, useState } from "react";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
-import { useRouter } from "next/navigation";
-import { updateUserImageAction } from "@/src/app/actions/user-actions";
-
 import {
   resetPasswordWith2FAAction,
   sendSettings2FACodeAction,
 } from "@/src/app/actions/settings-2fa-actions";
 import { updateAccountAction } from "@/src/app/actions/settings-actions";
+import { updateUserImageAction } from "@/src/app/actions/user-actions";
 import {
   Alert,
   AlertDescription,
@@ -45,12 +43,11 @@ interface SettingsClientProps {
 }
 
 export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
-    error?: Object;
+    error?: object;
   } | null>(null);
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -212,6 +209,7 @@ export default function SettingsClient({ user, isOAuth }: SettingsClientProps) {
                           setMessage({
                             type: "error",
                             text: "Erro ao comunicar com o servidor.",
+                            error: { error },
                           });
                         }
                       }

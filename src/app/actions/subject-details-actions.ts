@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
+import { createFullCalendarEventAction } from "./calendar-actions";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { createFullCalendarEventAction } from "./calendar-actions";
 
 export async function createSubjectNoteAction(data: {
   subjectId: string;
@@ -39,7 +40,6 @@ export async function createExamAction(data: {
   description?: string;
   color?: string;
 }) {
-
   const session = await auth();
   if (!session?.user?.id) return { error: "Não autorizado" };
 
