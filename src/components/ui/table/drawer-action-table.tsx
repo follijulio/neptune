@@ -122,6 +122,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
 
   useEffect(() => {
     if (isOpen && course.subjectId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsLoading(true);
       getSubjectDetailsAction(course.subjectId).then((res) => {
         if (res.success) {

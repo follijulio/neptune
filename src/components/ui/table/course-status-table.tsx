@@ -155,7 +155,7 @@ const CourseRow: React.FC<{ course: CourseStatusCardProps }> = ({ course }) => {
         );
         if (result?.error) throw new Error(result.error);
       }
-    } catch (error) {
+    } catch {
       setLocalAbsences(previousAbsences);
     }
   };

@@ -153,7 +153,7 @@ export async function updateFullCalendarEventAction(data: {
 
     if (!existingEvent) return { error: "Evento não encontrado." };
 
-    const updatedEvent = await prisma.calendarEvent.update({
+    await prisma.calendarEvent.update({
       where: { id: data.id },
       data: {
         title: data.title,

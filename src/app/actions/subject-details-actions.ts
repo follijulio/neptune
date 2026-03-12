@@ -149,7 +149,6 @@ export async function updateExamAction(data: {
       data: {
         title: data.title,
         examDate: data.examDate,
-        color: data.color,
       },
     });
 
