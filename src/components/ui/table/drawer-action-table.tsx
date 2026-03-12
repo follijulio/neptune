@@ -12,6 +12,7 @@ import {
   LuFileText,
   LuLoader,
   LuPaperclip,
+  LuPencil,
 } from "react-icons/lu";
 import ReactMarkdown from "react-markdown";
 import { format } from "date-fns";
@@ -47,6 +48,7 @@ import {
   createExamAction,
   createSubjectNoteAction,
   getSubjectDetailsAction,
+  updateSubjectNoteAction,
 } from "@/src/app/actions/subject-details-actions";
 import { UploadButton } from "@/src/components/ui/upload-button";
 import { cn } from "@/src/lib/utils";
@@ -103,13 +105,13 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   const [materials, setMaterials] = useState<SubjectMaterial[]>([]);
   const [isUploadingPDF, setIsUploadingPDF] = useState(false);
 
-  // ESTADO PARA AS SECÇÕES COLAPSÁVEIS (Accordion)
   const [openSections, setOpenSections] = useState({
     exams: true,
     materials: true,
     notes: true,
   });
 
+  const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
   const [examTitle, setExamTitle] = useState("");
@@ -135,20 +137,42 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
     }
   }, [isOpen, course.subjectId]);
 
-  const handleAddNote = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSaveNote = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    const res = await createSubjectNoteAction({
-      subjectId: course.subjectId,
-      title: noteTitle,
-      content: noteContent,
-    });
-    if (res.success) {
-      setNotes([res.note, ...notes]);
-      setNoteTitle("");
-      setNoteContent("");
-      setView("list");
-      setOpenSections((prev) => ({ ...prev, notes: true }));
+
+    if (editingNoteId) {
+      // MODO EDIÇÃO
+      const res = await updateSubjectNoteAction({
+        id: editingNoteId,
+        title: noteTitle,
+        content: noteContent,
+      });
+
+      if (res.success) {
+        // Atualiza a lista trocando a nota velha pela nova
+        setNotes((prev) =>
+          prev.map((n) => (n.id === editingNoteId ? res.note : n)),
+        );
+        setEditingNoteId(null);
+        setNoteTitle("");
+        setNoteContent("");
+        setView("list");
+      }
+    } else {
+      const res = await createSubjectNoteAction({
+        subjectId: course.subjectId,
+        title: noteTitle,
+        content: noteContent,
+      });
+
+      if (res.success) {
+        setNotes([res.note, ...notes]);
+        setNoteTitle("");
+        setNoteContent("");
+        setView("list");
+        setOpenSections((prev) => ({ ...prev, notes: true }));
+      }
     }
     setIsSaving(false);
   };
@@ -196,7 +220,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
           <GoPlus className="text-lg" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="flex h-full w-full flex-col border-l border-[#1A1A1A] bg-[#0A0A0A] px-6 text-white sm:max-w-md">
+      <DrawerContent className="flex h-full flex-col border-l border-[#1A1A1A] bg-[#0A0A0A] px-6 text-white sm:max-w-2xl">
         <DrawerHeader className="border-b border-[#1A1A1A] px-0 pt-8 pb-4">
           <div className="flex items-center justify-between">
             <div>
@@ -415,11 +439,25 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                         {notes.map((note) => (
                           <div
                             key={note.id}
-                            className="rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-4"
+                            className="group rounded-xl border border-zinc-800/50 bg-zinc-900/50 p-4 transition-colors hover:border-zinc-700"
                           >
-                            <h4 className="mb-2 text-sm font-semibold">
-                              {note.title}
-                            </h4>
+                            <div className="mb-2 flex items-center justify-between">
+                              <h4 className="text-sm font-semibold text-zinc-200">
+                                {note.title}
+                              </h4>
+                              <button
+                                onClick={() => {
+                                  setEditingNoteId(note.id);
+                                  setNoteTitle(note.title);
+                                  setNoteContent(note.content);
+                                  setView("add-note");
+                                }}
+                                className="text-zinc-500 opacity-0 transition-all group-hover:opacity-100 hover:text-[#007AFF]"
+                                title="Editar anotação"
+                              >
+                                <LuPencil className="h-4 w-4" />
+                              </button>
+                            </div>
                             <div className="prose prose-sm prose-invert prose-p:leading-relaxed prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800 line-clamp-4 max-w-none text-zinc-400">
                               <ReactMarkdown>{note.content}</ReactMarkdown>
                             </div>
@@ -433,7 +471,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
             </div>
           ) : view === "add-note" ? (
             <form
-              onSubmit={handleAddNote}
+              onSubmit={handleSaveNote}
               className="flex h-full flex-col space-y-4"
             >
               <h3 className="mb-2 text-lg font-bold">Nova Anotação</h3>

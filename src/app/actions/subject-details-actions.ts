@@ -110,3 +110,24 @@ export async function getSubjectDetailsAction(subjectId: string) {
     return { error: "Falha ao carregar os dados." };
   }
 }
+
+export async function updateSubjectNoteAction(data: {
+  id: string;
+  title: string;
+  content: string;
+}) {
+  try {
+    const updatedNote = await prisma.subjectNote.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+        content: data.content,
+      },
+    });
+
+    return { success: true, note: updatedNote };
+  } catch (error) {
+    console.error("Erro ao atualizar anotação:", error);
+    return { error: "Falha ao atualizar a anotação." };
+  }
+}
