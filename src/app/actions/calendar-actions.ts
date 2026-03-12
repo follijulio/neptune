@@ -22,15 +22,12 @@ export async function createFullCalendarEventAction(data: {
   date: string;
   color?: string;
 }) {
-  console.log("Iniciando criação de evento...");
-  console.log(data);
 
   const session = (await auth()) as CalendarActionSession | null;
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 
   try {
-    // banco primeiro, pq? PQ SIM
     const newEvent = await prisma.calendarEvent.create({
       data: {
         title: data.title,

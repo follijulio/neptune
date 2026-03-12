@@ -39,8 +39,6 @@ export async function createExamAction(data: {
   description?: string;
   color?: string;
 }) {
-  console.log("chegou aqui essa porra");
-  console.log(data);
 
   const session = await auth();
   if (!session?.user?.id) return { error: "Não autorizado" };
@@ -55,7 +53,7 @@ export async function createExamAction(data: {
 
     const eventDescription = `Evento criado em ${new Date().toLocaleDateString()} para a disciplina de ${subject.name}`;
     const endDate = new Date(data.examDate);
-    endDate.setHours(endDate.getHours() + 2 );
+    endDate.setHours(endDate.getHours() + 2);
 
     const calendarResult = await createFullCalendarEventAction({
       title: data.title,
@@ -101,7 +99,12 @@ export async function getSubjectDetailsAction(subjectId: string) {
       orderBy: { examDate: "asc" },
     });
 
-    return { success: true, notes, exams };
+    const materials = await prisma.subjectMaterial.findMany({
+      where: { subjectId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return { success: true, notes, exams, materials };
   } catch (error) {
     console.error("Erro ao buscar detalhes da disciplina:", error);
     return { error: "Falha ao carregar os dados." };
