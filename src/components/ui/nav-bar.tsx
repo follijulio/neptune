@@ -175,9 +175,10 @@ const MobileNav = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-zinc-800 focus-visible:ring-0"
+            aria-label="Abrir menu principal"
+            className="text-white transition-colors duration-300 hover:bg-white hover:text-black focus-visible:ring-0" // ← Contraste resolvido
           >
-            <LuMenu className="h-6 w-6" />
+            <LuMenu className="h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent

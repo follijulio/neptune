@@ -25,6 +25,7 @@ export interface EnrollmentResponse {
 
 export interface UpdateEnrollmentDto {
   id: string;
+  userId: string;
   status?: "APROVADO" | "REPROVADO" | "CURSANDO" | "PENDENTE";
   grade?: number | null;
   absences?: number | null;

@@ -1,4 +1,5 @@
 import { LuRocket } from "react-icons/lu";
+import { Metadata } from "next";
 import Link from "next/link";
 
 const STAR_BACKGROUND_STYLE: React.CSSProperties = {
@@ -10,6 +11,10 @@ const STAR_BACKGROUND_STYLE: React.CSSProperties = {
     radial-gradient(circle at 75% 85%, rgba(255, 255, 255, 0.7) 1px, transparent 1px)
   `,
   backgroundSize: "150px 150px", // Reduced size for better mobile density
+};
+
+export const metadata: Metadata = {
+  title: "Buraco negro - Netuno",
 };
 
 function StarField() {

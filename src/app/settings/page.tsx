@@ -1,8 +1,13 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import SettingsClient from "@/src/components/ui/clients/settings-client";
+
+export const metadata: Metadata = {
+  title: "Netuno - Configurações",
+};
 
 export default async function SettingsPage() {
   const session = await auth();

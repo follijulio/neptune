@@ -26,6 +26,7 @@ export interface UpdateWorkloadDto {
 
 export interface DeleteWorkloadDto {
   id: string;
+  userId: string;
 }
 
 export interface DeleteWorkloadResponse {

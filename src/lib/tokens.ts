@@ -1,7 +1,8 @@
 import { prisma } from "@/prisma/lib/prisma";
+import { randomInt } from "crypto";
 
 export async function generateTwoFactorToken(email: string) {
-  const token = Math.floor(100000 + Math.random() * 900000).toString();
+  const token = randomInt(100000, 1000000).toString();
 
   const expires = new Date(new Date().getTime() + 5 * 60 * 1000);
 

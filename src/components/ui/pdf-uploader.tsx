@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { Alert } from "../shadcn-ui/alert";
 
+import type { ParsedSubject } from "@/src/app/actions/pdf-actions";
 import {
   parseAcademicHistoryAction,
   saveExtractedSubjectsAction,
@@ -17,12 +18,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/shadcn-ui/card";
-
-interface ParsedSubject {
-  name: string;
-  grade?: string;
-  status: string;
-}
 
 interface UploadState {
   file: File | null;

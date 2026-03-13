@@ -15,33 +15,55 @@ export async function updateSubjectGradesAction(
   },
 ) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  if (!session?.user?.id) {
+    return { error: "Não autorizado." };
+  }
+
+  if (typeof subjectId !== "string" || !subjectId.trim()) {
+    return { error: "ID inválido." };
+  }
+
+  if (!data || typeof data !== "object") {
+    return { error: "Dados inválidos." };
+  }
+
+  const validateGrade = (grade: unknown): number | null => {
+    if (grade === null || grade === undefined) return null;
+    const num = Number(grade);
+    if (isNaN(num) || num < 0 || num > 100) throw new Error();
+    return num;
+  };
 
   try {
-    const subject = await prisma.subject.findUnique({
-      where: { id: subjectId },
-      include: { semester: true },
+    const ab1 = validateGrade(data.ab1);
+    const ab2 = validateGrade(data.ab2);
+    const reav = validateGrade(data.reav);
+    const finalExam = validateGrade(data.finalExam);
+
+    const subject = await prisma.subject.findFirst({
+      where: {
+        id: subjectId,
+        semester: { userId: session.user.id },
+      },
+      select: { id: true },
     });
 
-    if (!subject || subject.semester.userId !== session.user.id) {
+    if (!subject) {
       return { error: "Disciplina não encontrada ou acesso negado." };
     }
 
     await prisma.subject.update({
-      where: { id: subjectId },
-      data: {
-        ab1: data.ab1,
-        ab2: data.ab2,
-        reav: data.reav,
-        finalExam: data.finalExam,
-      },
+      where: { id: subject.id },
+      data: { ab1, ab2, reav, finalExam },
     });
 
     revalidatePath("/semester");
     return { success: "Notas atualizadas com sucesso!" };
-  } catch (error) {
-    console.error("Erro ao atualizar notas:", error);
-    return { error: "Falha ao salvar as notas." };
+  } catch {
+    return {
+      error: "Falha ao salvar as notas. Verifique os valores inseridos.",
+    };
   }
 }
 
@@ -50,70 +72,148 @@ export async function updateSubjectAbsencesAction(
   absences: number,
 ) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Não autorizado" };
 
-  if (!subjectId) {
-    console.error("ERRO: Tentativa de atualizar faltas sem subjectId!");
+  if (!session?.user?.id) {
+    return { error: "Não autorizado." };
+  }
+
+  if (typeof subjectId !== "string" || !subjectId.trim()) {
     return { error: "ID da disciplina não fornecido." };
   }
 
+  if (
+    typeof absences !== "number" ||
+    isNaN(absences) ||
+    absences < 0 ||
+    !Number.isInteger(absences)
+  ) {
+    return { error: "Valor de faltas inválido." };
+  }
+
   try {
+    const subject = await prisma.subject.findFirst({
+      where: {
+        id: subjectId,
+        semester: { userId: session.user.id },
+      },
+      select: { id: true },
+    });
+
+    if (!subject) {
+      return { error: "Disciplina não encontrada ou acesso negado." };
+    }
+
     await prisma.subject.update({
-      where: { id: subjectId },
+      where: { id: subject.id },
       data: { currentAbsences: absences },
     });
 
     revalidatePath("/dashboard");
     revalidatePath("/semester");
     return { success: true };
-  } catch (error) {
-    console.error("ERRO PRISMA:", { error });
+  } catch {
     return { error: "Erro no banco de dados ao salvar faltas." };
   }
 }
+
 export async function createSubjectAction(data: {
   name: string;
   workload: number;
   semesterId: string;
 }) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  if (!session?.user?.id) {
+    return { error: "Não autorizado." };
+  }
+
+  if (!data || typeof data !== "object") {
+    return { error: "Dados inválidos." };
+  }
+
+  const name = typeof data.name === "string" ? data.name.trim() : "";
+  const workload = typeof data.workload === "number" ? data.workload : 0;
+  const semesterId =
+    typeof data.semesterId === "string" ? data.semesterId.trim() : "";
+
+  if (!name || name.length > 150) {
+    return { error: "Nome da disciplina inválido." };
+  }
+
+  if (
+    isNaN(workload) ||
+    workload <= 0 ||
+    workload > 1000 ||
+    !Number.isInteger(workload)
+  ) {
+    return { error: "Carga horária inválida." };
+  }
+
+  if (!semesterId) {
+    return { error: "ID do semestre inválido." };
+  }
 
   try {
-    const maxAbsences = Math.floor(data.workload * 0.25);
+    const semester = await prisma.semester.findFirst({
+      where: { id: semesterId, userId: session.user.id },
+      select: { id: true },
+    });
+
+    if (!semester) {
+      return { error: "Semestre não encontrado ou acesso negado." };
+    }
+
+    const maxAbsences = Math.floor(workload * 0.25);
 
     await prisma.subject.create({
       data: {
-        name: data.name,
-        workload: data.workload,
+        name,
+        workload,
         maxAbsences,
-        semesterId: data.semesterId,
+        semesterId: semester.id,
       },
     });
 
     revalidatePath("/semester");
     return { success: "Disciplina adicionada com sucesso!" };
-  } catch (error) {
-    console.error("Erro ao criar disciplina:", error);
+  } catch {
     return { error: "Falha ao adicionar a disciplina." };
   }
 }
 
 export async function deleteSubjectAction(subjectId: string) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  if (!session?.user?.id) {
+    return { error: "Não autorizado." };
+  }
+
+  if (typeof subjectId !== "string" || !subjectId.trim()) {
+    return { error: "ID da disciplina não fornecido." };
+  }
 
   try {
+    const subject = await prisma.subject.findFirst({
+      where: {
+        id: subjectId,
+        semester: { userId: session.user.id },
+      },
+      select: { id: true },
+    });
+
+    if (!subject) {
+      return { error: "Disciplina não encontrada ou acesso negado." };
+    }
+
     await prisma.$transaction([
-      prisma.enrollment.deleteMany({ where: { subjectId } }),
-      prisma.subject.delete({ where: { id: subjectId } }),
+      prisma.enrollment.deleteMany({ where: { subjectId: subject.id } }),
+      prisma.subject.delete({ where: { id: subject.id } }),
     ]);
 
     revalidatePath("/semester");
     revalidatePath("/dashboard");
     return { success: "Disciplina eliminada!" };
-  } catch (error) {
-    console.error("Erro ao deletar:", error);
+  } catch {
     return {
       error: "Não foi possível apagar. Verifique se há dados dependentes.",
     };
@@ -125,31 +225,61 @@ export async function updateSubjectBaseAction(
   data: { name: string; workload: number },
 ) {
   const session = await auth();
-  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  if (!session?.user?.id) {
+    return { error: "Não autorizado." };
+  }
+
+  if (typeof subjectId !== "string" || !subjectId.trim()) {
+    return { error: "ID inválido." };
+  }
+
+  if (!data || typeof data !== "object") {
+    return { error: "Dados inválidos." };
+  }
+
+  const name = typeof data.name === "string" ? data.name.trim() : "";
+  const workload = typeof data.workload === "number" ? data.workload : 0;
+
+  if (!name || name.length > 150) {
+    return { error: "Nome da disciplina inválido." };
+  }
+
+  if (
+    isNaN(workload) ||
+    workload <= 0 ||
+    workload > 1000 ||
+    !Number.isInteger(workload)
+  ) {
+    return { error: "Carga horária inválida." };
+  }
 
   try {
-    const subject = await prisma.subject.findUnique({
-      where: { id: subjectId },
-      include: { semester: true },
+    const subject = await prisma.subject.findFirst({
+      where: {
+        id: subjectId,
+        semester: { userId: session.user.id },
+      },
+      select: { id: true, currentAbsences: true },
     });
 
-    if (!subject || subject.semester.userId !== session.user.id) {
+    if (!subject) {
       return { error: "Disciplina não encontrada ou acesso negado." };
     }
 
-    const newMaxAbsences = Math.floor(data.workload * 0.25);
+    const newMaxAbsences = Math.floor(workload * 0.25);
 
     if (subject.currentAbsences > newMaxAbsences) {
       return {
-        error: `Operação bloqueada! Você já tem ${subject.currentAbsences} faltas. A carga de ${data.workload}h só permite ${newMaxAbsences} faltas.`,
+        error: `Operação bloqueada! Você já tem ${subject.currentAbsences} faltas. A carga de ${workload}h só permite ${newMaxAbsences} faltas.`,
       };
     }
 
     await prisma.subject.update({
-      where: { id: subjectId },
+      where: { id: subject.id },
       data: {
-        name: data.name,
-        workload: data.workload,
+        name,
+        workload,
         maxAbsences: newMaxAbsences,
       },
     });
@@ -157,8 +287,7 @@ export async function updateSubjectBaseAction(
     revalidatePath("/semester");
     revalidatePath("/dashboard");
     return { success: "Disciplina atualizada com sucesso!" };
-  } catch (error) {
-    console.error("Erro ao atualizar disciplina:", error);
+  } catch {
     return { error: "Falha ao editar a disciplina." };
   }
 }

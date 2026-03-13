@@ -26,31 +26,57 @@ export async function createFullCalendarEventAction(data: {
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 
+  if (!data || typeof data !== "object") {
+    return { error: "Dados inválidos." };
+  }
+
+  const title = typeof data.title === "string" ? data.title.trim() : "";
+  let description =
+    typeof data.description === "string" ? data.description.trim() : "";
+  const dateStr = typeof data.date === "string" ? data.date : "";
+  const color = typeof data.color === "string" ? data.color.trim() : undefined;
+
+  if (!title || title.length > 255) {
+    return { error: "Título inválido ou muito longo." };
+  }
+
+  if (description.length > 100) {
+    description = description.slice(0, 100);
+  }
+
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) {
+    return { error: "Data inválida." };
+  }
+
+  if (color && color.length > 20) {
+    return { error: "Formato de cor inválido." };
+  }
+
   try {
     const newEvent = await prisma.calendarEvent.create({
       data: {
-        title: data.title,
-        description: data.description.substring(0, 100),
-        date: new Date(data.date),
+        title,
+        description,
+        date: parsedDate,
         userId: session.user.id,
-        color: data.color,
+        color,
       },
     });
 
     let googleId = null;
 
     if (session.accessToken) {
-      const startDate = new Date(data.date);
-      const endDate = new Date(startDate);
-      endDate.setHours(startDate.getHours() + 2);
+      const endDate = new Date(parsedDate);
+      endDate.setHours(parsedDate.getHours() + 2);
 
-      const eventColor = data.color ? data.color.substring(0, 2) : "11";
+      const eventColor = color ? color.substring(0, 2) : "11";
 
       const googleEvent = {
-        summary: data.title,
-        description: `${data.description}\n\nNetuno - Gerenciador de Estudos`,
+        summary: title,
+        description: `${description}\n\nNetuno - Gerenciador de Estudos`,
         start: {
-          dateTime: startDate.toISOString(),
+          dateTime: parsedDate.toISOString(),
           timeZone: "America/Sao_Paulo",
         },
         end: {
@@ -80,10 +106,11 @@ export async function createFullCalendarEventAction(data: {
           where: { id: newEvent.id },
           data: { googleEventId: googleId },
         });
-      } else {
-        console.error("Erro na API do Google:", await response.text());
       }
     }
+
+    revalidatePath("/dashboard");
+    revalidatePath("/calendar");
 
     return {
       success: googleId
@@ -92,8 +119,7 @@ export async function createFullCalendarEventAction(data: {
       internalId: newEvent.id,
       googleId: googleId,
     };
-  } catch (error) {
-    console.error("Erro interno:", error);
+  } catch {
     return { error: "Erro ao salvar o evento." };
   }
 }
@@ -103,12 +129,16 @@ export async function deleteCalendarEventAction(eventId: string) {
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 
+  if (typeof eventId !== "string" || !eventId.trim()) {
+    return { error: "ID de evento inválido." };
+  }
+
   try {
-    const event = await prisma.calendarEvent.findUnique({
+    const event = await prisma.calendarEvent.findFirst({
       where: { id: eventId, userId: session.user.id },
     });
 
-    if (!event) return { error: "Evento não encontrado." };
+    if (!event) return { error: "Evento não encontrado ou acesso negado." };
 
     if (event.googleEventId && session.accessToken) {
       await fetch(
@@ -123,14 +153,14 @@ export async function deleteCalendarEventAction(eventId: string) {
     }
 
     await prisma.calendarEvent.delete({
-      where: { id: eventId },
+      where: { id: event.id },
     });
 
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
+
     return { success: "Evento excluído com sucesso!" };
-  } catch (error) {
-    console.error("Erro ao deletar evento:", error);
+  } catch {
     return { error: "Erro interno ao excluir o evento." };
   }
 }
@@ -146,35 +176,67 @@ export async function updateFullCalendarEventAction(data: {
 
   if (!session?.user?.id) return { error: "Não autorizado" };
 
+  if (!data || typeof data !== "object") {
+    return { error: "Dados inválidos." };
+  }
+
+  const id = typeof data.id === "string" ? data.id.trim() : "";
+  const title = typeof data.title === "string" ? data.title.trim() : "";
+  const description =
+    typeof data.description === "string" ? data.description.trim() : "";
+  const dateStr = typeof data.date === "string" ? data.date : "";
+  const color = typeof data.color === "string" ? data.color.trim() : undefined;
+
+  if (!id) return { error: "ID de evento inválido." };
+
+  if (!title || title.length > 255) {
+    return { error: "Título inválido ou muito longo." };
+  }
+
+  if (description.length > 100) {
+    return { error: "Descrição excede o limite de 100 caracteres." };
+  }
+
+  const parsedDate = new Date(dateStr);
+  if (isNaN(parsedDate.getTime())) {
+    return { error: "Data inválida." };
+  }
+
+  if (color && color.length > 20) {
+    return { error: "Formato de cor inválido." };
+  }
+
   try {
-    const existingEvent = await prisma.calendarEvent.findUnique({
-      where: { id: data.id, userId: session.user.id },
+    let googleSyncWarning: string | undefined;
+
+    const existingEvent = await prisma.calendarEvent.findFirst({
+      where: { id: id, userId: session.user.id },
     });
 
-    if (!existingEvent) return { error: "Evento não encontrado." };
+    if (!existingEvent)
+      return { error: "Evento não encontrado ou acesso negado." };
 
     await prisma.calendarEvent.update({
-      where: { id: data.id },
+      where: { id: existingEvent.id },
       data: {
-        title: data.title,
-        description: data.description.substring(0, 100),
-        date: new Date(data.date),
-        color: data.color,
+        title,
+        description,
+        date: parsedDate,
+        color,
       },
     });
 
     if (existingEvent.googleEventId && session.accessToken) {
-      const startDate = new Date(data.date);
-      const endDate = new Date(startDate);
-      endDate.setHours(startDate.getHours() + 2);
+      const endDate = new Date(parsedDate);
+      endDate.setHours(parsedDate.getHours() + 2);
 
-      const eventColor = data.color ? data.color.substring(0, 2) : "11";
+      const eventColor = color ? color.substring(0, 2) : "11";
 
       const googleEvent = {
-        summary: data.title,
-        description: `${data.description}\n\nNetuno - Gerenciador de Estudos`,
+        summary: title,
+        description: `${description}\n\nNetuno - Gerenciador de Estudos`,
         start: {
-          dateTime: startDate.toISOString(),
+          dateTime: parsedDate.toISOString(),
           timeZone: "America/Sao_Paulo",
         },
         end: {
@@ -184,7 +246,7 @@ export async function updateFullCalendarEventAction(data: {
         colorId: eventColor,
       };
 
-      const response = await fetch(
+      const googleResponse = await fetch(
         `https://www.googleapis.com/calendar/v3/calendars/primary/events/${existingEvent.googleEventId}`,
         {
           method: "PUT",
@@ -196,20 +258,24 @@ export async function updateFullCalendarEventAction(data: {
         },
       );
 
-      if (!response.ok) {
-        console.error(
-          "Erro na API do Google ao atualizar:",
-          await response.text(),
-        );
+      if (!googleResponse.ok) {
+        googleSyncWarning =
+          "Evento atualizado localmente, mas houve uma falha ao sincronizar com o Google Calendar.";
       }
     }
 
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
 
+    if (googleSyncWarning) {
+      return {
+        success: "Evento atualizado com sucesso!",
+        warning: googleSyncWarning,
+      };
+    }
+
     return { success: "Evento atualizado com sucesso!" };
-  } catch (error) {
-    console.error("Erro interno ao atualizar:", error);
+  } catch {
     return { error: "Erro ao atualizar o evento." };
   }
 }
