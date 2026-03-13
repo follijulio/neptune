@@ -1,21 +1,17 @@
 "use server";
 
+import { prisma } from "@/prisma/lib/prisma";
 import { CreateEnrollmentController } from "@/src/adapters/controllers/enrollment/create-enrollment-controller";
 import { DeleteEnrollmentController } from "@/src/adapters/controllers/enrollment/delete-enrollment-controller";
 import { UpdateEnrollmentController } from "@/src/adapters/controllers/enrollment/update-enrollment-controller";
 import { auth } from "@/src/auth";
 import {
   CreateEnrollmentDto,
-  EnrollmentResponse,
-} from "@/src/domain/enrollment.dto";
-import { UpdateEnrollmentDto } from "@/src/domain/enrollment.dto";
-import {
   DeleteEnrollmentDto,
   DeleteEnrollmentResponse,
+  EnrollmentResponse,
+  UpdateEnrollmentDto,
 } from "@/src/domain/enrollment.dto";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
 
 export async function createEnrollmentAction(
   formData: CreateEnrollmentDto,
@@ -36,7 +32,6 @@ export async function createEnrollmentAction(
       semesterId?: string;
     };
 
-    // Validação de pertencimento: subjectId/semesterId devem estar associados ao usuário autenticado.
     if (subjectId) {
       const subject = await prisma.subject.findFirst({
         where: {
