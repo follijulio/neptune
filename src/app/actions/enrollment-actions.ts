@@ -55,7 +55,11 @@ export async function updateEnrollmentAction(
     }
 
     const controller = new UpdateEnrollmentController();
-    const enrollment = await controller.update(formData);
+    const payload = {
+      ...formData,
+      userId: session.user.id,
+    };
+    const enrollment = await controller.update(payload);
 
     return { success: true, data: enrollment };
   } catch {

@@ -22,6 +22,7 @@ const MODES = {
     color: "text-[#007AFF]",
     bg: "bg-[#007AFF]/10",
     border: "border-[#007AFF]/50",
+    shadow: "shadow-[#007AFF]/20",
   },
   shortBreak: {
     time: 5 * 60,
@@ -30,6 +31,7 @@ const MODES = {
     color: "text-emerald-500",
     bg: "bg-emerald-500/10",
     border: "border-emerald-500/50",
+    shadow: "shadow-emerald-500/20",
   },
   longBreak: {
     time: 15 * 60,
@@ -38,6 +40,7 @@ const MODES = {
     color: "text-amber-500",
     bg: "bg-amber-500/10",
     border: "border-amber-500/50",
+    shadow: "shadow-amber-500/20",
   },
 };
 
@@ -47,7 +50,7 @@ export default function PomodoroClient() {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: NodeJS.Timeout | undefined;
 
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
@@ -65,7 +68,9 @@ export default function PomodoroClient() {
       }, 1000);
     }
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isActive, timeLeft]);
 
   const switchMode = (newMode: Mode) => {
@@ -95,7 +100,9 @@ export default function PomodoroClient() {
   return (
     <div className="flex h-dvh w-full flex-col items-center justify-center px-4 py-8 text-white sm:h-full">
       <div
-        className={`relative flex w-full max-w-md flex-col items-center rounded-3xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-2xl transition-all duration-500 sm:rounded-[2rem] sm:p-12 ${isActive ? `shadow-${currentMode.color.split("-")[1]}/10 border-[#1A1A1A]` : ""}`}
+        className={`relative flex w-full max-w-md flex-col items-center rounded-3xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 transition-all duration-500 sm:rounded-[2rem] sm:p-12 ${
+          isActive ? `${currentMode.shadow} border-[#1A1A1A]` : "shadow-2xl"
+        }`}
       >
         <div className="custom-scrollbar mb-8 flex w-full justify-between overflow-x-auto rounded-xl bg-zinc-900/50 p-1 sm:mb-12 sm:rounded-2xl sm:p-1.5">
           {(Object.keys(MODES) as Mode[]).map((m) => (

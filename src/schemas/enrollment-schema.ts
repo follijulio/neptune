@@ -12,6 +12,7 @@ export const CreateEnrollmentSchema = z.object({
 
 export const UpdateEnrollmentSchema = z.object({
   id: z.string().min(1, "O ID é obrigatório"),
+  userId: z.string().min(1, "O ID do usuário é obrigatório"),
   status: z.enum(["APROVADO", "REPROVADO", "CURSANDO", "PENDENTE"]).optional(),
   grade: z.number().nonnegative().max(10).optional().nullable(),
   absences: z.number().int().nonnegative().optional().nullable(),

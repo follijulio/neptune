@@ -94,7 +94,11 @@ export async function deleteWorkloadAction(
     }
 
     const controller = new DeleteWorkloadController();
-    await controller.delete(formData);
+    const payload = {
+      ...formData,
+      userId: session.user.id,
+    };
+    await controller.delete(payload);
 
     return { success: true };
   } catch {

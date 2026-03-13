@@ -24,4 +24,5 @@ export const UpdateWorkloadSchema = z.object({
 
 export const DeleteWorkloadSchema = z.object({
   id: z.string().min(1, "O ID é obrigatório"),
+  userId: z.string().min(1, "O ID do usuário é obrigatório"),
 });

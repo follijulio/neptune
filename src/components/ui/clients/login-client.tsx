@@ -48,6 +48,9 @@ export default function LoginClient() {
     if (!showTwoFactor) {
       setEmail(formData.get("email") as string);
       setPassword(formData.get("password") as string);
+    } else {
+      formData.append("email", email);
+      formData.append("password", password);
     }
 
     const result = await loginAction(formData);
@@ -60,7 +63,6 @@ export default function LoginClient() {
       setIsLoading(false);
     }
   };
-
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -167,9 +169,6 @@ export default function LoginClient() {
                     onSubmit={handleLogin}
                     className="space-y-4 sm:space-y-6"
                   >
-                    <input type="hidden" name="email" value={email} />
-                    <input type="hidden" name="password" value={password} />
-
                     <div className="space-y-3">
                       <Input
                         name="code"
