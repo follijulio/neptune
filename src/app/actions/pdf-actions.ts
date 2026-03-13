@@ -259,7 +259,7 @@ function parseGrade(grade: unknown): number | null {
   if (grade === null || grade === undefined) return null;
   const gradeStr = String(grade).replace(",", ".");
   const parsed = parseFloat(gradeStr);
-  if (isNaN(parsed) || parsed < 0 || parsed > 100) return null;
+  if (isNaN(parsed) || parsed < 0 || parsed > 10) return null;
   return parsed;
 }
 
