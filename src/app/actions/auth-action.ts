@@ -24,7 +24,7 @@ async function generateUniqueUsername(
       findUnique: (args: { where: { username: string } }) => Promise<unknown>;
     };
   },
-  email: string
+  email: string,
 ): Promise<string> {
   const localPart = email.split("@")[0] ?? "";
   const sanitizedBase = localPart.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
@@ -84,7 +84,9 @@ export async function loginAction(formData: FormData) {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
 
     const hashToCompare = user?.passwordHash || DUMMY_HASH;
     const passwordsMatch = await bcrypt.compare(password, hashToCompare);
@@ -228,7 +230,14 @@ export async function registerAction(formData: FormData) {
 }
 
 export async function logoutAction() {
-  await signOut({ redirectTo: "/" });
+  try {
+    await signOut({ redirectTo: "/" });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      return { error: "Não foi possível encerrar a sessão no momento." };
+    }
+    throw error;
+  }
 }
 
 export async function loginWithGoogleAction() {
