@@ -92,7 +92,7 @@ export async function updateAccountAction(data: {
         select: { id: true },
       });
 
-      if (emailExists) {
+      if (emailExists && emailExists.id !== currentUser.id) {
         return { error: "Este e-mail já está em uso." };
       }
 

@@ -62,6 +62,9 @@ export async function updateWorkloadAction(
       return { success: false, error: "Não autorizado." };
     }
 
+    // Garanta que a atualização sempre esteja vinculada ao usuário autenticado
+    (formData as any).userId = session.user.id;
+
     const controller = new UpdateWorkloadController();
     const workload = await controller.update(formData);
 

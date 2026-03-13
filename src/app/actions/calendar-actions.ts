@@ -31,7 +31,7 @@ export async function createFullCalendarEventAction(data: {
   }
 
   const title = typeof data.title === "string" ? data.title.trim() : "";
-  const description =
+  let description =
     typeof data.description === "string" ? data.description.trim() : "";
   const dateStr = typeof data.date === "string" ? data.date : "";
   const color = typeof data.color === "string" ? data.color.trim() : undefined;
@@ -41,7 +41,7 @@ export async function createFullCalendarEventAction(data: {
   }
 
   if (description.length > 100) {
-    return { error: "Descrição excede o limite de 100 caracteres." };
+    description = description.slice(0, 100);
   }
 
   const parsedDate = new Date(dateStr);
@@ -207,6 +207,8 @@ export async function updateFullCalendarEventAction(data: {
   }
 
   try {
+    let googleSyncWarning: string | undefined;
+
     const existingEvent = await prisma.calendarEvent.findFirst({
       where: { id: id, userId: session.user.id },
     });
@@ -244,7 +246,7 @@ export async function updateFullCalendarEventAction(data: {
         colorId: eventColor,
       };
 
-      await fetch(
+      const googleResponse = await fetch(
         `https://www.googleapis.com/calendar/v3/calendars/primary/events/${existingEvent.googleEventId}`,
         {
           method: "PUT",
@@ -255,10 +257,22 @@ export async function updateFullCalendarEventAction(data: {
           body: JSON.stringify(googleEvent),
         },
       );
+
+      if (!googleResponse.ok) {
+        googleSyncWarning =
+          "Evento atualizado localmente, mas houve uma falha ao sincronizar com o Google Calendar.";
+      }
     }
 
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
+
+    if (googleSyncWarning) {
+      return {
+        success: "Evento atualizado com sucesso!",
+        warning: googleSyncWarning,
+      };
+    }
 
     return { success: "Evento atualizado com sucesso!" };
   } catch {
