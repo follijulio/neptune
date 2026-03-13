@@ -9,7 +9,7 @@ import { sendVerificationEmail } from "@/src/lib/mail";
 import { generateTwoFactorToken } from "@/src/lib/tokens";
 
 const DUMMY_HASH =
-  "$2a$12$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+  "$2a$12$wJjM3CwYch0eYRqpMfrQa.u1Gc7YCOUMIqFZRMVAb9Y/jGj33jjGa";
 
 function isValidEmail(email: string) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
