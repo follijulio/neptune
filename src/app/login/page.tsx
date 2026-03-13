@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { LuHexagon } from "react-icons/lu";
+import { Metadata } from "next";
 
 import {
   loginAction,
@@ -28,6 +29,11 @@ import { Input } from "@/src/components/shadcn-ui/input";
 import { Label } from "@/src/components/shadcn-ui/label";
 
 type AuthView = "login" | "register";
+
+
+export const metadata: Metadata = {
+  title: "Netuno - Login",
+};
 
 export default function Page() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);

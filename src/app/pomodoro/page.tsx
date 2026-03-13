@@ -9,6 +9,7 @@ import {
   LuPlay,
   LuRotateCcw,
 } from "react-icons/lu";
+import { Metadata } from "next";
 
 import { Button } from "@/src/components/shadcn-ui/button";
 
@@ -39,6 +40,11 @@ const MODES = {
     bg: "bg-amber-500/10",
     border: "border-amber-500/50",
   },
+};
+
+
+export const metadata: Metadata = {
+  title: "Netuno - Pomodoro",
 };
 
 export default function Page() {
