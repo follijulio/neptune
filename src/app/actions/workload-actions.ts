@@ -63,10 +63,13 @@ export async function updateWorkloadAction(
     }
 
     // Garanta que a atualização sempre esteja vinculada ao usuário autenticado
-    (formData as any).userId = session.user.id;
+    const payload = {
+      ...formData,
+      userId: session.user.id,
+    };
 
     const controller = new UpdateWorkloadController();
-    const workload = await controller.update(formData);
+    const workload = await controller.update(payload);
 
     return { success: true, data: workload };
   } catch {
