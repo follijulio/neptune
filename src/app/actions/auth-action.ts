@@ -11,9 +11,56 @@ import { generateTwoFactorToken } from "@/src/lib/tokens";
 const DUMMY_HASH =
   "$2a$12$wJjM3CwYch0eYRqpMfrQa.u1Gc7YCOUMIqFZRMVAb9Y/jGj33jjGa";
 
+const MAX_USERNAME_LENGTH = 30;
+
 function isValidEmail(email: string) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email) && email.length <= 255;
+}
+
+async function generateUniqueUsername(
+  tx: {
+    user: {
+      findUnique: (args: { where: { username: string } }) => Promise<unknown>;
+    };
+  },
+  email: string
+): Promise<string> {
+  const localPart = email.split("@")[0] ?? "";
+  const sanitizedBase = localPart.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+
+  const randomSuffix = () => Math.random().toString(36).slice(2, 8);
+
+  let base = sanitizedBase || `user${randomSuffix()}`;
+
+  if (base.length > MAX_USERNAME_LENGTH) {
+    base = base.slice(0, MAX_USERNAME_LENGTH);
+  }
+
+  const maxAttempts = 10;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const suffix = attempt === 0 ? "" : `_${attempt}`;
+    const allowedBaseLength = MAX_USERNAME_LENGTH - suffix.length;
+
+    let candidateBase = base;
+    if (candidateBase.length > allowedBaseLength) {
+      candidateBase = candidateBase.slice(0, allowedBaseLength);
+    }
+
+    const candidate = `${candidateBase}${suffix}`;
+
+    const existing = await tx.user.findUnique({
+      where: { username: candidate },
+    });
+
+    if (!existing) {
+      return candidate;
+    }
+  }
+
+  // Fallback to a fully random username if all attempts collide
+  return `user${randomSuffix()}`.slice(0, MAX_USERNAME_LENGTH);
 }
 
 export async function loginAction(formData: FormData) {
@@ -136,14 +183,16 @@ export async function registerAction(formData: FormData) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const usernameBase = email.split("@")[0].replace(/[^a-zA-Z0-9]/g, "");
 
     await prisma.$transaction(async (tx) => {
+      const normalizedEmail = email.toLowerCase();
+      const username = await generateUniqueUsername(tx, normalizedEmail);
+
       const user = await tx.user.create({
         data: {
           name: name.trim(),
-          email: email.toLowerCase(),
-          username: usernameBase,
+          email: normalizedEmail,
+          username,
           passwordHash: hashedPassword,
         },
       });
