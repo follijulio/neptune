@@ -104,7 +104,14 @@ export async function deleteWorkloadAction(
       ...formData,
       userId: session.user.id,
     };
-    await controller.delete(payload);
+    const result = await controller.delete(payload);
+
+    if (!result || (typeof result === "object" && "count" in result && result.count === 0)) {
+      return {
+        success: false,
+        error: "Carga horária não encontrada ou não pertence ao usuário.",
+      };
+    }
 
     return { success: true };
   } catch {
