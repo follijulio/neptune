@@ -77,12 +77,14 @@ export async function loginAction(formData: FormData) {
     return { error: "Preencha todos os campos corretamente." };
   }
 
-  if (!isValidEmail(email) || password.length > 72) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  if (!isValidEmail(normalizedEmail) || password.length > 72) {
     return { error: "Credenciais inválidas." };
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     const hashToCompare = user?.passwordHash || DUMMY_HASH;
     const passwordsMatch = await bcrypt.compare(password, hashToCompare);
@@ -101,7 +103,7 @@ export async function loginAction(formData: FormData) {
       }
 
       const twoFactorToken = await prisma.twoFactorToken.findFirst({
-        where: { email },
+        where: { email: normalizedEmail },
       });
 
       if (!twoFactorToken || twoFactorToken.token !== code) {
@@ -130,7 +132,7 @@ export async function loginAction(formData: FormData) {
       });
 
       await signIn("credentials", {
-        email,
+        email: normalizedEmail,
         password,
         redirectTo: "/dashboard",
       });
