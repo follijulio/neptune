@@ -29,7 +29,11 @@ export async function createEnrollmentAction(
     }
 
     const controller = new CreateEnrollmentController();
-    const enrollment = await controller.create(formData);
+    const enrollmentData: CreateEnrollmentDto = {
+      ...formData,
+      userId: session.user.id,
+    };
+    const enrollment = await controller.create(enrollmentData);
 
     return { success: true, data: enrollment };
   } catch {
