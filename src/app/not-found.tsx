@@ -13,7 +13,6 @@ const STAR_BACKGROUND_STYLE: React.CSSProperties = {
   backgroundSize: "150px 150px", // Reduced size for better mobile density
 };
 
-
 export const metadata: Metadata = {
   title: "Buraco negro - Netuno",
 };

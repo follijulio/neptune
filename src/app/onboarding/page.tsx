@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { auth } from "@/src/auth";
 import OnboardingFlow from "@/src/components/ui/flow/onboarding-flow";
 
-
 export const metadata: Metadata = {
   title: "Netuno - Onboarding",
 };

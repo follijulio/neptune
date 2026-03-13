@@ -5,7 +5,6 @@ import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import SemesterClient from "@/src/components/ui/clients/semester-client";
 
-
 export const metadata: Metadata = {
   title: "Netuno - Semestres",
 };
