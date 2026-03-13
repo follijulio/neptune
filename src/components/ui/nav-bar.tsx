@@ -271,7 +271,11 @@ const SettingsMenuGroup = () => (
 
 const LogoutMenuGroup = () => (
   <DropdownMenuGroup>
-    <form action={logoutAction}>
+    <form
+      action={async (_formData: FormData) => {
+        await logoutAction();
+      }}
+    >
       <DropdownMenuItem
         asChild
         className="cursor-pointer text-[#FF3B30] hover:bg-[#FF3B30]/10 focus:bg-[#FF3B30]/10 focus:text-[#FF3B30]"
