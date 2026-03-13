@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { LuCheck, LuGripHorizontal, LuPlus, LuTrash2 } from "react-icons/lu";
+import { useEffect, useMemo, useState } from "react";
+import {
+  LuCheck,
+  LuGripHorizontal,
+  LuPencil,
+  LuPlus,
+  LuTrash2,
+} from "react-icons/lu";
+import ReactMarkdown from "react-markdown";
 import {
   closestCenter,
   DndContext,
@@ -25,6 +32,7 @@ import {
   createNoteAction,
   deleteNoteAction,
   reorderNotesAction,
+  updateNoteAction,
 } from "@/src/app/actions/notes-actions";
 import { Button } from "@/src/components/shadcn-ui/button";
 import {
@@ -58,11 +66,13 @@ const NOTE_COLORS = [
 function SortableNoteCard({
   note,
   onDelete,
+  onEdit,
   isDeleting,
   index,
 }: {
   note: Note;
   onDelete: (id: string) => void;
+  onEdit: (note: Note) => void;
   isDeleting: boolean;
   index: number;
 }) {
@@ -75,55 +85,77 @@ function SortableNoteCard({
     isDragging,
   } = useSortable({ id: note.id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    zIndex: isDragging ? 50 : 1,
-    opacity: isDragging ? 0.8 : 1,
-    animationDelay: `${index * 20}ms`,
-  };
+  const style = useMemo(
+    () => ({
+      transform: CSS.Transform.toString(transform),
+      transition,
+      zIndex: isDragging ? 50 : 1,
+      opacity: isDragging ? 0.8 : 1,
+      animationDelay: `${index * 20}ms`,
+    }),
+    [transform, transition, isDragging, index],
+  );
+
+  const dateString = useMemo(
+    () => new Date(note.createdAt).toLocaleDateString("pt-BR"),
+    [note.createdAt],
+  );
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-70 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
+      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-60 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 sm:min-h-70 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
     >
       <div
-        className="absolute top-0 left-0 h-2 w-full"
+        className="absolute top-0 left-0 h-1.5 w-full sm:h-2"
         style={{ backgroundColor: note.color || "#007AFF" }}
       />
 
       <div
         {...attributes}
         {...listeners}
-        className="absolute top-4 right-4 cursor-grab touch-none p-1 text-zinc-600 hover:text-zinc-300 active:cursor-grabbing"
+        className="absolute top-3 right-3 cursor-grab touch-none p-1 text-zinc-600 hover:text-zinc-300 active:cursor-grabbing sm:top-4 sm:right-4"
         title="Arrastar anotação"
       >
-        <LuGripHorizontal className="h-5 w-5" />
+        <LuGripHorizontal className="h-4 w-4 sm:h-5 sm:w-5" />
       </div>
 
-      <div className="flex h-full flex-col p-8">
-        <h3 className="mb-4 pr-8 text-2xl leading-tight font-bold text-[#E0E0E0]">
+      <div className="flex h-full flex-col p-5 sm:p-8">
+        <h3 className="mb-3 pr-6 text-lg leading-tight font-bold text-[#E0E0E0] sm:mb-4 sm:pr-8 sm:text-2xl">
           {note.title}
         </h3>
-        <p className="flex-1 text-base leading-relaxed whitespace-pre-wrap text-[#A0A0A0]">
-          {note.content}
-        </p>
+        <div className="prose prose-sm prose-invert prose-p:leading-relaxed prose-pre:bg-zinc-950 prose-pre:border prose-pre:border-zinc-800 line-clamp-4 max-w-none text-xs text-zinc-400 sm:text-sm">
+          <ReactMarkdown>{note.content}</ReactMarkdown>
+        </div>
 
-        <div className="mt-8 flex items-center justify-between border-t border-[#1A1A1A] pt-4 text-sm font-medium text-zinc-600">
-          <span>{new Date(note.createdAt).toLocaleDateString("pt-BR")}</span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(note.id);
-            }}
-            disabled={isDeleting}
-            className="relative z-10 -mr-2 rounded-lg p-2 text-zinc-500 transition-colors hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50"
-            title="Apagar anotação"
-          >
-            <LuTrash2 className="h-5 w-5" />
-          </button>
+        <div className="mt-6 flex items-center justify-between border-t border-[#1A1A1A] pt-3 text-xs font-medium text-zinc-600 sm:mt-8 sm:pt-4 sm:text-sm">
+          <span>{dateString}</span>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(note);
+              }}
+              className="relative z-10 rounded-lg p-1.5 text-zinc-500 transition-all hover:bg-[#007AFF]/10 hover:text-[#007AFF] sm:p-2 sm:opacity-0 sm:group-hover:opacity-100"
+              title="Editar anotação"
+            >
+              <LuPencil className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(note.id);
+              }}
+              disabled={isDeleting}
+              className="relative z-10 -mr-1 rounded-lg p-1.5 text-zinc-500 transition-all hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50 sm:-mr-2 sm:p-2 sm:opacity-0 sm:group-hover:opacity-100"
+              title="Apagar anotação"
+            >
+              <LuTrash2 className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +173,10 @@ export default function MuralClient({
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteContent, setNoteContent] = useState("");
   const [selectedColor, setSelectedColor] = useState(NOTE_COLORS[0].value);
 
   useEffect(() => {
@@ -176,101 +212,163 @@ export default function MuralClient({
     setIsDeleting(null);
   }
 
-  async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
+  function openEditModal(note: Note) {
+    setEditingNote(note);
+    setNoteTitle(note.title);
+    setNoteContent(note.content);
+    setSelectedColor(note.color || NOTE_COLORS[0].value);
+    setError(null);
+    setIsOpen(true);
+  }
+
+  function openCreateModal() {
+    setEditingNote(null);
+    setNoteTitle("");
+    setNoteContent("");
+    setSelectedColor(NOTE_COLORS[0].value);
+    setError(null);
+    setIsOpen(true);
+  }
+
+  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      title: formData.get("title") as string,
-      content: formData.get("content") as string,
-      color: selectedColor,
-    };
-
-    if (!data.title || !data.content) {
+    if (!noteTitle || !noteContent) {
       setError("Preencha o título e o conteúdo da anotação.");
       setIsSaving(false);
       return;
     }
 
-    const result = await createNoteAction(data);
-    if (result.error) {
-      setError(result.error);
+    if (editingNote) {
+      const result = await updateNoteAction({
+        id: editingNote.id,
+        title: noteTitle,
+        content: noteContent,
+        color: selectedColor,
+      });
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setNotes((prev) =>
+          prev.map((n) =>
+            n.id === editingNote.id
+              ? {
+                  ...n,
+                  title: noteTitle,
+                  content: noteContent,
+                  color: selectedColor,
+                }
+              : n,
+          ),
+        );
+        setIsOpen(false);
+      }
     } else {
-      setIsOpen(false);
-      router.refresh();
+      const result = await createNoteAction({
+        title: noteTitle,
+        content: noteContent,
+        color: selectedColor,
+      });
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setIsOpen(false);
+        router.refresh();
+      }
     }
+
     setIsSaving(false);
   }
 
   return (
-    <section>
+    <section className="px-4 sm:px-0">
       <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
           <DialogTrigger asChild>
-            <Button className="h-12 gap-2 rounded-xl bg-[#007AFF] px-6 font-bold text-white hover:bg-[#005bb5]">
-              <LuPlus className="h-5 w-5" /> Novo Post-it
+            <Button
+              onClick={openCreateModal}
+              className="h-10 gap-2 rounded-xl bg-[#007AFF] px-4 text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:px-6 sm:text-base"
+            >
+              <LuPlus className="h-4 w-4 sm:h-5 sm:w-5" /> Novo Post-it
             </Button>
           </DialogTrigger>
 
-          <DialogContent className="rounded-2xl border-[#1A1A1A] bg-[#121212] text-white sm:max-w-md">
+          <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold">
-                Criar Anotação
+              <DialogTitle className="text-lg font-bold sm:text-2xl">
+                {editingNote ? "Editar Anotação" : "Criar Anotação"}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleCreate} className="space-y-6 pt-4">
+            <form
+              onSubmit={handleSave}
+              className="space-y-4 pt-2 sm:space-y-6 sm:pt-4"
+            >
               {error && (
-                <p className="text-sm font-medium text-red-500">{error}</p>
+                <p className="text-xs font-medium text-red-500 sm:text-sm">
+                  {error}
+                </p>
               )}
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-zinc-300">
+
+              <div className="space-y-1.5 sm:space-y-2">
+                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
                   Título
                 </label>
                 <Input
-                  name="title"
-                  placeholder="prova de ..."
-                  className="h-12 rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                  value={noteTitle}
+                  onChange={(e) => setNoteTitle(e.target.value)}
+                  placeholder="Ex: Prova de..."
+                  className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-zinc-300">
+
+              <div className="space-y-1.5 sm:space-y-2">
+                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
                   Conteúdo
                 </label>
                 <Textarea
-                  name="content"
-                  placeholder="a prova vai ter questões sobre..."
-                  className="min-h-30 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-white focus-visible:ring-[#007AFF]"
+                  value={noteContent}
+                  onChange={(e) => setNoteContent(e.target.value)}
+                  placeholder="Resumo, ideias..."
+                  className="min-h-24 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:min-h-30 sm:text-base"
                 />
               </div>
-              <div className="space-y-3">
-                <label className="text-sm font-semibold text-zinc-300">
+
+              <div className="space-y-2 sm:space-y-3">
+                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
                   Cor da Tag
                 </label>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   {NOTE_COLORS.map((c) => (
                     <button
                       key={c.value}
                       type="button"
                       onClick={() => setSelectedColor(c.value)}
-                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-110 ${selectedColor === c.value ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
+                      className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c.value ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
                       style={{ backgroundColor: c.value }}
                       title={c.name}
                     >
                       {selectedColor === c.value && (
-                        <LuCheck className="h-4 w-4 text-white drop-shadow-md" />
+                        <LuCheck className="h-3 w-3 text-white drop-shadow-md sm:h-4 sm:w-4" />
                       )}
                     </button>
                   ))}
                 </div>
               </div>
+
               <Button
                 type="submit"
                 disabled={isSaving}
-                className="h-12 w-full rounded-xl bg-[#007AFF] font-bold text-white hover:bg-[#005bb5]"
+                className="h-10 w-full rounded-xl bg-[#007AFF] text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:text-base"
               >
-                {isSaving ? "Salvando..." : "Salvar Post-it"}
+                {isSaving
+                  ? "Salvando..."
+                  : editingNote
+                    ? "Salvar Alterações"
+                    : "Salvar Post-it"}
               </Button>
             </form>
           </DialogContent>
@@ -278,8 +376,8 @@ export default function MuralClient({
       </header>
 
       {notes.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-24 text-center">
-          <p className="text-lg text-zinc-500">Mural vazio...</p>
+        <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
+          <p className="text-base text-zinc-500 sm:text-lg">Mural vazio...</p>
         </div>
       ) : (
         <DndContext
@@ -288,13 +386,14 @@ export default function MuralClient({
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={notes} strategy={rectSortingStrategy}>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
               {notes.map((note, index) => (
                 <SortableNoteCard
                   key={note.id}
                   note={note}
                   index={index}
                   onDelete={handleDelete}
+                  onEdit={openEditModal}
                   isDeleting={isDeleting === note.id}
                 />
               ))}

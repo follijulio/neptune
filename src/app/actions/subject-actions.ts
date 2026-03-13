@@ -119,3 +119,46 @@ export async function deleteSubjectAction(subjectId: string) {
     };
   }
 }
+
+export async function updateSubjectBaseAction(
+  subjectId: string,
+  data: { name: string; workload: number },
+) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    const subject = await prisma.subject.findUnique({
+      where: { id: subjectId },
+      include: { semester: true },
+    });
+
+    if (!subject || subject.semester.userId !== session.user.id) {
+      return { error: "Disciplina não encontrada ou acesso negado." };
+    }
+
+    const newMaxAbsences = Math.floor(data.workload * 0.25);
+
+    if (subject.currentAbsences > newMaxAbsences) {
+      return {
+        error: `Operação bloqueada! Você já tem ${subject.currentAbsences} faltas. A carga de ${data.workload}h só permite ${newMaxAbsences} faltas.`,
+      };
+    }
+
+    await prisma.subject.update({
+      where: { id: subjectId },
+      data: {
+        name: data.name,
+        workload: data.workload,
+        maxAbsences: newMaxAbsences,
+      },
+    });
+
+    revalidatePath("/semester");
+    revalidatePath("/dashboard");
+    return { success: "Disciplina atualizada com sucesso!" };
+  } catch (error) {
+    console.error("Erro ao atualizar disciplina:", error);
+    return { error: "Falha ao editar a disciplina." };
+  }
+}

@@ -1,8 +1,6 @@
 "use client";
 
-import { FaListOl } from "react-icons/fa";
-import { MdOutlineFolder } from "react-icons/md";
-import Link from "next/link";
+import { useMemo } from "react";
 
 import {
   Accordion,
@@ -18,8 +16,8 @@ import { useFilterParam } from "@/src/hooks/useFilterParam";
 import { cn } from "@/src/lib/utils";
 
 interface Subject {
+  id: string;
   subject_name: string;
-  code: string;
   status: string;
   partial_grade: number | null;
 }
@@ -44,42 +42,6 @@ const CURRICULUM_FILTERS: FilterOption[] = [
 const DEFAULT_FILTER = "all";
 const PASSING_GRADE = 6;
 
-// const SubjectCardSkeleton = () => (
-//   <Card className="flex flex-row justify-between rounded-[2px] border border-white/10 bg-transparent p-4">
-//     <div className="flex w-full flex-col justify-between gap-4">
-//       <section className="space-y-2">
-//         <div className="h-5 w-3/4 animate-pulse rounded bg-white/10" />
-//         <div className="h-3 w-1/4 animate-pulse rounded bg-white/10" />
-//       </section>
-//       <section className="flex flex-row gap-4">
-//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-//         <div className="h-4 w-20 animate-pulse rounded bg-white/10" />
-//       </section>
-//     </div>
-//     <div>
-//       <div className="h-6 w-14 animate-pulse rounded-full bg-white/10" />
-//     </div>
-//   </Card>
-// );
-
-// const SemesterAccordionSkeleton = () => (
-//   <div className="flex w-full flex-col gap-3">
-//     {[1, 2].map((i) => (
-//       <Card
-//         key={i}
-//         className="min-h-20 justify-center border border-white/20 bg-black p-4 shadow-lg"
-//       >
-//         <div className="mb-4 h-6 w-32 animate-pulse rounded bg-white/10" />
-//         <div className="grid grid-cols-4 gap-4">
-//           {[1, 2, 3, 4].map((j) => (
-//             <SubjectCardSkeleton key={j} />
-//           ))}
-//         </div>
-//       </Card>
-//     ))}
-//   </div>
-// );
-
 const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   data,
   isLoading,
@@ -93,9 +55,11 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   );
 
   return (
-    <Card className="min-h-52 w-full border-0 bg-black p-2 text-white">
-      <h2 className="mb-4 text-2xl font-semibold">Grade Curricular</h2>
-      <section className="mb-4">
+    <Card className="min-h-52 w-full border-0 bg-black p-2 text-white sm:p-4">
+      <h2 className="mb-4 text-xl font-semibold sm:text-2xl">
+        Grade Curricular
+      </h2>
+      <section className="custom-scrollbar mb-4 overflow-x-auto pb-2">
         <FilterButtons
           filters={CURRICULUM_FILTERS}
           activeFilter={activeFilter || DEFAULT_FILTER}
@@ -114,7 +78,7 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
           )}
         >
           {data.length === 0 && !isLoading ? (
-            <div className="rounded-lg border border-white/10 py-10 text-center text-[#888888]">
+            <div className="rounded-lg border border-white/10 py-10 text-center text-sm text-[#888888] sm:text-base">
               Nenhuma disciplina encontrada para este filtro.
             </div>
           ) : (
@@ -141,7 +105,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
 }) => {
   const getButtonClassName = (isActive: boolean) =>
     cn(
-      "transition-all duration-200",
+      "transition-all duration-200 whitespace-nowrap text-xs sm:text-sm h-9 sm:h-10",
       isActive
         ? "bg-white text-black hover:bg-gray-200"
         : "bg-transparent text-white border border-gray-600 hover:bg-gray-800",
@@ -149,7 +113,7 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
     );
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-nowrap gap-2 sm:flex-wrap">
       {filters.map((filter) => (
         <Button
           key={filter.id}
@@ -169,24 +133,32 @@ const FilterButtons: React.FC<FilterButtonsProps> = ({
 const SemesterAccordion: React.FC<{ semesters: Semester[] }> = ({
   semesters,
 }) => {
+  const defaultValues = useMemo(
+    () => semesters.map((s) => s.semester),
+    [semesters],
+  );
+
   return (
     <Accordion
       type="multiple"
-      className="flex w-full flex-col gap-3"
-      defaultValue={semesters.map((s) => s.semester)}
+      className="flex w-full flex-col gap-3 sm:gap-4"
+      defaultValue={defaultValues}
     >
       {semesters.map((semester) => (
         <Card
           key={semester.semester}
           className="min-h-20 justify-center border border-white/20 bg-black text-white shadow-lg transition-all duration-300 hover:shadow-xl"
         >
-          <AccordionItem className="border-0 px-4" value={semester.semester}>
-            <AccordionTrigger className="py-4 text-xl font-semibold hover:no-underline">
+          <AccordionItem
+            className="border-0 px-3 sm:px-4"
+            value={semester.semester}
+          >
+            <AccordionTrigger className="py-3 text-lg font-semibold hover:no-underline sm:py-4 sm:text-xl">
               <span className="flex items-center gap-2">
                 {semester.semester}
               </span>
             </AccordionTrigger>
-            <AccordionContent className="grid grid-cols-4 gap-4 border-t border-white/15 pt-4 pb-2 leading-relaxed text-gray-300">
+            <AccordionContent className="grid grid-cols-1 gap-3 border-t border-white/15 pt-4 pb-2 leading-relaxed text-gray-300 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
               {semester.data.map((subject, i) => (
                 <SubjectCard key={i} subject={subject} />
               ))}
@@ -203,8 +175,12 @@ interface SubjectCardProps {
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
-  const { subject_name, code, partial_grade } = subject;
-  const isFailing = partial_grade !== null && partial_grade < PASSING_GRADE;
+  const { subject_name, partial_grade } = subject;
+
+  const isFailing = useMemo(
+    () => partial_grade !== null && partial_grade < PASSING_GRADE,
+    [partial_grade],
+  );
 
   const gradeColorClass = isFailing
     ? "bg-[#FF3B30]/20 text-[#FF3B30]"
@@ -213,46 +189,31 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
   const dotColorClass = isFailing ? "bg-[#FF3B30]" : "bg-[#00FF88]";
 
   return (
-    <Card className="flex flex-row justify-between rounded-[2px] border border-white/10 bg-transparent p-4">
-      <div className="flex flex-col justify-between text-white">
+    <Card className="flex flex-row justify-between gap-3 rounded-[2px] border border-white/10 bg-transparent p-3 sm:p-4">
+      <div className="flex w-full flex-col justify-between pr-2 text-white">
         <section>
           <h3
-            className="line-clamp-2 text-lg font-semibold"
+            className="line-clamp-2 text-base font-semibold sm:text-lg"
             title={subject_name}
           >
             {subject_name}
           </h3>
-          <p
-            className={
-              (cn("text-sm text-white/60"),
-              code === "N/A" ? "text-xs font-thin italic" : "")
-            }
-          >
-            {code}
-          </p>
-        </section>
-        <section className="mt-4 flex flex-row gap-4 font-bold">
-          <SubjectLink
-            href={`/materiais/${subject_name}`}
-            icon={MdOutlineFolder}
-            label="Materiais"
-          />
-          <SubjectLink
-            href={`/ementas/${subject_name}`}
-            icon={FaListOl}
-            label="Ementa"
-          />
         </section>
       </div>
-      <div>
+      <div className="shrink-0">
         <Badge
           variant="default"
           className={cn(
-            "min-w-14 justify-center gap-2 text-sm",
+            "min-w-12 justify-center gap-1.5 text-xs sm:min-w-14 sm:gap-2 sm:text-sm",
             gradeColorClass,
           )}
         >
-          <span className={cn("h-2 w-2 rounded-full", dotColorClass)} />
+          <span
+            className={cn(
+              "h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2",
+              dotColorClass,
+            )}
+          />
           <p>{partial_grade !== null ? partial_grade : "-"}</p>
         </Badge>
       </div>
@@ -260,27 +221,27 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
   );
 };
 
-interface SubjectLinkProps {
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-}
+// interface SubjectLinkProps {
+//   href: string;
+//   icon: React.ComponentType<{ className?: string }>;
+//   label: string;
+// }
 
-const SubjectLink: React.FC<SubjectLinkProps> = ({
-  href,
-  icon: Icon,
-  label,
-}) => {
-  return (
-    <Link
-      href={href}
-      className="flex items-center gap-2 text-[#888888] transition-colors hover:text-[#007AFF]"
-    >
-      <Icon className="text-lg" />
-      <span>{label}</span>
-    </Link>
-  );
-};
+// const SubjectLink: React.FC<SubjectLinkProps> = ({
+//   href,
+//   icon: Icon,
+//   label,
+// }) => {
+//   return (
+//     <Link
+//       href={href}
+//       className="flex items-center gap-2 text-[#888888] transition-colors hover:text-[#007AFF]"
+//     >
+//       <Icon className="text-base sm:text-lg" />
+//       <span className="text-sm sm:text-base">{label}</span>
+//     </Link>
+//   );
+// };
 
 export default SemesterTable;
 export { FilterButtons };

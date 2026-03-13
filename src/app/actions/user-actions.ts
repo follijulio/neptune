@@ -1,0 +1,26 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
+
+export async function updateUserImageAction(imageUrl: string) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { image: imageUrl },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/settings");
+    revalidatePath("/", "layout");
+    return { success: true };
+  } catch (error) {
+    console.error("Erro ao atualizar foto:", error);
+    return { error: "Falha ao salvar a imagem." };
+  }
+}

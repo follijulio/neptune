@@ -30,13 +30,42 @@ const CHART_CONFIG = {
   },
 } satisfies ChartConfig;
 
-const CHART_STYLE = {
-  startAngle: 90,
-  innerRadius: 80,
-  outerRadius: 110,
-  barSize: 30,
-  polarRadius: [86, 74] as [number, number],
+type ChartStyle = {
+  startAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  barSize: number;
+  polarRadius: [number, number];
 };
+
+const getResponsiveChartStyle = (): ChartStyle => {
+  if (typeof window === "undefined") {
+    return {
+      startAngle: 90,
+      innerRadius: 70,
+      outerRadius: 100,
+      barSize: 35,
+      polarRadius: [76, 64],
+    };
+  }
+
+  const vw = window.innerWidth;
+  const scale = Math.min(Math.max(vw / 1440, 0.65), 1); // 65% -> 100%
+
+  const innerRadius = Math.round(70 * scale);
+  const outerRadius = Math.round(100 * scale);
+  const barSize = Math.round(35 * scale);
+
+  return {
+    startAngle: 90,
+    innerRadius,
+    outerRadius,
+    barSize,
+    polarRadius: [Math.round(76 * scale), Math.round(64 * scale)],
+  };
+};
+
+const CHART_STYLE = getResponsiveChartStyle();
 
 const calculateProgress = (completed: number, total: number): number => {
   return total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -80,7 +109,8 @@ const RadialProgressChart: React.FC<RadialProgressChartProps> = ({
                     <tspan
                       x={viewBox.cx}
                       y={viewBox.cy}
-                      className="fill-white text-4xl font-medium"
+                      className="fill-white font-medium"
+                      style={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
                     >
                       {progress}%
                     </tspan>

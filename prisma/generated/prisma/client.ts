@@ -106,3 +106,18 @@ export type CalendarEvent = Prisma.CalendarEventModel
  * 
  */
 export type Link = Prisma.LinkModel
+/**
+ * Model SubjectNote
+ * 
+ */
+export type SubjectNote = Prisma.SubjectNoteModel
+/**
+ * Model Exam
+ * 
+ */
+export type Exam = Prisma.ExamModel
+/**
+ * Model SubjectMaterial
+ * 
+ */
+export type SubjectMaterial = Prisma.SubjectMaterialModel

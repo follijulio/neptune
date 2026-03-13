@@ -18,6 +18,12 @@ type SemesterWithCR = SemesterWithEnrollments & {
   yieldCoefficient: number;
 };
 
+const FILTER_MAP: Record<string, (status: string) => boolean> = {
+  completed: (status) => status === "APROVADO",
+  pending: (status) => ["PENDENTE", "CURSANDO", "REPROVADO"].includes(status),
+  blocked: (status) => status === "BLOQUEADO",
+};
+
 export class GetDashboardDataService {
   async execute({ userId, semester, filterCurriculum }: DashboardFiltersDto) {
     const [workloads, semesters, filteredEnrollments] = await Promise.all([
@@ -26,9 +32,7 @@ export class GetDashboardDataService {
       prisma.semester.findMany({
         where: { userId },
         orderBy: { title: "asc" },
-        include: {
-          enrollments: { include: { subject: true } },
-        },
+        include: { enrollments: { include: { subject: true } } },
       }),
 
       prisma.enrollment.findMany({
@@ -53,16 +57,23 @@ export class GetDashboardDataService {
       enrollments: SemesterWithEnrollments["enrollments"],
     ): number => {
       let totalScore = 0;
-      let totalHours = 0;
+      let totalWorkload = 0;
 
-      enrollments.forEach((env) => {
+      for (const env of enrollments) {
         if (env.grade !== null && env.subject?.workload) {
           totalScore += env.grade * env.subject.workload;
-          totalHours += env.subject.workload;
+          totalWorkload += env.subject.workload;
         }
-      });
+      }
 
-      return totalHours > 0 ? Number((totalScore / totalHours).toFixed(2)) : 0;
+      return totalWorkload > 0
+        ? Number((totalScore / totalWorkload).toFixed(2))
+        : 0;
+    };
+
+    const filterByStatus = (status: string): boolean => {
+      if (!filterCurriculum || filterCurriculum === "all") return true;
+      return FILTER_MAP[filterCurriculum]?.(status) ?? true;
     };
 
     const semestersWithCR: SemesterWithCR[] = semesters.map((sem) => ({
@@ -71,44 +82,31 @@ export class GetDashboardDataService {
     }));
 
     const currentYieldCoefficient =
-      semestersWithCR[semestersWithCR.length - 1]?.yieldCoefficient || 0;
+      semestersWithCR.at(-1)?.yieldCoefficient ?? 0;
     const previousYieldCoefficient =
-      semestersWithCR[semestersWithCR.length - 2]?.yieldCoefficient || 0;
+      semestersWithCR.at(-2)?.yieldCoefficient ?? 0;
 
     const semestersTable = semestersWithCR
-      .map((sem) => {
-        const filteredData = sem.enrollments.filter((env) => {
-          if (!filterCurriculum || filterCurriculum === "all") return true;
-          if (filterCurriculum === "completed")
-            return env.status === "APROVADO";
-          if (filterCurriculum === "pending")
-            return ["PENDENTE", "CURSANDO", "REPROVADO"].includes(env.status);
-          if (filterCurriculum === "blocked")
-            return (env.status as string) === "BLOQUEADO";
-          return true;
-        });
-
-        return {
-          semester: sem.title,
-          status:
-            (sem as SemesterWithCR & { status?: string }).status || "CONCLUIDO",
-          data: filteredData.map((env) => ({
+      .map((sem) => ({
+        semester: sem.title,
+        status:
+          (sem as SemesterWithCR & { status?: string }).status ?? "CONCLUIDO",
+        data: sem.enrollments
+          .filter((env) => filterByStatus(env.status))
+          .map((env) => ({
+            id: env.id,
             subject_name: env.subject.name,
-            code:
-              (env.subject as typeof env.subject & { code?: string }).code ||
-              "N/A",
             status: env.status,
             partial_grade: env.grade,
           })),
-        };
-      })
+      }))
       .filter((sem) => sem.data.length > 0);
 
     const coursesAttention = filteredEnrollments.map(
       (env: EnrollmentWithSubject) => ({
         subject_name: env.subject.name,
-        absences: env.subject.currentAbsences || 0,
-        maxAbsences: env.subject.maxAbsences || 0,
+        absences: env.subject.currentAbsences ?? 0,
+        maxAbsences: env.subject.maxAbsences ?? 0,
       }),
     );
 
@@ -127,11 +125,9 @@ export class GetDashboardDataService {
         id: env.id,
         subjectId: env.subjectId,
         subject_name: env.subject.name,
-        code:
-          (env.subject as typeof env.subject & { code?: string }).code || "N/A",
         status: env.status,
-        absences: env.subject.currentAbsences || 0,
-        maxAbsences: env.subject.maxAbsences || 0,
+        absences: env.subject.currentAbsences ?? 0,
+        maxAbsences: env.subject.maxAbsences ?? 0,
         partial_grade: env.grade,
       }),
     );

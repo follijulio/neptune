@@ -1,0 +1,164 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+import { createFullCalendarEventAction } from "./calendar-actions";
+
+import { prisma } from "@/prisma/lib/prisma";
+import { auth } from "@/src/auth";
+
+export async function createSubjectNoteAction(data: {
+  subjectId: string;
+  title: string;
+  content: string;
+}) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    const note = await prisma.subjectNote.create({
+      data: {
+        title: data.title,
+        content: data.content,
+        subjectId: data.subjectId,
+      },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/semester");
+    return { success: true, note };
+  } catch (error) {
+    console.error("Erro ao criar anotação:", error);
+    return { error: "Falha ao salvar a anotação." };
+  }
+}
+
+export async function createExamAction(data: {
+  subjectId: string;
+  title: string;
+  examDate: Date;
+  description?: string;
+  color?: string;
+}) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    const subject = await prisma.subject.findUnique({
+      where: { id: data.subjectId },
+      select: { name: true },
+    });
+
+    if (!subject) return { error: "Disciplina não encontrada." };
+
+    const eventDescription = `Evento criado em ${new Date().toLocaleDateString()} para a disciplina de ${subject.name}`;
+    const endDate = new Date(data.examDate);
+    endDate.setHours(endDate.getHours() + 2);
+
+    const calendarResult = await createFullCalendarEventAction({
+      title: data.title,
+      description: eventDescription,
+      date: data.examDate.toISOString(),
+      color: data.color || "11",
+    });
+
+    const internalEventId = calendarResult.internalId || null;
+    const googleEventId = calendarResult.googleId || null;
+
+    const newExam = await prisma.exam.create({
+      data: {
+        title: data.title,
+        examDate: data.examDate,
+        subjectId: data.subjectId,
+        eventId: internalEventId,
+        googleEventId: googleEventId,
+      },
+    });
+
+    revalidatePath("/semester");
+    revalidatePath("/dashboard");
+    revalidatePath("/calendar");
+
+    return { success: true, exam: newExam };
+  } catch (error) {
+    console.error("Erro ao agendar prova:", error);
+    return { error: "Falha ao agendar a prova." };
+  }
+}
+
+//todo: lembrar de adicionar filtros, ou até paginação...
+export async function getSubjectDetailsAction(subjectId: string) {
+  try {
+    const notes = await prisma.subjectNote.findMany({
+      where: { subjectId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const exams = await prisma.exam.findMany({
+      where: { subjectId },
+      orderBy: { examDate: "asc" },
+    });
+
+    const materials = await prisma.subjectMaterial.findMany({
+      where: { subjectId },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return { success: true, notes, exams, materials };
+  } catch (error) {
+    console.error("Erro ao buscar detalhes da disciplina:", error);
+    return { error: "Falha ao carregar os dados." };
+  }
+}
+
+export async function updateSubjectNoteAction(data: {
+  id: string;
+  title: string;
+  content: string;
+}) {
+  try {
+    const updatedNote = await prisma.subjectNote.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+        content: data.content,
+      },
+    });
+
+    return { success: true, note: updatedNote };
+  } catch (error) {
+    console.error("Erro ao atualizar anotação:", error);
+    return { error: "Falha ao atualizar a anotação." };
+  }
+}
+
+export async function updateExamAction(data: {
+  id: string;
+  title: string;
+  examDate: Date;
+  color: string;
+}) {
+  try {
+    const existingExam = await prisma.exam.findUnique({
+      where: { id: data.id },
+      select: { googleEventId: true },
+    });
+
+    const updatedExam = await prisma.exam.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+        examDate: data.examDate,
+      },
+    });
+
+    // TODO: google.
+    if (existingExam?.googleEventId) {
+    }
+
+    return { success: true, exam: updatedExam };
+  } catch (error) {
+    console.error("Erro ao atualizar prova:", error);
+    return { error: "Falha ao atualizar a prova." };
+  }
+}

@@ -17,7 +17,36 @@ export async function getDashboardDataAction(
     const controller = new GetDashboardDataController();
     const data = await controller.get(filters);
 
-    return { success: true, data };
+    const normalizedData = {
+      ...data,
+      semestersTable: data.semestersTable.map((semester, semesterIndex) => {
+        const semesterWithOptionalId = semester as typeof semester & {
+          id?: string;
+        };
+
+        return {
+          ...semester,
+          id:
+            semesterWithOptionalId.id ??
+            `${semester.semester}-${semesterIndex}`,
+          data: semester.data.map((subject, subjectIndex) => {
+            const subjectWithOptionalId = subject as typeof subject & {
+              id?: string;
+            };
+
+            return {
+              ...subject,
+              id:
+                subjectWithOptionalId.id ??
+                `${semester.semester}-${semesterIndex}-${subjectIndex}`,
+              status: String(subject.status),
+            };
+          }),
+        };
+      }),
+    };
+
+    return { success: true, data: normalizedData };
   } catch (error) {
     return {
       success: false,

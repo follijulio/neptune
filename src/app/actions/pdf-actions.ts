@@ -11,7 +11,6 @@ const groq = new Groq({
 });
 
 export interface ParsedSubject {
-  code?: string;
   name: string;
   grade?: string;
   status: string;
@@ -48,7 +47,6 @@ export async function parseAcademicHistoryAction(formData: FormData) {
       Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
       Analise o texto abaixo, que foi extraído de um PDF de histórico escolar, e encontre as disciplinas cursadas.
       Retorne ESTRITAMENTE um array JSON contendo objetos com as seguintes chaves:
-      - "code": código da disciplina (se houver, ex: MAT001). Se não houver, deixe como null.
       - "name": nome da disciplina (ex: Matemática, Português, Cálculo 1).
       - "grade": a nota final em formato de string (ex: "8.5", "10", "A"). Se não houver, deixe como null.
       - "status": a situação (ex: APROVADO, REPROVADO, CURSANDO, TRANSFERIDO).

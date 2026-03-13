@@ -12,11 +12,12 @@ export interface DashboardDataResponse {
     currentYieldCoefficient: number;
     previousYieldCoefficient: number;
     semestersTable: Array<{
+      id: string;
       semester: string;
       status: string;
       data: Array<{
+        id: string;
         subject_name: string;
-        code: string;
         status: string;
         partial_grade: number | null;
       }>;
@@ -38,7 +39,6 @@ export interface DashboardDataResponse {
       id: string;
       subjectId: string;
       subject_name: string;
-      code: string;
       status: string;
       absences: number | null;
       maxAbsences: number | null;

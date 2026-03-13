@@ -76,3 +76,33 @@ export async function reorderNotesAction(orderedIds: string[]) {
     return { error: "Erro ao tentar salvar nova ordem" };
   }
 }
+
+export async function updateNoteAction(data: {
+  id: string;
+  title: string;
+  content: string;
+  color?: string;
+}) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado" };
+
+  try {
+    const updatedNote = await prisma.note.update({
+      where: {
+        id: data.id,
+        userId: session.user.id,
+      },
+      data: {
+        title: data.title,
+        content: data.content,
+        color: data.color,
+      },
+    });
+
+    revalidatePath("/mural");
+    return { success: true, note: updatedNote };
+  } catch (error) {
+    console.error("Erro ao atualizar nota do mural:", error);
+    return { error: "Falha ao atualizar a nota." };
+  }
+}

@@ -6,12 +6,19 @@ import LinksClient from "@/src/components/ui/clients/link-client";
 
 export default async function Page() {
   const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
 
   const links = await prisma.link.findMany({
     where: { userId: session.user.id },
     orderBy: { createdAt: "asc" },
   });
 
-  return <LinksClient initialLinks={links} />;
+  return (
+    <div className="mx-auto w-full px-0 sm:px-4">
+      <LinksClient initialLinks={links} />
+    </div>
+  );
 }
