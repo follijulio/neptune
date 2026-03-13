@@ -176,8 +176,12 @@ export async function registerAction(formData: FormData) {
     return { error: "Nome inválido." };
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   try {
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
     if (existingUser) {
       return { error: "Este e-mail já está em uso." };
     }
@@ -185,7 +189,6 @@ export async function registerAction(formData: FormData) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     await prisma.$transaction(async (tx) => {
-      const normalizedEmail = email.toLowerCase();
       const username = await generateUniqueUsername(tx, normalizedEmail);
 
       const user = await tx.user.create({
@@ -210,7 +213,7 @@ export async function registerAction(formData: FormData) {
 
   try {
     await signIn("credentials", {
-      email,
+      email: normalizedEmail,
       password,
       redirectTo: "/dashboard",
     });
