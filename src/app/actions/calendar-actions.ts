@@ -207,6 +207,8 @@ export async function updateFullCalendarEventAction(data: {
   }
 
   try {
+    let googleSyncWarning: string | undefined;
+
     const existingEvent = await prisma.calendarEvent.findFirst({
       where: { id: id, userId: session.user.id },
     });
@@ -244,7 +246,7 @@ export async function updateFullCalendarEventAction(data: {
         colorId: eventColor,
       };
 
-      await fetch(
+      const googleResponse = await fetch(
         `https://www.googleapis.com/calendar/v3/calendars/primary/events/${existingEvent.googleEventId}`,
         {
           method: "PUT",
@@ -255,10 +257,22 @@ export async function updateFullCalendarEventAction(data: {
           body: JSON.stringify(googleEvent),
         },
       );
+
+      if (!googleResponse.ok) {
+        googleSyncWarning =
+          "Evento atualizado localmente, mas houve uma falha ao sincronizar com o Google Calendar.";
+      }
     }
 
     revalidatePath("/dashboard");
     revalidatePath("/calendar");
+
+    if (googleSyncWarning) {
+      return {
+        success: "Evento atualizado com sucesso!",
+        warning: googleSyncWarning,
+      };
+    }
 
     return { success: "Evento atualizado com sucesso!" };
   } catch {
