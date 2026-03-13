@@ -14,8 +14,24 @@ export async function getDashboardDataAction(
   filters: DashboardFiltersDto,
 ): Promise<DashboardDataResponse> {
   try {
+    const session = await auth();
+
+    if (!session?.user?.id) {
+      return { success: false, error: "Não autorizado." };
+    }
+
+    const safeFilters: DashboardFiltersDto = {
+      userId: session.user.id,
+      semester:
+        typeof filters?.semester === "string" ? filters.semester : undefined,
+      filterCurriculum:
+        typeof filters?.filterCurriculum === "string"
+          ? filters.filterCurriculum
+          : undefined,
+    };
+
     const controller = new GetDashboardDataController();
-    const data = await controller.get(filters);
+    const data = await controller.get(safeFilters);
 
     const normalizedData = {
       ...data,
@@ -47,10 +63,10 @@ export async function getDashboardDataAction(
     };
 
     return { success: true, data: normalizedData };
-  } catch (error) {
+  } catch {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
+      error: "Não foi possível carregar os dados do painel.",
     };
   }
 }
@@ -59,7 +75,16 @@ export async function skipOnboardingAction(totalHours: number) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return { error: "Não autenticado" };
+    return { error: "Não autorizado." };
+  }
+
+  if (
+    typeof totalHours !== "number" ||
+    isNaN(totalHours) ||
+    totalHours <= 0 ||
+    totalHours > 50000
+  ) {
+    return { error: "Carga horária inválida." };
   }
 
   try {
@@ -72,13 +97,13 @@ export async function skipOnboardingAction(totalHours: number) {
         data: {
           userId: session.user.id,
           category: "Obrigatórias",
-          totalHours: totalHours,
+          totalHours: Math.floor(totalHours),
           completedHours: 0,
         },
       });
     }
-  } catch (error) {
-    console.error("Erro ao pular onboarding:", error);
+  } catch {
+    return { error: "Erro ao processar a configuração inicial." };
   }
 
   redirect("/dashboard");
