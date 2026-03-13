@@ -14,12 +14,55 @@ const DUMMY_HASH =
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
+    error?: string;
   }
 }
 
 declare module "@auth/core/jwt" {
   interface JWT {
     accessToken?: string;
+    refreshToken?: string;
+    expiresAt?: number;
+    error?: string;
+  }
+}
+
+async function refreshAccessToken(token: any) {
+  try {
+    const url =
+      "https://oauth2.googleapis.com/token?" +
+      new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID!,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      });
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+    });
+
+    const refreshedTokens = await response.json();
+
+    if (!response.ok) {
+      throw refreshedTokens;
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      expiresAt: Math.floor(Date.now() / 1000 + refreshedTokens.expires_in),
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+    };
+  } catch (error) {
+    console.error("Error refreshing access token", error);
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
   }
 }
 
@@ -31,7 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true,
+      allowDangerousEmailAccountLinking: false,
       authorization: {
         params: {
           prompt: "consent",
@@ -93,12 +136,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
     async jwt({ token, user, account }) {
-      if (user) {
+      if (account && user) {
         token.id = user.id;
+
+        if (account.provider === "google") {
+          token.accessToken = account.access_token as string;
+          token.refreshToken = account.refresh_token as string;
+          token.expiresAt = account.expires_at as number;
+        }
+        return token;
       }
-      if (account?.provider === "google") {
-        token.accessToken = account.access_token as string;
+
+      if (token.expiresAt && Date.now() < token.expiresAt * 1000) {
+        return token;
       }
+
+      if (token.refreshToken) {
+        return await refreshAccessToken(token);
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -107,6 +163,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       if (token.accessToken) {
         session.accessToken = token.accessToken as string;
+      }
+      if (token.error) {
+        session.error = token.error as string;
       }
       return session;
     },
