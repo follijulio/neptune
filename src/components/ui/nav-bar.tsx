@@ -175,9 +175,9 @@ const MobileNav = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="text-white hover:bg-zinc-800 focus-visible:ring-0"
+            className="text-white hover:bg-white focus-visible:ring-0 text-2xl transition-colors duration-300"
           >
-            <LuMenu className="h-6 w-6" />
+            <LuMenu  className="h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
