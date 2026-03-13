@@ -31,7 +31,7 @@ export async function createFullCalendarEventAction(data: {
   }
 
   const title = typeof data.title === "string" ? data.title.trim() : "";
-  const description =
+  let description =
     typeof data.description === "string" ? data.description.trim() : "";
   const dateStr = typeof data.date === "string" ? data.date : "";
   const color = typeof data.color === "string" ? data.color.trim() : undefined;
@@ -41,7 +41,7 @@ export async function createFullCalendarEventAction(data: {
   }
 
   if (description.length > 100) {
-    return { error: "Descrição excede o limite de 100 caracteres." };
+    description = description.slice(0, 100);
   }
 
   const parsedDate = new Date(dateStr);
