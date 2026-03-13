@@ -81,7 +81,8 @@ export async function deleteEnrollmentAction(
     }
 
     const controller = new DeleteEnrollmentController();
-    await controller.delete(formData);
+    const deletePayload = { ...formData, userId: session.user.id };
+    await controller.delete(deletePayload);
 
     return { success: true };
   } catch {
