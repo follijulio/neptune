@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { LuHexagon, LuLogOut, LuMenu, LuSettings } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -269,22 +269,35 @@ const SettingsMenuGroup = () => (
   </DropdownMenuGroup>
 );
 
-const LogoutMenuGroup = () => (
-  <DropdownMenuGroup>
-    <form
-      action={async (_formData: FormData) => {
-        await logoutAction();
-      }}
-    >
+const LogoutMenuGroup = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleLogout = async (e: Event) => {
+    e.preventDefault(); 
+    
+    setLoading(true);
+    await logoutAction();
+  };
+
+  return (
+    <DropdownMenuGroup>
       <DropdownMenuItem
-        asChild
+        onSelect={handleLogout}
+        disabled={loading}
         className="cursor-pointer text-[#FF3B30] hover:bg-[#FF3B30]/10 focus:bg-[#FF3B30]/10 focus:text-[#FF3B30]"
       >
-        <button type="submit" className="flex w-full items-center gap-2">
-          <LuLogOut className="text-lg" />
-          <span>Sair da conta</span>
-        </button>
+        {loading ? (
+          <span className="flex w-full animate-pulse items-center gap-2 text-[#FF3B30]">
+            <LuLogOut className="text-lg" />
+            <span>Saindo...</span>
+          </span>
+        ) : (
+          <span className="flex w-full items-center gap-2">
+            <LuLogOut className="text-lg" />
+            <span>Sair da conta</span>
+          </span>
+        )}
       </DropdownMenuItem>
-    </form>
-  </DropdownMenuGroup>
-);
+    </DropdownMenuGroup>
+  );
+};
