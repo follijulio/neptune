@@ -1,8 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "driver.js/dist/driver.css";
-/* @import "@uploadthing/react/styles.css"; */
 
 @plugin "@tailwindcss/typography";
 
