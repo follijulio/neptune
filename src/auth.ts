@@ -9,7 +9,7 @@ import { authConfig } from "./auth.config";
 import { prisma } from "@/prisma/lib/prisma";
 
 const DUMMY_HASH =
-  "$2a$12$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+  "$2a$12$C6UzMDM.H6dfI/f/IKcEeO7rQx6w6Ow5uCq1KqzZM.kI7cVw9u4W2";
 
 declare module "next-auth" {
   interface Session {
