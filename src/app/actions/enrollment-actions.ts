@@ -13,6 +13,9 @@ import {
   DeleteEnrollmentDto,
   DeleteEnrollmentResponse,
 } from "@/src/domain/enrollment.dto";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export async function createEnrollmentAction(
   formData: CreateEnrollmentDto,
@@ -26,6 +29,51 @@ export async function createEnrollmentAction(
 
     if (!formData || typeof formData !== "object") {
       return { success: false, error: "Dados inválidos." };
+    }
+
+    const { subjectId, semesterId } = formData as unknown as {
+      subjectId?: string;
+      semesterId?: string;
+    };
+
+    // Validação de pertencimento: subjectId/semesterId devem estar associados ao usuário autenticado.
+    if (subjectId) {
+      const subject = await prisma.subject.findFirst({
+        where: {
+          id: subjectId,
+          semester: {
+            userId: session.user.id,
+          },
+        },
+      });
+
+      if (!subject) {
+        return {
+          success: false,
+          error: "Disciplina inválida ou não autorizada.",
+        };
+      }
+
+      if (semesterId && subject.semesterId !== semesterId) {
+        return {
+          success: false,
+          error: "Semestre inválido para a disciplina selecionada.",
+        };
+      }
+    } else if (semesterId) {
+      const semester = await prisma.semester.findFirst({
+        where: {
+          id: semesterId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!semester) {
+        return {
+          success: false,
+          error: "Semestre inválido ou não autorizado.",
+        };
+      }
     }
 
     const controller = new CreateEnrollmentController();
