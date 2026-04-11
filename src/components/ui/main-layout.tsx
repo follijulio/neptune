@@ -1,29 +1,12 @@
 import { ReactNode } from "react";
 
-import { NavBar } from "./nav-bar";
-
+import { Navigation } from "./navigation";  
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
-
-const MainLayoutContent = ({ children }: MainLayoutProps) => {
-  return (
-    <main className="h-full w-full flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 md:p-8">
-      {children}
-    </main>
-  );
-};
-
-const MainLayoutContainer = ({ children }: MainLayoutProps) => {
-  return (
-    <div className="flex h-dvh w-full flex-col bg-black text-white">
-      {children}
-    </div>
-  );
-};
 
 export default async function MainLayout({ children }: MainLayoutProps) {
   const session = await auth();
@@ -40,9 +23,8 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     : undefined;
 
   return (
-    <MainLayoutContainer>
-      <NavBar firstLetter={firstLetter} profileImageUrl={dbImageUrl} />
-      <MainLayoutContent>{children}</MainLayoutContent>
-    </MainLayoutContainer>
+    <Navigation firstLetter={firstLetter} profileImageUrl={dbImageUrl}>
+      {children}
+    </Navigation>
   );
 }

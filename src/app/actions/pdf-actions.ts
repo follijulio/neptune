@@ -1,14 +1,12 @@
 "use server";
 
-import Groq from "groq-sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import PDFParser from "pdf2json";
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 export interface ParsedSubject {
   name: string;
@@ -68,35 +66,32 @@ export async function parseAcademicHistoryAction(formData: FormData) {
     const prompt = `
       Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
       Analise o texto abaixo, que foi extraído de um PDF de histórico escolar, e encontre as disciplinas cursadas.
-      Retorne ESTRITAMENTE um array JSON contendo objetos com as seguintes chaves:
-      - "name": nome da disciplina (ex: Matemática, Português, Cálculo 1).
-      - "grade": a nota final em formato de string (ex: "8.5", "10", "A"). Se não houver, deixe como null.
-      - "status": a situação (ex: APROVADO, REPROVADO, CURSANDO, TRANSFERIDO).
-      - "semester": o semestre ou período letivo (ex: "2023.1", "2024.2", "1º Ano"). Se não houver, deixe como null.
-      - "hours": a carga horária da disciplina. Apenas o número inteiro (ex: 60, 90). Se não houver, deixe como null.
-
-      Regra de ouro: Retorne APENAS o JSON válido. Nenhuma palavra antes, nenhuma palavra depois. Sem formatação markdown.
+      
+      Retorne um array contendo objetos com as seguintes chaves (use os tipos corretos):
+      - "name" (string): nome da disciplina (ex: Matemática, Português, Cálculo 1).
+      - "grade" (string ou null): a nota final (ex: "8.5", "10", "A").
+      - "status" (string): a situação (ex: APROVADO, REPROVADO, CURSANDO, TRANSFERIDO).
+      - "semester" (string ou null): o semestre ou período letivo (ex: "2023.1", "2024.2", "1º Ano").
+      - "hours" (number ou null): a carga horária da disciplina. Apenas o número inteiro (ex: 60, 90).
 
       Texto do histórico:
       ${rawText.substring(0, 25000)}
     `;
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0,
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      generationConfig: {
+        temperature: 0,
+        responseMimeType: "application/json",
+      },
     });
 
-    const responseText = chatCompletion.choices[0]?.message?.content || "[]";
-
-    const cleanJson = responseText
-      .replace(/```json\n?/g, "")
-      .replace(/```/g, "")
-      .trim();
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
 
     let subjects: ParsedSubject[];
     try {
-      subjects = JSON.parse(cleanJson);
+      subjects = JSON.parse(responseText || "[]");
       if (!Array.isArray(subjects)) throw new Error();
     } catch {
       return {
@@ -106,7 +101,8 @@ export async function parseAcademicHistoryAction(formData: FormData) {
     }
 
     return { success: true, subjects };
-  } catch {
+  } catch (error) {
+    console.error("Erro no processamento do PDF:", error);
     return { error: "Falha ao processar o documento. Tente novamente." };
   }
 }
