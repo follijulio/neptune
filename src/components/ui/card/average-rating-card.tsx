@@ -1,10 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
 import { IoMdTrendingUp } from "react-icons/io";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { AxisDomain } from "recharts/types/util/types";
-
 import { Card, CardContent } from "../../shadcn-ui/card";
 import {
   type ChartConfig,
@@ -12,39 +10,14 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../../shadcn-ui/chart";
+import { useMemo } from "react";
 
 interface ChartLineLabelProps {
-  semesters_data: SemesterDataProps[];
+  semesters_data: { semester: string; yield_coefficient: number | null }[];
 }
 
-interface SemesterDataProps {
-  semester: string;
-  yield_coefficient: number | null;
-}
-
-export const AverageRatingCard: React.FC<ChartLineLabelProps> = ({
-  semesters_data,
-}) => {
-  return (
-    <Card className="flex h-72 w-full flex-col rounded-2xl border border-white/50 bg-transparent p-3 text-white sm:h-96 sm:rounded-3xl sm:p-4">
-      <h1 className="mb-2 flex items-center gap-1.5 text-xs font-semibold tracking-wider text-[#888888] uppercase sm:mb-4 sm:gap-2 sm:text-sm">
-        <IoMdTrendingUp className="inline shrink-0 text-sm sm:text-base" />
-        <span className="truncate">Evolução do Rendimento</span>
-      </h1>
-      <section className="min-h-0 w-full flex-1">
-        <ChartLineLabel semesters_data={semesters_data} />
-      </section>
-    </Card>
-  );
-};
-
-export const description = "A line chart with a label";
-
-const chartConfig = {
-  yield_coefficient: {
-    label: "CR",
-    color: "#007AFF",
-  },
+const averageRatingChartConfig = {
+  yield_coefficient: { label: "CR", color: "#007AFF" },
 } satisfies ChartConfig;
 
 export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
@@ -67,7 +40,10 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
 
   return (
     <CardContent className="h-full w-full p-0">
-      <ChartContainer config={chartConfig} className="h-full w-full">
+      <ChartContainer
+        config={averageRatingChartConfig}
+        className="h-full w-full"
+      >
         <AreaChart
           className="h-full"
           data={semesters_data}
@@ -84,12 +60,12 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
               <stop
                 offset="5%"
                 stopColor="var(--color-yield_coefficient)"
-                stopOpacity={0.4}
+                stopOpacity={0.35}
               />
               <stop
                 offset="95%"
                 stopColor="var(--color-yield_coefficient)"
-                stopOpacity={0.1}
+                stopOpacity={0.05}
               />
             </linearGradient>
           </defs>
@@ -98,7 +74,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             vertical
             strokeDasharray="4 4"
             strokeLinecap="round"
-            opacity={0.2}
+            opacity={0.15}
             className="text-white"
           />
 
@@ -106,7 +82,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             dataKey="semester"
             tickLine={false}
             axisLine={false}
-            tick={{ fontSize: 10, fill: "#888888" }}
+            tick={{ fontSize: 10, fill: "#555555" }}
             tickMargin={8}
             minTickGap={15}
           />
@@ -118,7 +94,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             tickFormatter={yAxisFormatter}
             tickLine={false}
             axisLine={false}
-            tick={{ fontSize: 10, fill: "#888888" }}
+            tick={{ fontSize: 10, fill: "#555555" }}
             width={40}
           />
 
@@ -127,7 +103,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             content={
               <ChartTooltipContent
                 indicator="line"
-                className="bg-black p-2 text-xs text-white sm:text-sm"
+                className="border-[#1A1A1A] bg-[#0A0A0A] p-2 text-xs text-white"
               />
             }
           />
@@ -139,7 +115,7 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
             strokeWidth={2}
             type="monotone"
             dot={{
-              fill: "black",
+              fill: "#0A0A0A",
               stroke: "var(--color-yield_coefficient)",
               strokeWidth: 2,
               r: 3,
@@ -149,5 +125,21 @@ export const ChartLineLabel: React.FC<ChartLineLabelProps> = ({
         </AreaChart>
       </ChartContainer>
     </CardContent>
+  );
+};
+
+export const AverageRatingCard: React.FC<ChartLineLabelProps> = ({
+  semesters_data,
+}) => {
+  return (
+    <Card className="flex h-full w-full flex-col rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
+      <h1 className="mb-3 flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-zinc-400 uppercase sm:gap-2">
+        <IoMdTrendingUp className="shrink-0 text-sm" />
+        <span className="truncate">Evolução do Rendimento</span>
+      </h1>
+      <section className="min-h-0 w-full flex-1">
+        <ChartLineLabel semesters_data={semesters_data} />
+      </section>
+    </Card>
   );
 };

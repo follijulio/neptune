@@ -1,9 +1,6 @@
-"use client";
-
 import { useMemo } from "react";
 import { FaRegClock } from "react-icons/fa";
 import { Pie, PieChart } from "recharts";
-
 import { Card, CardContent } from "../../shadcn-ui/card";
 import {
   ChartConfig,
@@ -23,15 +20,12 @@ interface ChartPieDonutProps {
   ChartData: ChartDataEntry[];
 }
 
-export const description = "A donut chart";
-
 function getColor(hours_name: string): string {
   const normalized = hours_name
     .toLowerCase()
     .trim()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
-
   switch (normalized) {
     case "obrigatorias":
       return "#2D5BFF";
@@ -49,11 +43,7 @@ function getColor(hours_name: string): string {
   }
 }
 
-const chartConfigBase = {
-  hours: {
-    label: "Horas",
-  },
-} satisfies ChartConfig;
+const chartConfigBase = { hours: { label: "Horas" } } satisfies ChartConfig;
 
 export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
   const chartDataWithColors = useMemo(
@@ -80,11 +70,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
   );
 
   const finalChartConfig = useMemo(
-    () =>
-      ({
-        ...chartConfigBase,
-        ...dynamicConfig,
-      }) satisfies ChartConfig,
+    () => ({ ...chartConfigBase, ...dynamicConfig }) satisfies ChartConfig,
     [dynamicConfig],
   );
 
@@ -92,7 +78,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
     <CardContent className="flex-1 p-0 pb-0 text-white">
       <ChartContainer
         config={finalChartConfig}
-        className="mx-auto aspect-square max-h-50 w-full pb-0 sm:max-h-62.5"
+        className="mx-auto aspect-square max-h-48 w-full pb-0 sm:max-h-56"
       >
         <PieChart>
           <ChartTooltip
@@ -100,7 +86,7 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
             content={
               <ChartTooltipContent
                 hideLabel
-                className="flex flex-row gap-1 border-white/20 bg-black p-2 text-xs text-white sm:gap-2 sm:text-sm"
+                className="flex flex-row gap-1 border-[#1A1A1A] bg-[#0A0A0A] p-2 text-xs text-white sm:gap-2 sm:text-sm"
               />
             }
           />
@@ -109,13 +95,13 @@ export const ChartPieDonut: React.FC<ChartPieDonutProps> = ({ ChartData }) => {
             dataKey="hours"
             nameKey="hours_name"
             innerRadius={45}
-            outerRadius={80}
+            outerRadius={75}
             stroke="none"
           />
           <ChartLegend
-            className="pt-2 text-[10px] text-white sm:pt-4 sm:text-sm"
+            className="pt-2 text-[10px] text-zinc-400 sm:pt-3 sm:text-xs"
             content={
-              <ChartLegendContent className="flex-wrap justify-center gap-2 text-white sm:gap-4" />
+              <ChartLegendContent className="flex-wrap justify-center gap-2 text-zinc-400 sm:gap-3" />
             }
           />
         </PieChart>
@@ -128,12 +114,12 @@ export const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({
   ChartData,
 }) => {
   return (
-    <Card className="flex h-72 min-h-75 w-full flex-col rounded-2xl border border-white/50 bg-transparent p-4 text-white sm:h-auto sm:min-h-0 sm:rounded-3xl sm:p-5">
-      <h1 className="mb-2 flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-[#888888] uppercase sm:mb-4 sm:gap-2 sm:text-sm">
-        <FaRegClock className="inline shrink-0 text-sm sm:text-base" />
+    <Card className="flex h-full w-full flex-col rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
+      <h1 className="mb-2 flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-zinc-400 uppercase sm:mb-3 sm:gap-2">
+        <FaRegClock className="shrink-0" />
         <span className="truncate">Distribuição de Carga Horária</span>
       </h1>
-      <section className="flex min-h-0 w-full flex-1 items-center justify-center pt-2 sm:pt-0">
+      <section className="flex min-h-0 w-full flex-1 items-center justify-center">
         <ChartPieDonut ChartData={ChartData} />
       </section>
     </Card>
