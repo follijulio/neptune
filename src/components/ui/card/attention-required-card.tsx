@@ -1,5 +1,6 @@
-import { RiErrorWarningLine } from "react-icons/ri";
+"use client";
 
+import { RiErrorWarningLine } from "react-icons/ri";
 import { cn } from "@/src/lib/utils";
 
 interface Subject {
@@ -42,10 +43,8 @@ const countCriticalSubjects = (subjects: Subject[]): number =>
 
 const getSeverityColor = (subjects: Subject[]): string => {
   if (subjects.length === 0) return SEVERITY_COLORS.SAFE;
-
   const criticalCount = countCriticalSubjects(subjects);
   const criticalRatio = (criticalCount / subjects.length) * 100;
-
   if (criticalRatio <= 25) return SEVERITY_COLORS.SAFE;
   if (criticalRatio <= 50) return SEVERITY_COLORS.WARNING;
   if (criticalRatio <= 75) return SEVERITY_COLORS.DANGER;
@@ -62,17 +61,19 @@ export const AttentionRequiredCard: React.FC<AttentionRequiredCardProps> = ({
   const severityColor = getSeverityColor(subjects);
 
   return (
-    <div className="flex h-72 w-full flex-col gap-8 rounded-3xl border border-white/50 bg-transparent p-4 text-white">
-      <header className="flex items-center gap-2 font-semibold text-[#888888]">
-        <RiErrorWarningLine className="inline" />
+    <div className="flex h-full w-full flex-col gap-6 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
+      <header className="flex items-center gap-2 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+        <RiErrorWarningLine className="shrink-0" />
         Atenção Requerida
       </header>
 
-      <div className={cn("text-6xl font-light", severityColor)}>
+      <div
+        className={cn("flex-1 text-6xl leading-none font-light", severityColor)}
+      >
         {criticalSubjectsCount}
       </div>
 
-      <footer className="text-[#888888]">
+      <footer className="text-xs text-zinc-500">
         Disciplina{suffix} próxima{suffix} do limite de falta{suffix}.
       </footer>
     </div>

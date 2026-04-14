@@ -43,6 +43,7 @@ function FileInputZone({
   return (
     <div className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#1A1A1A] bg-[#000000]/50 p-6 text-center transition-colors hover:border-[#007AFF] sm:p-8">
       <input
+        placeholder="file"
         type="file"
         accept="application/pdf"
         onChange={onChange}

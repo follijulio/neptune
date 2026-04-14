@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { LuHexagon, LuLogOut, LuMenu, LuSettings } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,6 +23,7 @@ interface NavigationProps {
   children: React.ReactNode;
   profileImageUrl?: string;
   firstLetter: string;
+  userName?: string | null;
 }
 
 interface NavItem {
@@ -37,6 +38,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Links", href: "/links" },
   { label: "Semestre", href: "/semester" },
   { label: "Pomodoro", href: "/pomodoro" },
+  { label: "Treinamento", href: "/quests" },
   { label: "Configurações", href: "/settings" },
 ];
 
@@ -46,6 +48,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   children,
   profileImageUrl,
   firstLetter,
+  userName,
 }) => {
   const pathname = usePathname();
 
@@ -63,7 +66,6 @@ export const Navigation: React.FC<NavigationProps> = ({
     );
   }, [pathname]);
 
-  // Rotas como Login ou Onboarding (Apenas o conteúdo puro)
   if (!pathname || isHiddenRoute) {
     return (
       <main className="flex h-dvh w-full flex-1 flex-col overflow-x-hidden overflow-y-auto bg-black text-white">
@@ -72,7 +74,6 @@ export const Navigation: React.FC<NavigationProps> = ({
     );
   }
 
-  // Rota Pública (Landing Page mantendo Navbar superior)
   if (pathname === "/") {
     return (
       <div className="flex h-dvh w-full flex-col bg-black text-white">
@@ -84,22 +85,21 @@ export const Navigation: React.FC<NavigationProps> = ({
     );
   }
 
-  // Rotas Privadas (App com Sidebar no Desktop e Navbar no Mobile)
   if (isPrivateRoute) {
     return (
-      <div className="flex h-dvh w-full flex-col bg-black text-white lg:flex-row">
+      <div className="flex h-screen w-full flex-col bg-black text-white lg:flex-row">
         <PrivateSidebar
           profileImageUrl={profileImageUrl}
           firstLetter={firstLetter}
+          userName={userName}
         />
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-[#0A0A0A] p-4 sm:p-6 md:p-8 lg:p-10">
-          <div className="mx-auto max-w-6xl">{children}</div>
+        <main className="h-full w-full flex-1 overflow-x-hidden overflow-y-auto bg-[#0A0A0A] p-4 sm:p-6 md:p-8 lg:p-10">
+          <div className="h-full w-full">{children}</div>
         </main>
       </div>
     );
   }
 
-  // Fallback de segurança
   return (
     <main className="flex h-dvh w-full flex-1 flex-col overflow-x-hidden overflow-y-auto bg-black text-white">
       {children}
@@ -107,7 +107,6 @@ export const Navigation: React.FC<NavigationProps> = ({
   );
 };
 
-/* ================= PUBLIC NAVBAR ================= */
 const PublicNavBar = () => (
   <header className="sticky top-0 z-50 w-full shrink-0 border-b border-[#1A1A1A] bg-[#000000]/80 backdrop-blur-md">
     <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6">
@@ -121,6 +120,7 @@ const PublicNavBar = () => (
             Entrar
           </Button>
         </Link>
+        {/* eu não implementei a page de registro de pegar esse slug... */}
         <Link href="/login?tab=register">
           <Button className="h-9 bg-[#E0E0E0] px-3 text-sm font-semibold text-[#000000] hover:bg-[#CCCCCC] sm:h-10 sm:px-4 sm:text-base">
             Começar agora
@@ -131,45 +131,132 @@ const PublicNavBar = () => (
   </header>
 );
 
-/* ================= PRIVATE SIDEBAR / MOBILE NAV ================= */
 const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
   profileImageUrl,
   firstLetter,
+  userName,
 }) => {
   const pathname = usePathname();
 
+  const [sidebarWidth, setSidebarWidth] = useState(260);
+  const [isResizing, setIsResizing] = useState(false);
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+  const [activeBoxStyle, setActiveBoxStyle] = useState({
+    top: 0,
+    height: 0,
+    opacity: 0,
+  });
+
+  const activeIndex = useMemo(() => {
+    return NAV_ITEMS.findIndex(
+      (item) => pathname === item.href || pathname?.startsWith(`${item.href}/`),
+    );
+  }, [pathname]);
+
+  useEffect(() => {
+    const savedWidth = localStorage.getItem("netuno_sidebar_width");
+    if (savedWidth) {
+      setSidebarWidth(Number(savedWidth));
+    }
+  }, []);
+
+  // TODO: precisa-se otimizar isso. pq? (resposta abaixo...)
+  //? Isso aqui eu tenho que ver se tem como otimizar,
+  //? pq, tipo, toda vez que o mouse se move ele atualiza o estado do sidebarWidth,
+  //? e isso faz com que o componente inteiro seja re-renderizado - eu acho... - mesmo as partes que não dependem dessa largura.
+  //? Talvez seja possível usar uma ref para armazenar a largura atual durante o redimensionamento e só atualizar o estado quando o usuário soltar o mouse,
+  //? Pra evitar essa suruba de renderizações sem motivo, tenho q pensar em uma solução um pouco melhor.
+  //? Vou tentar implementar isso depois. Por enquanto, vou deixar assim, essa porra tá funcionando,
+  //? não quero arrumar o que não tá quebrado.
+  //! Se você está lendo isso, você é maluco...
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newWidth = Math.min(Math.max(e.clientX, 200), 480);
+      setSidebarWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      localStorage.setItem("netuno_sidebar_width", sidebarWidth.toString());
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing, sidebarWidth]);
+
+  useEffect(() => {
+    if (activeIndex !== -1 && linkRefs.current[activeIndex]) {
+      const activeElement = linkRefs.current[activeIndex];
+      if (activeElement) {
+        setActiveBoxStyle({
+          top: activeElement.offsetTop,
+          height: activeElement.offsetHeight,
+          opacity: 1,
+        });
+      }
+    } else {
+      setActiveBoxStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  }, [activeIndex, sidebarWidth]);
+
   return (
     <>
-      {/* MOBILE TOP BAR (Apenas em telas menores que lg) */}
       <nav className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b border-[#1A1A1A] bg-[#000000]/80 px-4 backdrop-blur-md lg:hidden">
         <Logo />
         <div className="flex items-center gap-3">
           <MobileUserMenu
             profileImageUrl={profileImageUrl}
             firstLetter={firstLetter}
+            userName={userName}
           />
           <MobileNav />
         </div>
       </nav>
 
-      {/* DESKTOP SIDEBAR (Apenas em telas maiores que lg) */}
-      <aside className="hidden w-[260px] shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] lg:flex">
+      <aside
+        ref={sidebarRef}
+        style={{ width: `${sidebarWidth}px` }}
+        className={`relative hidden shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] lg:flex ${
+          isResizing ? "select-none" : ""
+        }`}
+      >
         <div className="flex h-20 items-center px-6">
           <Logo />
         </div>
 
-        <nav className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 py-6">
-          {NAV_ITEMS.map((item) => {
-            const isActive =
-              pathname === item.href || pathname?.startsWith(`${item.href}/`);
+        <nav className="relative flex flex-1 flex-col gap-2 overflow-y-auto py-6 pr-4">
+          <div
+            className="absolute right-4 left-0 z-0 rounded-r-lg bg-[#1A1A1A] transition-all duration-300 ease-in-out"
+            style={{
+              top: `${activeBoxStyle.top}px`,
+              height: `${activeBoxStyle.height}px`,
+              opacity: activeBoxStyle.opacity,
+            }}
+          />
+
+          {NAV_ITEMS.map((item, index) => {
+            const isActive = index === activeIndex;
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                ref={(el) => {
+                  linkRefs.current[index] = el;
+                }}
+                className={`relative z-10 flex items-center gap-3 rounded-r-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-[#1A1A1A] text-[#007AFF]"
-                    : "text-zinc-400 hover:bg-[#121212] hover:text-white"
+                    ? "text-[#007AFF]"
+                    : "text-zinc-400 hover:bg-[#121212]/80 hover:text-white"
                 }`}
               >
                 {item.label}
@@ -177,13 +264,20 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
             );
           })}
         </nav>
-
         <div className="border-t border-[#1A1A1A] p-4">
           <DesktopUserMenu
             profileImageUrl={profileImageUrl}
             firstLetter={firstLetter}
+            userName={userName}
           />
         </div>
+
+        <div
+          onMouseDown={() => setIsResizing(true)}
+          className={`absolute top-0 right-[-2px] z-50 h-full w-[4px] cursor-col-resize transition-colors duration-200 ${
+            isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
+          }`}
+        />
       </aside>
     </>
   );
@@ -198,7 +292,6 @@ const Logo = () => (
   </Link>
 );
 
-/* ================= MOBILE NAVIGATION ================= */
 const MobileNav = () => {
   const pathname = usePathname();
 
@@ -248,11 +341,10 @@ const MobileNav = () => {
   );
 };
 
-/* ================= MENUS DE USUÁRIO ================= */
-// Menu simplificado para Mobile (Topo)
 const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   profileImageUrl,
   firstLetter,
+  userName,
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]">
@@ -278,10 +370,10 @@ const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   </DropdownMenu>
 );
 
-// Menu em formato de "Card" para o final da Sidebar (Desktop)
 const DesktopUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   profileImageUrl,
   firstLetter,
+  userName,
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors outline-none hover:bg-[#1A1A1A] focus-visible:ring-2 focus-visible:ring-[#007AFF]">
@@ -293,7 +385,7 @@ const DesktopUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
       </Avatar>
       <div className="flex flex-1 flex-col overflow-hidden">
         <span className="truncate text-sm font-medium text-white">
-          Minha Conta
+          {userName ? `Olá, ${userName}!` : "Minha conta"}
         </span>
         <span className="truncate text-xs text-zinc-500">Opções</span>
       </div>
