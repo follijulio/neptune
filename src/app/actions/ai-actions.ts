@@ -13,102 +13,100 @@ export interface GenerateQuestionsResponse {
   questions?: any[];
 }
 
-export async function generateQuestionsAction(
-  documentId: string,
-): Promise<GenerateQuestionsResponse> {
+export async function generateQuestionsAction(documentId: string) {
   const session = await auth();
-
-  if (!session?.user?.id) {
-    return { error: "Não autorizado." };
-  }
+  if (!session?.user?.id) return { error: "Não autorizado." };
 
   try {
-    const studyDocument = await prisma.studyDocument.findUnique({
-      where: { id: documentId, userId: session.user.id },
+    const studyDoc = await prisma.studyDocument.findUnique({
+      where: { id: documentId },
     });
 
-    if (!studyDocument) {
-      return { error: "Documento não encontrado." };
+    if (!studyDoc || !studyDoc.fileUrl) {
+      return { error: "Documento não encontrado ou URL inválida." };
     }
 
-    if (!studyDocument.rawText) {
-      return {
-        error: "O documento não possui texto extraído para ser analisado.",
-      };
+    const response = await fetch(studyDoc.fileUrl);
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar PDF da nuvem: ${response.statusText}`);
     }
 
-    const EXTRACTQUESTIONSPROMPT = `
-      Você é um especialista em educação encarregado de extrair questões de um texto bruto e não estruturado.
-      Abaixo está o conteúdo de um PDF educacional (prova, lista de exercícios ou apostila).
-      Sua tarefa é encontrar todas as perguntas contidas no texto e retorná-las no formato JSON exato especificado.
-
-      Diretrizes Críticas:
-      - Extraia APENAS perguntas genuínas. Ignore títulos gerais de capítulos ou textos introdutórios que não fazem parte do enunciado.
-      - Tente inferir a numeração da questão (ex: "1.", "Questão 2") no campo "referenceIndex".
-      - Em "providedData", extraia dados numéricos importantes ou premissas dadas no enunciado (ex: "G = 10m/s²", "Aceleração = 5", "Massa = 5kg"). Se não houver, retorne um array vazio [].
-      - Em "keyTopics", inferir de 1 a 3 assuntos essenciais para resolver a questão (ex: "Cinemática", "Interpretação de Texto", "Equações de 2º Grau").
-
-      O formato de saída DEVE ser estritamente este JSON (nenhum outro texto):
-      {
-      "questoes": [
-        {
-        "referenceIndex": 1,
-        "fullText": "Texto integral da questão aqui...",
-        "providedData": ["dado 1", "dado 2"],
-        "keyTopics": ["assunto 1", "assunto 2"],
-        "expectedType": "calculo_logico" // ou "texto_dissertativo"
-        }
-      ]
-      }
-
-      Texto do Documento:
-      ---
-      ${studyDocument.rawText.substring(0, 30000)}
-      ---
-    `;
+    const arrayBuffer = await response.arrayBuffer();
+    const pdfBuffer = Buffer.from(arrayBuffer);
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
-      generationConfig: {
-        temperature: 0.1,
-        responseMimeType: "application/json",
-      },
+      generationConfig: { responseMimeType: "application/json" },
     });
 
-    const result = await model.generateContent(EXTRACTQUESTIONSPROMPT);
-    const responseText = result.response.text();
+    const prompt = `
+      Você é um professor extraindo questões de uma prova/lista de exercícios.
+      Analise este documento PDF e extraia TODAS as questões encontradas.
+      
+      REGRA DE OURO PARA MATEMÁTICA E JSON: 
+      Sempre que houver fórmulas, utilize a sintaxe LaTeX.
+      COMO VOCÊ ESTÁ GERANDO UM JSON, AS BARRAS INVERTIDAS DEVEM SER DUPLAMENTE ESCAPADAS.
+      Escreva "\\\\sqrt{4 - x^2}" e NUNCA "\\sqrt{4 - x^2}".
+      Escreva "\\\\frac{1}{2}" e NUNCA "\\frac{1}{2}".
+      Escreva "\\\\begin{cases}" e NUNCA "\\begin{cases}".
+      Use $ para matemática inline e $$ para blocos de equação.
+      
+      Retorne estritamente um JSON no seguinte formato de array:
+      [
+        {
+          "fullText": "O enunciado completo da questão com o LaTeX aplicado...",
+          "providedData": ["Dado 1", "Dado 2"],
+          "keyTopics": ["Assunto 1", "Assunto 2"],
+          "expectedType": "calculo"
+        }
+      ]
+    `;
 
-    const parsedJson = JSON.parse(responseText);
-    const questoes = parsedJson.questoes;
+    const result = await model.generateContent([
+      prompt,
+      {
+        inlineData: {
+          data: pdfBuffer.toString("base64"),
+          mimeType: "application/pdf",
+        },
+      },
+    ]);
 
-    if (!Array.isArray(questoes) || questoes.length === 0) {
-      return { error: "Nenhuma questão foi encontrada no texto analisado." };
+    let responseText = result.response.text();
+    responseText = responseText
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let parsedQuestions;
+    try {
+      parsedQuestions = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error("Formato de resposta inválido da IA.");
     }
 
-    await prisma.$transaction(async (tx) => {
-      for (const q of questoes) {
-        await tx.question.create({
+    const savedQuestions = await Promise.all(
+      parsedQuestions.map((q: any, index: number) =>
+        prisma.question.create({
           data: {
-            referenceIndex: q.referenceIndex || null,
+            referenceIndex: index + 1,
             fullText: q.fullText,
             providedData: q.providedData || [],
             keyTopics: q.keyTopics || [],
-            expectedType: q.expectedType || "texto_dissertativo",
-            documentId: documentId,
+            expectedType: q.expectedType || "texto",
+            documentId: studyDoc.id,
           },
-        });
-      }
-    });
+        }),
+      ),
+    );
 
-    const savedQuestions = await prisma.question.findMany({
-      where: { documentId: documentId },
-      orderBy: { createdAt: "asc" },
-    });
-
-    return { success: true, count: questoes.length, questions: savedQuestions };
+    return { success: true, questions: savedQuestions };
   } catch (error) {
-    console.error("Erro na Server Action generateQuestionsAction:", error);
-    return { error: "Ocorreu um erro ao gerar as questões a partir do texto." };
+    return {
+      error:
+        "Falha ao extrair as questões do documento." +
+        (error instanceof Error ? ` Detalhes: ${error.message}` : { error }),
+    };
   }
 }
 
@@ -162,7 +160,7 @@ export async function evaluateAnswerAction(
       promptContent.push(`Resposta em texto do aluno: "${studentAnswer}"`);
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(promptContent);
     const aiEvaluation = JSON.parse(result.response.text());
 
@@ -273,5 +271,26 @@ export async function generateBossChallengeAction(): Promise<GenerateBossRespons
   } catch (error) {
     console.error("Erro na Action generateBossChallengeAction:", error);
     return { error: "Ocorreu um erro ao invocar o Desafio Netuno." };
+  }
+}
+
+export async function getUserQuestHistoryAction() {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Não autorizado." };
+
+  try {
+    const documents = await prisma.studyDocument.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: {
+        questions: true,
+      },
+    });
+
+    return { success: true, history: documents };
+  } catch (error) {
+    console.error("Erro ao buscar histórico de quests:", error);
+    return { error: "Falha ao carregar seus materiais de treino anteriores." };
   }
 }
