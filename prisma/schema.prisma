@@ -25,6 +25,12 @@ model User {
   calendarEvents        CalendarEvent[]
   links                 Link[]
   subjectMaterials      SubjectMaterial[]
+  studyDocuments        StudyDocument[]
+  attempts              Attempt[]
+  difficultyTags        DifficultyTag[]
+  xp                    Int                    @default(0)
+  level                 Int                    @default(1)
+  studySessions         StudySession[]
 }
 
 model VerificationToken {
@@ -126,6 +132,7 @@ model Subject {
   subjectNotes     SubjectNote[]
   exams            Exam[]
   subjectMaterials SubjectMaterial[]
+  studyDocuments   StudyDocument[]
 }
 
 model Enrollment {
@@ -223,6 +230,85 @@ model SubjectMaterial {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+}
+
+model StudyDocument {
+  id      String  @id @default(uuid())
+  title   String
+  fileUrl String
+  fileKey String
+  rawText String? @db.Text
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+
+  questions Question[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id             String   @id @default(uuid())
+  referenceIndex Int?
+  fullText       String   @db.Text
+  providedData   String[]
+  keyTopics      String[]
+  expectedType   String?
+
+  documentId String?
+  document   StudyDocument? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  attempts Attempt[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attempt {
+  id             String  @id @default(uuid())
+  studentAnswer  String  @db.Text
+  isFullyCorrect Boolean @default(false)
+  logicalScore   Float?
+  aiFeedback     String? @db.Text
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  difficultyTags DifficultyTag[]
+
+  createdAt      DateTime @default(now())
+  answerImageUrl String?
+}
+
+model DifficultyTag {
+  id   String @id @default(uuid())
+  name String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  attempts Attempt[]
+
+  createdAt DateTime @default(now())
+
+  @@unique([name, userId])
+}
+
+model StudySession {
+  id        String   @id @default(uuid())
+  duration  Int // Duração em minutos
+  mode      String // "POMODORO" ou "TIMER"
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum SemesterStatus {

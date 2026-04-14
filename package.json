@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "vai_logo_porra": "next build && next start",
     "format": "prettier --write . && eslint --fix .",
     "check": "tsc --noEmit && eslint .",
     "usage": "knip"
@@ -80,7 +81,8 @@
     "typescript": "^5.9.3"
   },
   "overrides": {
-    "nodemailer": "$nodemailer"
+    "nodemailer": "$nodemailer",
+    "effect": "3.18.4"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
