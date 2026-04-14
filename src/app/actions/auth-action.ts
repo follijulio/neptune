@@ -59,7 +59,6 @@ async function generateUniqueUsername(
     }
   }
 
-  // Fallback to a fully random username if all attempts collide
   return `user${randomSuffix()}`.slice(0, MAX_USERNAME_LENGTH);
 }
 
