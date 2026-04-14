@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { Navigation } from "./navigation";  
+import { Navigation } from "./navigation";
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 
@@ -11,7 +11,11 @@ interface MainLayoutProps {
 export default async function MainLayout({ children }: MainLayoutProps) {
   const session = await auth();
 
-  const firstLetter = session?.user?.name?.charAt(0).toUpperCase() ?? "N";
+  const userName = session?.user?.name?.split(" ")[0] ?? null;
+  const firstLetter =
+    userName !== null && userName !== undefined
+      ? userName.charAt(0).toUpperCase()
+      : "N";
 
   const dbImageUrl = session?.user?.id
     ? ((
@@ -23,7 +27,11 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     : undefined;
 
   return (
-    <Navigation firstLetter={firstLetter} profileImageUrl={dbImageUrl}>
+    <Navigation
+      firstLetter={firstLetter}
+      profileImageUrl={dbImageUrl}
+      userName={userName}
+    >
       {children}
     </Navigation>
   );
