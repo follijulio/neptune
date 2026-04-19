@@ -2,9 +2,7 @@
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+import { generateJsonByTask } from "../../lib/ai-router";
 
 export interface GenerateQuestionsResponse {
   success?: boolean;
@@ -13,7 +11,16 @@ export interface GenerateQuestionsResponse {
   questions?: any[];
 }
 
-export async function generateQuestionsAction(documentId: string) {
+interface ExtractedQuestion {
+  fullText: string;
+  providedData?: string[];
+  keyTopics?: string[];
+  expectedType?: string;
+}
+
+export async function generateQuestionsAction(
+  documentId: string,
+): Promise<GenerateQuestionsResponse> {
   const session = await auth();
   if (!session?.user?.id) return { error: "Não autorizado." };
 
@@ -32,80 +39,77 @@ export async function generateQuestionsAction(documentId: string) {
     }
 
     const arrayBuffer = await response.arrayBuffer();
-    const pdfBuffer = Buffer.from(arrayBuffer);
+    const MAX_QUEST_PDF_SIZE = 8 * 1024 * 1024;
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      generationConfig: { responseMimeType: "application/json" },
-    });
+    if (arrayBuffer.byteLength > MAX_QUEST_PDF_SIZE) {
+      return {
+        error:
+          "PDF muito grande para extração automática. Envie um arquivo de até 8MB.",
+      };
+    }
+
+    const pdfBase64 = Buffer.from(arrayBuffer).toString("base64");
 
     const prompt = `
-      Você é um professor extraindo questões de uma prova/lista de exercícios.
-      Analise este documento PDF e extraia TODAS as questões encontradas.
-      
-      REGRA DE OURO PARA MATEMÁTICA E JSON: 
-      Sempre que houver fórmulas, utilize a sintaxe LaTeX.
-      COMO VOCÊ ESTÁ GERANDO UM JSON, AS BARRAS INVERTIDAS DEVEM SER DUPLAMENTE ESCAPADAS.
-      Escreva "\\\\sqrt{4 - x^2}" e NUNCA "\\sqrt{4 - x^2}".
-      Escreva "\\\\frac{1}{2}" e NUNCA "\\frac{1}{2}".
-      Escreva "\\\\begin{cases}" e NUNCA "\\begin{cases}".
-      Use $ para matemática inline e $$ para blocos de equação.
-      
-      Retorne estritamente um JSON no seguinte formato de array:
-      [
-        {
-          "fullText": "O enunciado completo da questão com o LaTeX aplicado...",
-          "providedData": ["Dado 1", "Dado 2"],
-          "keyTopics": ["Assunto 1", "Assunto 2"],
-          "expectedType": "calculo"
-        }
-      ]
-    `;
+Você é um professor extraindo questões de um PDF.
+Extraia questões matemáticas identificáveis, com limite máximo de 20 questões.
 
-    const result = await model.generateContent([
+Retorne ESTRITAMENTE um ARRAY JSON:
+[
+  {
+    "fullText": "...",
+    "providedData": ["..."],
+    "keyTopics": ["..."],
+    "expectedType": "calculo"
+  }
+]
+
+Regras:
+- Use LaTeX quando necessário com barras duplas escapadas em JSON.
+- Se não houver questão, retorne [].
+`;
+
+    const parsedQuestions = await generateJsonByTask<ExtractedQuestion[]>({
+      task: "pdf_question_extraction",
       prompt,
-      {
-        inlineData: {
-          data: pdfBuffer.toString("base64"),
-          mimeType: "application/pdf",
-        },
-      },
-    ]);
+      pdfBase64,
+    });
 
-    let responseText = result.response.text();
-    responseText = responseText
-      .replace(/```json/gi, "")
-      .replace(/```/g, "")
-      .trim();
-
-    let parsedQuestions;
-    try {
-      parsedQuestions = JSON.parse(responseText);
-    } catch (e) {
-      throw new Error("Formato de resposta inválido da IA.");
+    if (!Array.isArray(parsedQuestions) || parsedQuestions.length === 0) {
+      return { error: "Nenhuma questão válida foi extraída do documento." };
     }
 
     const savedQuestions = await Promise.all(
-      parsedQuestions.map((q: any, index: number) =>
+      parsedQuestions.map((q, index) =>
         prisma.question.create({
           data: {
             referenceIndex: index + 1,
-            fullText: q.fullText,
-            providedData: q.providedData || [],
-            keyTopics: q.keyTopics || [],
-            expectedType: q.expectedType || "texto",
+            fullText:
+              typeof q.fullText === "string" && q.fullText.trim().length > 0
+                ? q.fullText.trim()
+                : `Questão ${index + 1}`,
+            providedData: Array.isArray(q.providedData) ? q.providedData : [],
+            keyTopics: Array.isArray(q.keyTopics) ? q.keyTopics : [],
+            expectedType:
+              typeof q.expectedType === "string" && q.expectedType.trim()
+                ? q.expectedType.trim()
+                : "texto",
             documentId: studyDoc.id,
           },
         }),
       ),
     );
 
-    return { success: true, questions: savedQuestions };
+    return {
+      success: true,
+      count: savedQuestions.length,
+      questions: savedQuestions,
+    };
   } catch (error) {
     return {
       error:
         "Falha ao extrair as questões do documento." +
-        (error instanceof Error ? ` Detalhes: ${error.message}` : { error }),
+        (error instanceof Error ? ` Detalhes: ${error.message}` : ""),
     };
   }
 }
@@ -119,6 +123,13 @@ export interface EvaluateAnswerResponse {
     aiFeedback: string;
     difficultyTags: string[];
   };
+}
+
+interface AIEvaluation {
+  isFullyCorrect: boolean;
+  logicalScore: number;
+  aiFeedback: string;
+  difficultyTags: string[];
 }
 
 export async function evaluateAnswerAction(
@@ -136,57 +147,101 @@ export async function evaluateAnswerAction(
     });
     if (!question) return { error: "Questão não encontrada." };
 
-    let promptContent: any[] = [
-      `Avalie o raciocínio lógico do aluno para esta questão: ${question.fullText}. 
-       Dados fornecidos: ${question.providedData.join(", ")}.
-       
-       Responda estritamente em JSON com: isFullyCorrect (boolean), logicalScore (0-10), 
-       aiFeedback (string incentivadora e técnica) e difficultyTags (array de strings se houver erro).`,
-    ];
+    const prompt = `
+Avalie o raciocínio lógico do aluno para esta questão:
+${question.fullText}
+
+Dados fornecidos: ${question.providedData.join(", ") || "Nenhum"}.
+
+Responda ESTRITAMENTE em JSON com:
+{
+  "isFullyCorrect": boolean,
+  "logicalScore": number (0 a 10),
+  "aiFeedback": string (incentivadora e técnica),
+  "difficultyTags": string[]
+}
+
+${studentAnswer ? `Resposta em texto do aluno: "${studentAnswer}"` : ""}
+${answerImageUrl ? `Há também resposta manuscrita em imagem.` : ""}
+`;
+
+    let aiEvaluation: AIEvaluation;
 
     if (answerImageUrl) {
       const imageResp = await fetch(answerImageUrl);
+      if (!imageResp.ok) {
+        return { error: "Não foi possível carregar a imagem da resposta." };
+      }
+
       const buffer = await imageResp.arrayBuffer();
-      promptContent.push({
-        inlineData: {
-          data: Buffer.from(buffer).toString("base64"),
-          mimeType: "image/jpeg",
-        },
+      const imageBase64 = Buffer.from(buffer).toString("base64");
+
+      aiEvaluation = await generateJsonByTask<AIEvaluation>({
+        task: "answer_evaluation_multimodal",
+        prompt,
+        imageBase64,
+        imageMimeType: "image/jpeg",
       });
-      promptContent.push("Analise os cálculos manuscritos nesta imagem.");
+    } else {
+      aiEvaluation = await generateJsonByTask<AIEvaluation>({
+        task: "answer_evaluation_text",
+        prompt,
+      });
     }
 
-    if (studentAnswer) {
-      promptContent.push(`Resposta em texto do aluno: "${studentAnswer}"`);
-    }
-
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    const result = await model.generateContent(promptContent);
-    const aiEvaluation = JSON.parse(result.response.text());
+    const normalized: AIEvaluation = {
+      isFullyCorrect: Boolean(aiEvaluation?.isFullyCorrect),
+      logicalScore: Math.max(
+        0,
+        Math.min(10, Number(aiEvaluation?.logicalScore ?? 0)),
+      ),
+      aiFeedback:
+        typeof aiEvaluation?.aiFeedback === "string" &&
+        aiEvaluation.aiFeedback.trim()
+          ? aiEvaluation.aiFeedback.trim()
+          : "Boa tentativa! Continue praticando para evoluir seu raciocínio.",
+      difficultyTags: Array.isArray(aiEvaluation?.difficultyTags)
+        ? aiEvaluation.difficultyTags.filter((t) => typeof t === "string")
+        : [],
+    };
 
     await prisma.$transaction(async (tx) => {
       await tx.attempt.create({
         data: {
           studentAnswer: studentAnswer || "Resposta por imagem",
-          answerImageUrl: answerImageUrl,
-          isFullyCorrect: aiEvaluation.isFullyCorrect,
-          logicalScore: aiEvaluation.logicalScore,
-          aiFeedback: aiEvaluation.aiFeedback,
-          userId: userId,
+          answerImageUrl: answerImageUrl || null,
+          isFullyCorrect: normalized.isFullyCorrect,
+          logicalScore: normalized.logicalScore,
+          aiFeedback: normalized.aiFeedback,
+          userId,
           questionId: question.id,
         },
       });
 
-      const xpGanhado = aiEvaluation.isFullyCorrect ? 150 : 50;
+      const xpGanhado = normalized.isFullyCorrect ? 150 : 50;
       await tx.user.update({
         where: { id: userId },
         data: { xp: { increment: xpGanhado } },
       });
+
+      if (!normalized.isFullyCorrect && normalized.difficultyTags.length > 0) {
+        await tx.difficultyTag.createMany({
+          data: normalized.difficultyTags.map((name) => ({
+            userId,
+            name,
+          })),
+          skipDuplicates: true,
+        });
+      }
     });
 
-    return { success: true, evaluation: aiEvaluation };
+    return { success: true, evaluation: normalized };
   } catch (error) {
-    return { error: "Erro na avaliação multimodal." };
+    return {
+      error:
+        "Erro na avaliação da resposta." +
+        (error instanceof Error ? ` Detalhes: ${error.message}` : ""),
+    };
   }
 }
 
@@ -194,6 +249,14 @@ export interface GenerateBossResponse {
   success?: boolean;
   error?: string;
   question?: any;
+}
+
+interface BossQuestionPayload {
+  referenceIndex?: number;
+  fullText: string;
+  providedData?: string[];
+  keyTopics?: string[];
+  expectedType?: string;
 }
 
 export async function generateBossChallengeAction(): Promise<GenerateBossResponse> {
@@ -207,7 +270,7 @@ export async function generateBossChallengeAction(): Promise<GenerateBossRespons
 
   try {
     const recentTags = await prisma.difficultyTag.findMany({
-      where: { userId: userId },
+      where: { userId },
       orderBy: { createdAt: "desc" },
       take: 3,
       select: { name: true },
@@ -222,47 +285,51 @@ export async function generateBossChallengeAction(): Promise<GenerateBossRespons
       };
     }
 
-    const GENERATEBOSSCHALLENGEPROMPT = `
-      Você é 'Netuno', o Mestre de Jogo e professor de uma plataforma gamificada de estudos.
-      Sua tarefa é gerar uma ÚNICA QUESTÃO DE NÍVEL DIFÍCIL (Boss Challenge) para o aluno.
-      
-      Esta questão deve OBRIGATORIAMENTE envolver os seguintes assuntos em que o aluno tem demonstrado dificuldade recentemente:
-      [ ${tagNames.join(" | ")} ]
-      
-      Diretrizes Críticas:
-      - Crie um enunciado criativo, profundo e que exija raciocínio lógico cruzado entre esses assuntos.
-      - Não torne a questão impossível, mas exija que ele demonstre domínio nos pontos onde costumava errar.
-      - Retorne os dados estritamente no formato JSON abaixo.
+    const prompt = `
+Você é "Netuno", um professor especialista em avaliação por competências.
+Gere UMA única questão Boss Challenge avançada e específica.
 
-      O formato de saída DEVE ser estritamente este JSON (nenhum outro texto):
-      {
-      "referenceIndex": 999,
-      "fullText": "O enunciado épico da questão...",
-      "providedData": ["Dado Importante 1", "Dado Importante 2"],
-      "keyTopics": ["${tagNames[0]}", "Desafio Boss"],
-      "expectedType": "calculo_logico"
-      }
-    `;
+Tema obrigatório (dificuldades recentes do aluno):
+[ ${tagNames.join(" | ")} ]
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-pro",
-      generationConfig: {
-        temperature: 0.7,
-        responseMimeType: "application/json",
-      },
+Regras obrigatórias:
+1) A questão deve combinar pelo menos 2 dos temas listados.
+2) O enunciado deve ter contexto real (aplicado), com dados numéricos concretos.
+3) Deve exigir raciocínio em múltiplas etapas (não pode ser resolvida em 1 passo direto).
+4) Inclua 3 a 5 dados em "providedData", úteis para a resolução.
+5) "keyTopics" deve conter exatamente 3 itens: dois temas da lista + "Desafio Boss".
+6) "expectedType" deve ser "calculo_logico".
+7) Proibido enunciado genérico como "resolva", "calcule" sem contexto.
+8) Dificuldade: alta, mas solucionável por aluno universitário.
+
+Retorne ESTRITAMENTE JSON:
+{
+  "referenceIndex": 999,
+  "fullText": "Enunciado completo, específico e contextualizado...",
+  "providedData": ["dado 1", "dado 2", "dado 3"],
+  "keyTopics": ["tema1", "tema2", "Desafio Boss"],
+  "expectedType": "calculo_logico"
+}
+`;
+    const parsedJson = await generateJsonByTask<BossQuestionPayload>({
+      task: "boss_generation",
+      prompt,
     });
 
-    const result = await model.generateContent(GENERATEBOSSCHALLENGEPROMPT);
-    const responseText = result.response.text();
-
-    const parsedJson = JSON.parse(responseText);
+    if (!parsedJson?.fullText || typeof parsedJson.fullText !== "string") {
+      return { error: "A IA não retornou uma questão válida para o Boss." };
+    }
 
     const bossQuestion = await prisma.question.create({
       data: {
         referenceIndex: parsedJson.referenceIndex || 999,
         fullText: parsedJson.fullText,
-        providedData: parsedJson.providedData || [],
-        keyTopics: parsedJson.keyTopics || ["Desafio Final"],
+        providedData: Array.isArray(parsedJson.providedData)
+          ? parsedJson.providedData
+          : [],
+        keyTopics: Array.isArray(parsedJson.keyTopics)
+          ? parsedJson.keyTopics
+          : ["Desafio Final"],
         expectedType: parsedJson.expectedType || "texto_dissertativo",
       },
     });
@@ -270,7 +337,11 @@ export async function generateBossChallengeAction(): Promise<GenerateBossRespons
     return { success: true, question: bossQuestion };
   } catch (error) {
     console.error("Erro na Action generateBossChallengeAction:", error);
-    return { error: "Ocorreu um erro ao invocar o Desafio Netuno." };
+    return {
+      error:
+        "Ocorreu um erro ao invocar o Desafio Netuno." +
+        (error instanceof Error ? ` Detalhes: ${error.message}` : ""),
+    };
   }
 }
 
