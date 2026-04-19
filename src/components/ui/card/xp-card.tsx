@@ -17,7 +17,7 @@ export function XpCard({ xp }: XpCardProps) {
     <div className="flex h-full min-h-[220px] flex-col justify-between rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-lg sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <header className="flex items-center gap-2 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
-          <IoMdPlanet  className="shrink-0" />
+          <IoMdPlanet className="shrink-0" />
           STATUS PLANETÁRIO
         </header>
         <FiHexagon

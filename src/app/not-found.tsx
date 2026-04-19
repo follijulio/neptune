@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 function StarField() {
   return (
     <div
-      className="pointer-events-none absolute inset-0 opacity-60 sm:bg-size-[300px_300px]" 
+      className="pointer-events-none absolute inset-0 opacity-60 sm:bg-size-[300px_300px]"
       style={STAR_BACKGROUND_STYLE}
     />
   );

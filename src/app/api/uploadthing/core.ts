@@ -24,7 +24,6 @@ export const ourFileRouter = {
       }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-
       try {
         const studyDoc = await prisma.studyDocument.create({
           data: {

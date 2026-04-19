@@ -15,11 +15,11 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const MAX_RETRIES = 2;
 const TASK_TIMEOUT_MS: Record<TaskType, number> = {
-  pdf_question_extraction: 60 * 1000,       // 60 seg
-  answer_evaluation_multimodal: 30 * 1000,  // 30 seg
-  answer_evaluation_text: 20 * 1000,        // 20 seg
-  boss_generation: 20 * 1000,               // 20 seg
-  history_structuring: 25 * 1000,           // 25 seg
+  pdf_question_extraction: 60 * 1000, // 60 seg
+  answer_evaluation_multimodal: 30 * 1000, // 30 seg
+  answer_evaluation_text: 20 * 1000, // 20 seg
+  boss_generation: 20 * 1000, // 20 seg
+  history_structuring: 25 * 1000, // 25 seg
 };
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
