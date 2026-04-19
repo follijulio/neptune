@@ -2,6 +2,8 @@
 
 import { getUserPlanet } from "@/src/lib/gamification";
 import { FiHexagon } from "react-icons/fi";
+import { IoMdPlanet } from "react-icons/io";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 interface XpCardProps {
   xp: number;
@@ -14,16 +16,18 @@ export function XpCard({ xp }: XpCardProps) {
   return (
     <div className="flex h-full min-h-[220px] flex-col justify-between rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-lg sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h3 className="text-sm font-bold text-zinc-400">Status Planetário</h3>
+        <header className="flex items-center gap-2 text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+          <IoMdPlanet  className="shrink-0" />
+          STATUS PLANETÁRIO
+        </header>
         <FiHexagon
-
           className={`h-6 w-6 shrink-0 ${current.color} animate-[spin_8s_linear_infinite]`}
         />
       </div>
 
       <div className="mt-6 flex flex-col items-center text-center">
         <span
-          className={`max-w-full text-center text-[clamp(1.125rem,2.6vw,2.25rem)] leading-tight tracking-[0.08em] wrap-break-word whitespace-normal text-white `}
+          className={`max-w-full text-center text-[clamp(1.125rem,2.6vw,2.25rem)] leading-tight tracking-[0.08em] wrap-break-word whitespace-normal text-white`}
         >
           {current.name}
         </span>
