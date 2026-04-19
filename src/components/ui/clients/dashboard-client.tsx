@@ -173,20 +173,18 @@ export default function DashboardClient({
           </Dialog>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
-          <div className="h-48 sm:h-52 md:col-span-2">
+        <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+          <div className="h-60 sm:h-64 md:col-span-2">
             <Cards.YieldCoefficient
               semesters={data.performanceChart}
               currentValue={data.currentYieldCoefficient}
               previousValue={data.previousYieldCoefficient}
             />
           </div>
-
-          <div className="h-48 sm:h-52">
+          <div className="h-60 sm:h-64">
             <Cards.XpProgress xp={initialXp ?? 0} />
           </div>
-
-          <div className="h-48 sm:h-52">
+          <div className="h-60 sm:h-64">
             <Cards.CourseProgress
               hoursCompleted={data.completedHours}
               hoursTotal={data.totalHours}

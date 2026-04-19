@@ -96,6 +96,20 @@ const RadialProgressChart: React.FC<RadialProgressChartProps> = ({
   );
 };
 
+const SimpleProgressBar: React.FC<{ progress: number }> = ({ progress }) => {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2">
+      <div className="relative h-3 w-full overflow-hidden rounded-full bg-zinc-700/30">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#007AFF] to-[#0099FF] transition-all duration-300"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+      <span className="text-sm font-semibold text-zinc-300">{progress}%</span>
+    </div>
+  );
+};
+
 export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
   hoursTotal,
   hoursCompleted,
@@ -109,7 +123,7 @@ export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
         <span>Progresso do Curso</span>
       </header>
 
-      <div className="mt-4 flex flex-1 flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <div className="mt-4 flex flex-1 flex-col justify-between gap-4 sm:items-center 2xl:flex-row">
         <div className="min-w-0">
           <span className="block text-4xl leading-none font-light tabular-nums sm:text-5xl lg:text-6xl">
             {progress}%
@@ -119,8 +133,12 @@ export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
           </span>
         </div>
 
-        <div className="mx-auto h-20 w-20 shrink-0 sm:mx-0 sm:h-24 sm:w-24 lg:h-28 lg:w-28">
+        <div className="mx-auto hidden h-24 w-24 shrink-0 sm:mx-0 sm:h-28 sm:w-28 lg:h-32 lg:w-32 2xl:flex">
           <RadialProgressChart progress={progress} />
+        </div>
+
+        <div className="flex w-full 2xl:hidden">
+          <SimpleProgressBar progress={progress} />
         </div>
       </div>
     </div>

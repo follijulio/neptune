@@ -51,17 +51,14 @@ const YieldCoefficientChart = ({
 }) => {
   if (semesters.length <= 1) {
     return (
-      <div className="flex min-h-[180px] items-center justify-center text-center text-xs text-zinc-600 sm:min-h-[220px] sm:text-sm">
+      <div className="flex h-full min-h-[140px] items-center justify-center px-3 text-center text-xs text-zinc-600 sm:min-h-[160px] sm:text-sm">
         Sem dados suficientes para gerar o gráfico...
       </div>
     );
   }
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="h-full min-h-[180px] w-full sm:min-h-[220px]"
-    >
+    <ChartContainer config={chartConfig} className="h-full min-h-0 w-full">
       <AreaChart accessibilityLayer data={semesters}>
         <defs>
           <linearGradient id="fillYield" x1="0" y1="0" x2="0" y2="1">
