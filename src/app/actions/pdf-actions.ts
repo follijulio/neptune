@@ -1,12 +1,10 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import PDFParser from "pdf2json";
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+import { generateJsonByTask } from "@/src/lib/ai-router";
 
 export interface ParsedSubject {
   name: string;
@@ -64,39 +62,93 @@ export async function parseAcademicHistoryAction(formData: FormData) {
     }
 
     const prompt = `
-      Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
-      Analise o texto abaixo, que foi extraído de um PDF de histórico escolar, e encontre as disciplinas cursadas.
-      
-      Retorne um array contendo objetos com as seguintes chaves (use os tipos corretos):
-      - "name" (string): nome da disciplina (ex: Matemática, Português, Cálculo 1).
-      - "grade" (string ou null): a nota final (ex: "8.5", "10", "A").
-      - "status" (string): a situação (ex: APROVADO, REPROVADO, CURSANDO, TRANSFERIDO).
-      - "semester" (string ou null): o semestre ou período letivo (ex: "2023.1", "2024.2", "1º Ano").
-      - "hours" (number ou null): a carga horária da disciplina. Apenas o número inteiro (ex: 60, 90).
+Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
+Analise o texto abaixo e extraia disciplinas cursadas.
 
-      Texto do histórico:
-      ${rawText.substring(0, 25000)}
-    `;
+Retorne ESTRITAMENTE um array JSON com objetos contendo:
+- "name" (string): nome da disciplina (ex: Matemática, Português, Cálculo 1)
+- "grade" (string ou null): nota final (ex: "8.5", "10", "A")
+- "status" (string): situação (APROVADO, REPROVADO, CURSANDO, TRANSFERIDO etc.)
+- "semester" (string ou null): período letivo (ex: "2023.1", "2024.2", "1º Ano")
+- "hours" (number ou null): carga horária inteira (ex: 60, 90)
 
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      generationConfig: {
-        temperature: 0,
-        responseMimeType: "application/json",
-      },
-    });
-
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+Texto do histórico:
+${rawText.substring(0, 25000)}
+`;
 
     let subjects: ParsedSubject[];
+
     try {
-      subjects = JSON.parse(responseText || "[]");
-      if (!Array.isArray(subjects)) throw new Error();
-    } catch {
+      const aiResult = await generateJsonByTask<unknown>({
+        task: "history_structuring",
+        prompt,
+      });
+
+      let rawSubjects: unknown[] = [];
+
+      if (Array.isArray(aiResult)) {
+        rawSubjects = aiResult;
+      } else if (
+        aiResult &&
+        typeof aiResult === "object" &&
+        Array.isArray((aiResult as any).disciplinas)
+      ) {
+        rawSubjects = (aiResult as any).disciplinas;
+      } else if (
+        aiResult &&
+        typeof aiResult === "object" &&
+        Array.isArray((aiResult as any).subjects)
+      ) {
+        rawSubjects = (aiResult as any).subjects;
+      } else {
+        console.log("Resposta IA inesperada:", aiResult);
+        return {
+          error:
+            "A análise do documento falhou devido a uma formatação inesperada.",
+        };
+      }
+
+      subjects = rawSubjects
+        .filter((item) => item && typeof item === "object")
+        .map((item) => {
+          const s = item as Record<string, unknown>;
+          return {
+            name:
+              typeof s.name === "string"
+                ? s.name.trim()
+                : "Disciplina Desconhecida",
+            grade:
+              typeof s.grade === "string"
+                ? s.grade
+                : s.grade == null
+                  ? null
+                  : String(s.grade),
+            status: typeof s.status === "string" ? s.status : "PENDENTE",
+            semester:
+              typeof s.semester === "string"
+                ? s.semester
+                : s.semester == null
+                  ? null
+                  : String(s.semester),
+            hours:
+              typeof s.hours === "number"
+                ? s.hours
+                : s.hours == null
+                  ? null
+                  : Number.parseInt(String(s.hours), 10),
+          };
+        });
+    } catch (error) {
+      console.error("Falha ao estruturar JSON do histórico com IA:", error);
       return {
         error:
           "A análise do documento falhou devido a uma formatação inesperada.",
+      };
+    }
+
+    if (!subjects.length) {
+      return {
+        error: "Nenhuma disciplina foi identificada no histórico enviado.",
       };
     }
 

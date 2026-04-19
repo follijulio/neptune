@@ -24,7 +24,6 @@ export const ourFileRouter = {
       }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      console.log("🟢 [Uploadthing] Arquivo salvo na nuvem!");
 
       try {
         const studyDoc = await prisma.studyDocument.create({
@@ -37,10 +36,6 @@ export const ourFileRouter = {
           },
         });
 
-        console.log(
-          "🟢 [Uploadthing] Documento salvo no banco! ID:",
-          studyDoc.id,
-        );
         return { documentId: studyDoc.id };
       } catch (error) {
         console.error("🔴 [Uploadthing] ERRO NO BANCO:", error);
