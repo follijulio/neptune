@@ -135,9 +135,7 @@ export default function QuestsClient() {
         );
       }
     } catch (error: any) {
-      setQuestError(
-        error.message || "Falha crítica ao comunicar com os satélites de IA.",
-      );
+      setQuestError(error.message || "Falha crítica ao comunicar com a IA.");
       toast.dismiss("gen-questions");
     } finally {
       setIsGenerating(false);
@@ -306,7 +304,6 @@ export default function QuestsClient() {
                       if (res?.[0]?.serverData) {
                         const newDocId = res[0].serverData.documentId as string;
                         setDocumentId(newDocId);
-                        // Adiciona provisoriamente ao histórico
                         setHistory((prev) => [
                           {
                             id: newDocId,
