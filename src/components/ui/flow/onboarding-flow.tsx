@@ -14,6 +14,7 @@ import { Button } from "../../shadcn-ui/button";
 import PdfUploader from "../pdf-uploader";
 
 import { skipOnboardingAction } from "@/src/app/actions/dashboard-actions";
+import { Input } from "@/src/components/shadcn-ui/input";
 
 export default function OnboardingFlow({ userName }: { userName: string }) {
   const [isSkipping, setIsSkipping] = useState(false);
@@ -111,6 +112,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
                 Carga Horária Total (Horas)
               </label>
               <input
+                title="Input"
                 type="number"
                 value={totalHours}
                 onChange={(e) => setTotalHours(Number(e.target.value))}

@@ -155,6 +155,7 @@ function SemesterSelector({
         Período:
       </span>
       <select
+        title="select-semester"
         value={activeSemesterId}
         onChange={(e) => onChange(e.target.value)}
         className="w-full cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-[#007AFF] sm:w-auto sm:px-3 sm:py-1.5 sm:text-sm"
