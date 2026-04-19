@@ -223,7 +223,7 @@ export default function LinksClient({
                       const IconComponent = ICON_MAP[iconName];
                       return (
                         <button
-                        title="Selecionar ícone"
+                          title="Selecionar ícone"
                           key={iconName}
                           type="button"
                           onClick={() => setSelectedIcon(iconName)}
