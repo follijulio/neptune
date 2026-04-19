@@ -120,7 +120,6 @@ const PublicNavBar = () => (
             Entrar
           </Button>
         </Link>
-        {/* eu não implementei a page de registro de pegar esse slug... */}
         <Link href="/login?tab=register">
           <Button className="h-9 bg-[#E0E0E0] px-3 text-sm font-semibold text-[#000000] hover:bg-[#CCCCCC] sm:h-10 sm:px-4 sm:text-base">
             Começar agora
@@ -284,7 +283,10 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
 };
 
 const Logo = () => (
-  <Link href="/" className="flex items-center text-xl select-none sm:text-2xl">
+  <Link
+    href="/dashboard"
+    className="flex items-center text-xl select-none sm:text-2xl"
+  >
     <span className="flex items-center gap-2 font-bold tracking-wider text-white">
       <LuHexagon className="inline text-2xl text-[#007AFF]" />
       <p>Netuno</p>
