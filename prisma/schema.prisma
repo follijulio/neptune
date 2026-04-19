@@ -303,8 +303,8 @@ model DifficultyTag {
 
 model StudySession {
   id        String   @id @default(uuid())
-  duration  Int // Duração em minutos
-  mode      String // "POMODORO" ou "TIMER"
+  duration  Int
+  mode      String
   createdAt DateTime @default(now())
 
   userId String
