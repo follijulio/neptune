@@ -113,6 +113,37 @@ export default function QuestsClient() {
     setFeedback(null);
   }
 
+  async function handleDeleteDocument(docId: string, title: string) {
+    if (deletingDocId) return;
+
+    setDeletingDocId(docId);
+    toast.loading(`Excluindo "${title}"...`, { id: "delete-doc" });
+
+    try {
+      const response = await deleteStudyDocumentAction(docId);
+
+      if (response.error) {
+        toast.error(response.error, { id: "delete-doc" });
+        return;
+      }
+
+      setHistory((prev) => prev.filter((d) => d.id !== docId));
+
+      if (documentId === docId) {
+        setDocumentId(null);
+        setQuestions([]);
+        setSelectedQuestion(null);
+        setFeedback(null);
+        setAnswerText("");
+      }
+
+      toast.success("Material removido com sucesso.", { id: "delete-doc" });
+    } catch {
+      toast.error("Falha ao excluir material.", { id: "delete-doc" });
+    } finally {
+      setDeletingDocId(null);
+    }
+  }
   async function handleGenerateQuestions() {
     if (!documentId) return;
     setIsGenerating(true);
@@ -270,23 +301,51 @@ export default function QuestsClient() {
                       setDocumentId(null);
                       setQuestions([]);
                     }}
-                    className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${!documentId ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]" : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"}`}
+                    className={`flex-shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+                      !documentId
+                        ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
+                        : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"
+                    }`}
                   >
                     + Novo Material
                   </Button>
+
                   {history.map((doc) => (
-                    <button
+                    <div
                       key={doc.id}
-                      onClick={() => loadHistoricalDocument(doc)}
-                      className={`flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition-all ${
+                      className={`group flex flex-shrink-0 items-center gap-1 rounded-xl border px-2 py-1.5 transition-all ${
                         documentId === doc.id
-                          ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
-                          : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-white"
+                          ? "border-[#007AFF]/50 bg-[#1A1A1A]"
+                          : "border-[#1A1A1A] bg-[#0A0A0A]"
                       }`}
                     >
-                      <LuHistory className="h-4 w-4" />
-                      <span className="max-w-37.5 truncate">{doc.title}</span>
-                    </button>
+                      <button
+                        onClick={() => loadHistoricalDocument(doc)}
+                        className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-bold ${
+                          documentId === doc.id
+                            ? "text-[#007AFF]"
+                            : "text-zinc-500 hover:text-white"
+                        }`}
+                      >
+                        <LuHistory className="h-4 w-4" />
+                        <span className="max-w-[140px] truncate">
+                          {doc.title}
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => handleDeleteDocument(doc.id, doc.title)}
+                        disabled={deletingDocId === doc.id}
+                        title="Excluir material"
+                        className="rounded-md p-1 text-zinc-500 transition hover:bg-red-500/10 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {deletingDocId === doc.id ? (
+                          <Spinner className="text-red-400" />
+                        ) : (
+                          <LuTrash2 className="h-4 w-4 " />
+                        )}
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}
