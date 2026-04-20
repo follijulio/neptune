@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserPlanet } from "@/src/app/actions/gamification-actions";
+import { getUserPlanet } from "@/src/lib/gamification";
 import { FiHexagon } from "react-icons/fi";
 
 export default function UserBadge({

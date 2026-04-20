@@ -14,8 +14,9 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import "katex/dist/katex.min.css";
 
+import { LuTrash2 } from "react-icons/lu";
+import { deleteStudyDocumentAction } from "@/src/app/actions/study-document-actions";
 import { Alert } from "@/src/components/shadcn-ui/alert";
 import { GiHarpoonTrident } from "react-icons/gi";
 import { toast } from "sonner";
@@ -59,6 +60,8 @@ type Feedback = {
 export default function QuestsClient() {
   const [activeTab, setActiveTab] = useState<"training" | "boss">("training");
   const [documentId, setDocumentId] = useState<string | null>(null);
+
+  const [deletingDocId, setDeletingDocId] = useState<string | null>(null);
 
   const [history, setHistory] = useState<DocumentHistory[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -130,7 +133,9 @@ export default function QuestsClient() {
         });
         setHistory((prev) =>
           prev.map((d) =>
-            d.id === documentId ? { ...d, questions: response.questions } : d,
+            d.id === documentId
+              ? { ...d, questions: response.questions ?? [] }
+              : d,
           ),
         );
       }
@@ -265,7 +270,7 @@ export default function QuestsClient() {
                       setDocumentId(null);
                       setQuestions([]);
                     }}
-                    className={`flex-shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${!documentId ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]" : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"}`}
+                    className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${!documentId ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]" : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"}`}
                   >
                     + Novo Material
                   </Button>
@@ -273,16 +278,14 @@ export default function QuestsClient() {
                     <button
                       key={doc.id}
                       onClick={() => loadHistoricalDocument(doc)}
-                      className={`flex flex-shrink-0 items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition-all ${
+                      className={`flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold transition-all ${
                         documentId === doc.id
                           ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
                           : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-white"
                       }`}
                     >
                       <LuHistory className="h-4 w-4" />
-                      <span className="max-w-[150px] truncate">
-                        {doc.title}
-                      </span>
+                      <span className="max-w-37.5 truncate">{doc.title}</span>
                     </button>
                   ))}
                 </div>

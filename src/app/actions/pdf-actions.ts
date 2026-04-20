@@ -101,7 +101,7 @@ ${rawText.substring(0, 25000)}
       ) {
         rawSubjects = (aiResult as any).subjects;
       } else {
-        console.log("Resposta IA inesperada:", aiResult);
+        console.error("Resposta IA inesperada:", aiResult);
         return {
           error:
             "A análise do documento falhou devido a uma formatação inesperada.",
