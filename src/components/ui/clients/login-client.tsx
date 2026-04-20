@@ -28,6 +28,324 @@ import { Label } from "@/src/components/shadcn-ui/label";
 
 type AuthView = "login" | "register";
 
+interface ErrorAlertProps {
+  error: string | null | undefined;
+  currentView: AuthView;
+}
+
+interface AuthTabsProps {
+  currentView: AuthView;
+  onSwitchView: (view: AuthView) => void;
+}
+
+interface GoogleButtonProps {
+  text: string;
+}
+
+interface TwoFactorFormProps {
+  isLoading: boolean;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onBack: () => void;
+}
+
+interface LoginFormProps {
+  email: string;
+  password: string;
+  isLoading: boolean;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+interface RegisterFormProps {
+  isLoading: boolean;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+interface AuthHeaderProps {
+  title: string;
+  description: string;
+}
+
+interface BrandingSectionProps {
+  onViewSwitch: (view: AuthView) => void;
+  currentView: AuthView;
+}
+
+interface AuthDividerProps {}
+
+const ErrorAlert = ({ error, currentView }: ErrorAlertProps) => {
+  if (!error) return null;
+
+  return (
+    <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 p-3 text-[#FF3B30] sm:p-4">
+      <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
+      <AlertTitle className="text-xs font-bold sm:text-sm">
+        {currentView === "login"
+          ? "Erro na autenticação"
+          : "Não foi possível cadastrar"}
+      </AlertTitle>
+      <AlertDescription className="text-[10px] sm:text-xs">
+        {error}
+      </AlertDescription>
+    </Alert>
+  );
+};
+
+const AuthTabs = ({ currentView, onSwitchView }: AuthTabsProps) => (
+  <div className="grid h-12 w-full grid-cols-2 rounded-xl bg-[#121212] p-1 lg:h-14 lg:p-1.5">
+    <button
+      onClick={() => onSwitchView("login")}
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
+        currentView === "login"
+          ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
+          : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
+      }`}
+    >
+      Entrar
+    </button>
+    <button
+      onClick={() => onSwitchView("register")}
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
+        currentView === "register"
+          ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
+          : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
+      }`}
+    >
+      Cadastrar
+    </button>
+  </div>
+);
+
+const AuthHeader = ({ title, description }: AuthHeaderProps) => (
+  <CardHeader className="mb-6 space-y-1 p-0 sm:mb-8 sm:space-y-2">
+    <CardTitle className="text-xl font-bold tracking-wide sm:text-2xl">
+      {title}
+    </CardTitle>
+    <CardDescription className="text-sm text-[#888888] sm:text-base">
+      {description}
+    </CardDescription>
+  </CardHeader>
+);
+
+const AuthDivider = ({}: AuthDividerProps) => (
+  <div className="mt-6">
+    <div className="relative">
+      <div className="absolute inset-0 flex items-center">
+        <span className="w-full border-t border-[#1A1A1A]" />
+      </div>
+      <div className="relative flex justify-center text-[10px] uppercase sm:text-xs">
+        <span className="bg-[#121212] px-2 text-[#888888]">
+          Ou continue com
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+const GoogleButton = ({ text }: GoogleButtonProps) => (
+  <form action={loginWithGoogleAction} className="mt-4 sm:mt-6">
+    <Button
+      type="submit"
+      variant="outline"
+      className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent text-xs font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white sm:h-12 sm:text-sm"
+    >
+      <svg
+        role="img"
+        viewBox="0 0 24 24"
+        className="h-4 w-4 sm:h-5 sm:w-5"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>Google</title>
+        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+      </svg>
+      {text}
+    </Button>
+  </form>
+);
+
+const TwoFactorForm = ({ isLoading, onSubmit, onBack }: TwoFactorFormProps) => (
+  <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
+    <div className="space-y-3">
+      <Input
+        name="code"
+        maxLength={6}
+        placeholder="000000"
+        required
+        autoComplete="off"
+        className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-2 text-center text-xl font-bold tracking-[0.5em] text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-14 sm:text-2xl sm:tracking-[1em]"
+      />
+    </div>
+
+    <Button
+      type="submit"
+      disabled={isLoading}
+      className="mt-4 h-10 w-full rounded-lg bg-[#007AFF] text-sm font-bold text-white transition-colors hover:bg-[#007AFF]/80 sm:mt-8 sm:h-12 sm:text-base"
+    >
+      {isLoading ? "Verificando..." : "Confirmar Código"}
+    </Button>
+
+    <button
+      type="button"
+      onClick={onBack}
+      className="mt-2 w-full text-xs text-[#888888] transition-colors hover:text-[#E0E0E0] sm:mt-4 sm:text-sm"
+    >
+      Voltar para o login normal
+    </button>
+  </form>
+);
+
+const LoginForm = ({
+  email,
+  password,
+  isLoading,
+  onSubmit,
+}: LoginFormProps) => (
+  <>
+    <form onSubmit={onSubmit} className="space-y-4 sm:space-y-6">
+      <div className="space-y-2">
+        <Label
+          htmlFor="email"
+          className="text-xs font-medium text-[#888888] sm:text-sm"
+        >
+          E-mail
+        </Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="seu@email.com"
+          required
+          defaultValue={email}
+          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label
+            htmlFor="password"
+            className="text-xs font-medium text-[#888888] sm:text-sm"
+          >
+            Senha
+          </Label>
+          <a
+            href="#"
+            className="text-xs text-[#007AFF] transition-colors hover:underline sm:text-sm"
+          >
+            Esqueceu a senha?
+          </a>
+        </div>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          required
+          defaultValue={password}
+          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+      <Button
+        type="submit"
+        disabled={isLoading}
+        className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
+      >
+        {isLoading ? "Autenticando..." : "Entrar na plataforma"}
+      </Button>
+    </form>
+    <AuthDivider />
+    <GoogleButton text="Entrar com Google" />
+  </>
+);
+
+const RegisterForm = ({ isLoading, onSubmit }: RegisterFormProps) => (
+  <>
+    <form onSubmit={onSubmit} className="space-y-4 sm:space-y-5">
+      <div className="space-y-1.5 sm:space-y-2">
+        <Label
+          htmlFor="name"
+          className="text-xs font-medium text-[#888888] sm:text-sm"
+        >
+          Nome completo
+        </Label>
+        <Input
+          id="name"
+          name="name"
+          placeholder="Ex: João Silva"
+          required
+          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+      <div className="space-y-1.5 sm:space-y-2">
+        <Label
+          htmlFor="reg-email"
+          className="text-xs font-medium text-[#888888] sm:text-sm"
+        >
+          E-mail
+        </Label>
+        <Input
+          id="reg-email"
+          name="email"
+          type="email"
+          placeholder="seu@email.com"
+          required
+          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+      <div className="space-y-1.5 sm:space-y-2">
+        <Label
+          htmlFor="reg-password"
+          className="text-xs font-medium text-[#888888] sm:text-sm"
+        >
+          Senha
+        </Label>
+        <Input
+          id="reg-password"
+          name="password"
+          type="password"
+          required
+          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+      <Button
+        type="submit"
+        disabled={isLoading}
+        className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
+      >
+        {isLoading ? "Criando conta..." : "Cadastrar e acessar"}
+      </Button>
+    </form>
+    <AuthDivider />
+    <GoogleButton text="Cadastrar com Google" />
+  </>
+);
+
+const BrandingSection = ({
+  onViewSwitch,
+  currentView,
+}: BrandingSectionProps) => (
+  <div className="flex w-full max-w-md flex-col items-center text-center lg:items-start lg:text-left">
+    <LuHexagon className="mb-4 text-6xl text-[#007AFF] lg:mb-6 lg:text-8xl" />
+    <h1 className="mb-2 text-4xl font-bold tracking-tight text-[#E0E0E0] lg:mb-4 lg:text-6xl">
+      Netuno
+    </h1>
+    <p className="mb-8 text-base leading-relaxed text-[#888888] lg:mb-12 lg:text-xl">
+      Seu dashboard acadêmico inteligente. Domine as disciplinas da Licenciatura
+      e otimize sua rotina universitária com dados.{" "}
+      <span className="mt-2 block text-[10px] opacity-50 lg:inline lg:text-xs">
+        Desenvolvido por{" "}
+        <a
+          href="https://github.com/follijulio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#007AFF] hover:underline"
+        >
+          folli
+        </a>
+      </span>
+    </p>
+    <AuthTabs currentView={currentView} onSwitchView={onViewSwitch} />
+  </div>
+);
+
 export default function LoginClient() {
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined | null>("");
@@ -63,6 +381,7 @@ export default function LoginClient() {
       setIsLoading(false);
     }
   };
+
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -83,210 +402,49 @@ export default function LoginClient() {
     setShowTwoFactor(false);
   };
 
+  const handleBackFromTwoFactor = () => {
+    setShowTwoFactor(false);
+  };
+
   const errorAlert = useMemo(() => {
-    if (!error) return null;
-    return (
-      <Alert className="mb-6 border-[#FF3B30]/20 bg-[#FF3B30]/10 p-3 text-[#FF3B30] sm:p-4">
-        <IoAlertCircleOutline className="h-4 w-4 stroke-[#FF3B30]" />
-        <AlertTitle className="text-xs font-bold sm:text-sm">
-          {currentView === "login"
-            ? "Erro na autenticação"
-            : "Não foi possível cadastrar"}
-        </AlertTitle>
-        <AlertDescription className="text-[10px] sm:text-xs">
-          {error}
-        </AlertDescription>
-      </Alert>
-    );
+    return <ErrorAlert error={error} currentView={currentView} />;
   }, [error, currentView]);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-10 overflow-y-auto bg-[#000000] p-6 lg:flex-row lg:gap-32 lg:p-24">
-      <div className="flex w-full max-w-md flex-col items-center text-center lg:items-start lg:text-left">
-        <LuHexagon className="mb-4 text-6xl text-[#007AFF] lg:mb-6 lg:text-8xl" />
-        <h1 className="mb-2 text-4xl font-bold tracking-tight text-[#E0E0E0] lg:mb-4 lg:text-6xl">
-          Netuno
-        </h1>
-        <p className="mb-8 text-base leading-relaxed text-[#888888] lg:mb-12 lg:text-xl">
-          Seu dashboard acadêmico inteligente. Domine as disciplinas da
-          Licenciatura e otimize sua rotina universitária com dados.{" "}
-          <span className="mt-2 block text-[10px] opacity-50 lg:inline lg:text-xs">
-            Desenvolvido por{" "}
-            <a
-              href="https://github.com/follijulio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#007AFF] hover:underline"
-            >
-              folli
-            </a>
-          </span>
-        </p>
-        <div className="grid h-12 w-full grid-cols-2 rounded-xl bg-[#121212] p-1 lg:h-14 lg:p-1.5">
-          <button
-            onClick={() => switchView("login")}
-            className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
-              currentView === "login"
-                ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
-                : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-            }`}
-          >
-            Entrar
-          </button>
-          <button
-            onClick={() => switchView("register")}
-            className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
-              currentView === "register"
-                ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
-                : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-            }`}
-          >
-            Cadastrar
-          </button>
-        </div>
-      </div>
+      <BrandingSection onViewSwitch={switchView} currentView={currentView} />
 
       <div className="w-full max-w-md lg:max-w-lg">
         {currentView === "login" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
             <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
-              <CardHeader className="mb-6 space-y-1 p-0 sm:mb-8 sm:space-y-2">
-                <CardTitle className="text-xl font-bold tracking-wide sm:text-2xl">
-                  {showTwoFactor
+              <AuthHeader
+                title={
+                  showTwoFactor
                     ? "Verificação de Segurança"
-                    : "Bem-vindo de volta"}
-                </CardTitle>
-                <CardDescription className="text-sm text-[#888888] sm:text-base">
-                  {showTwoFactor
+                    : "Bem-vindo de volta"
+                }
+                description={
+                  showTwoFactor
                     ? "Enviamos um código de 6 dígitos para o seu e-mail."
-                    : "Insira suas credenciais para acessar seu painel."}
-                </CardDescription>
-              </CardHeader>
+                    : "Insira suas credenciais para acessar seu painel."
+                }
+              />
               <CardContent className="p-0">
                 {errorAlert}
                 {showTwoFactor ? (
-                  <form
+                  <TwoFactorForm
+                    isLoading={isLoading}
                     onSubmit={handleLogin}
-                    className="space-y-4 sm:space-y-6"
-                  >
-                    <div className="space-y-3">
-                      <Input
-                        name="code"
-                        maxLength={6}
-                        placeholder="000000"
-                        required
-                        autoComplete="off"
-                        className="h-12 rounded-lg border border-[#1A1A1A] bg-[#000000] px-2 text-center text-xl font-bold tracking-[0.5em] text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-14 sm:text-2xl sm:tracking-[1em]"
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="mt-4 h-10 w-full rounded-lg bg-[#007AFF] text-sm font-bold text-white transition-colors hover:bg-[#007AFF]/80 sm:mt-8 sm:h-12 sm:text-base"
-                    >
-                      {isLoading ? "Verificando..." : "Confirmar Código"}
-                    </Button>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowTwoFactor(false)}
-                      className="mt-2 w-full text-xs text-[#888888] transition-colors hover:text-[#E0E0E0] sm:mt-4 sm:text-sm"
-                    >
-                      Voltar para o login normal
-                    </button>
-                  </form>
+                    onBack={handleBackFromTwoFactor}
+                  />
                 ) : (
-                  <>
-                    <form
-                      onSubmit={handleLogin}
-                      className="space-y-4 sm:space-y-6"
-                    >
-                      <div className="space-y-2">
-                        <Label
-                          htmlFor="email"
-                          className="text-xs font-medium text-[#888888] sm:text-sm"
-                        >
-                          E-mail
-                        </Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="seu@email.com"
-                          required
-                          defaultValue={email}
-                          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <Label
-                            htmlFor="password"
-                            className="text-xs font-medium text-[#888888] sm:text-sm"
-                          >
-                            Senha
-                          </Label>
-                          <a
-                            href="#"
-                            className="text-xs text-[#007AFF] transition-colors hover:underline sm:text-sm"
-                          >
-                            Esqueceu a senha?
-                          </a>
-                        </div>
-                        <Input
-                          id="password"
-                          name="password"
-                          type="password"
-                          required
-                          defaultValue={password}
-                          className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
-                      >
-                        {isLoading ? "Autenticando..." : "Entrar na plataforma"}
-                      </Button>
-                    </form>
-                    <div className="mt-6">
-                      <div className="relative">
-                        <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t border-[#1A1A1A]" />
-                        </div>
-                        <div className="relative flex justify-center text-[10px] uppercase sm:text-xs">
-                          <span className="bg-[#121212] px-2 text-[#888888]">
-                            Ou continue com
-                          </span>
-                        </div>
-                      </div>
-
-                      <form
-                        action={loginWithGoogleAction}
-                        className="mt-4 sm:mt-6"
-                      >
-                        <Button
-                          type="submit"
-                          variant="outline"
-                          className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent text-xs font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white sm:h-12 sm:text-sm"
-                        >
-                          <svg
-                            role="img"
-                            viewBox="0 0 24 24"
-                            className="h-4 w-4 sm:h-5 sm:w-5"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <title>Google</title>
-                            <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-                          </svg>
-                          Entrar com Google
-                        </Button>
-                      </form>
-                    </div>
-                  </>
+                  <LoginForm
+                    email={email}
+                    password={password}
+                    isLoading={isLoading}
+                    onSubmit={handleLogin}
+                  />
                 )}
               </CardContent>
             </Card>
@@ -296,106 +454,13 @@ export default function LoginClient() {
         {currentView === "register" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
             <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
-              <CardHeader className="mb-6 space-y-1 p-0 sm:mb-8 sm:space-y-2">
-                <CardTitle className="text-xl font-bold tracking-wide sm:text-2xl">
-                  Criar uma conta
-                </CardTitle>
-                <CardDescription className="text-sm text-[#888888] sm:text-base">
-                  Comece a gerenciar sua grade curricular hoje mesmo.
-                </CardDescription>
-              </CardHeader>
+              <AuthHeader
+                title="Criar uma conta"
+                description="Comece a gerenciar sua grade curricular hoje mesmo."
+              />
               <CardContent className="p-0">
                 {errorAlert}
-                <form
-                  onSubmit={handleRegister}
-                  className="space-y-4 sm:space-y-5"
-                >
-                  <div className="space-y-1.5 sm:space-y-2">
-                    <Label
-                      htmlFor="name"
-                      className="text-xs font-medium text-[#888888] sm:text-sm"
-                    >
-                      Nome completo
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder="Ex: João Silva"
-                      required
-                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                    />
-                  </div>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    <Label
-                      htmlFor="reg-email"
-                      className="text-xs font-medium text-[#888888] sm:text-sm"
-                    >
-                      E-mail
-                    </Label>
-                    <Input
-                      id="reg-email"
-                      name="email"
-                      type="email"
-                      placeholder="seu@email.com"
-                      required
-                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                    />
-                  </div>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    <Label
-                      htmlFor="reg-password"
-                      className="text-xs font-medium text-[#888888] sm:text-sm"
-                    >
-                      Senha
-                    </Label>
-                    <Input
-                      id="reg-password"
-                      name="password"
-                      type="password"
-                      required
-                      className="h-10 rounded-lg border border-[#1A1A1A] bg-[#000000] px-4 text-sm text-[#E0E0E0] transition-all focus-visible:border-[#007AFF] focus-visible:ring-1 focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="mt-4 h-10 w-full rounded-lg bg-[#E0E0E0] text-sm font-bold text-[#000000] transition-colors hover:bg-[#CCCCCC] sm:mt-8 sm:h-12 sm:text-base"
-                  >
-                    {isLoading ? "Criando conta..." : "Cadastrar e acessar"}
-                  </Button>
-                </form>
-                <div className="mt-6">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t border-[#1A1A1A]" />
-                    </div>
-                    <div className="relative flex justify-center text-[10px] uppercase sm:text-xs">
-                      <span className="bg-[#121212] px-2 text-[#888888]">
-                        Ou continue com
-                      </span>
-                    </div>
-                  </div>
-
-                  <form action={loginWithGoogleAction} className="mt-4 sm:mt-6">
-                    <Button
-                      type="submit"
-                      variant="outline"
-                      className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#1A1A1A] bg-transparent text-xs font-medium text-[#E0E0E0] transition-colors hover:bg-[#1A1A1A] hover:text-white sm:h-12 sm:text-sm"
-                    >
-                      <svg
-                        role="img"
-                        viewBox="0 0 24 24"
-                        className="h-4 w-4 sm:h-5 sm:w-5"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <title>Google</title>
-                        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-                      </svg>
-                      Cadastrar com Google
-                    </Button>
-                  </form>
-                </div>
+                <RegisterForm isLoading={isLoading} onSubmit={handleRegister} />
               </CardContent>
               <CardFooter className="mt-4 flex justify-center border-t border-[#1A1A1A] p-0 pt-4 sm:mt-6 sm:pt-6">
                 <p className="text-center text-[10px] leading-relaxed text-[#555555] sm:text-xs">

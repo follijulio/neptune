@@ -22,7 +22,28 @@ import { Button } from "@/src/components/shadcn-ui/button";
 type AppMode = "pomodoro" | "timer";
 type PomodoroPhase = "focus" | "shortBreak" | "longBreak";
 
-const POMODORO_CONFIG = {
+interface PomodoroConfig {
+  time: number;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bg: string;
+  pill: string;
+  glow: string;
+  activeDot: string;
+}
+
+interface TimerConfig {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bg: string;
+  pill: string;
+  glow: string;
+  activeDot: string;
+}
+
+const POMODORO_CONFIG: Record<PomodoroPhase, PomodoroConfig> = {
   focus: {
     time: 25 * 60,
     label: "Foco Profundo",
@@ -55,13 +76,273 @@ const POMODORO_CONFIG = {
   },
 };
 
+interface MonthlyStatsProps {
+  monthlyMinutes: number;
+}
+
+interface ModeToggleProps {
+  appMode: AppMode;
+  onModeChange: (mode: AppMode) => void;
+}
+
+interface PhaseButtonProps {
+  phase: PomodoroPhase;
+  isSelected: boolean;
+  config: PomodoroConfig;
+  onPhaseChange: (phase: PomodoroPhase) => void;
+}
+
+interface PhaseSelectorProps {
+  appMode: AppMode;
+  phase: PomodoroPhase;
+  onPhaseChange: (phase: PomodoroPhase) => void;
+}
+
+interface TimerDisplayProps {
+  formattedDisplay: string;
+  currentConfig: PomodoroConfig | TimerConfig;
+}
+
+interface ControlButtonsProps {
+  isActive: boolean;
+  appMode: AppMode;
+  elapsedTime: number;
+  onToggle: () => void;
+  onFinish: () => void;
+  onReset: () => void;
+}
+
+interface StatusIndicatorProps {
+  currentConfig: PomodoroConfig | TimerConfig;
+  isActive: boolean;
+}
+
+interface FooterLinkProps {
+  href: string;
+  children: React.ReactNode;
+}
+
+const MonthlyStats = ({ monthlyMinutes }: MonthlyStatsProps) => (
+  <div className="absolute top-6 right-6 z-10 flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 backdrop-blur-sm">
+    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007AFF]/10">
+      <LuTrophy className="h-4 w-4 text-[#007AFF]" />
+    </div>
+    <div>
+      <p className="text-[9px] font-semibold tracking-[0.15em] text-zinc-600 uppercase">
+        Esforço Mensal
+      </p>
+      <p className="text-base font-black text-white tabular-nums">
+        {Math.floor(monthlyMinutes / 60)}
+        <span className="text-zinc-500">h</span> {monthlyMinutes % 60}
+        <span className="text-zinc-500">m</span>
+      </p>
+    </div>
+  </div>
+);
+
+const ModeToggle = ({ appMode, onModeChange }: ModeToggleProps) => (
+  <div className="relative z-10 mb-8 flex rounded-2xl border border-white/5 bg-white/[0.03] p-1 backdrop-blur-sm">
+    {(["pomodoro", "timer"] as AppMode[]).map((mode) => (
+      <button
+        key={mode}
+        onClick={() => onModeChange(mode)}
+        className={`relative flex items-center gap-2 rounded-xl px-7 py-2.5 text-xs font-bold tracking-wide transition-all duration-300 ${
+          appMode === mode ? "text-white" : "text-zinc-600 hover:text-zinc-400"
+        }`}
+      >
+        {appMode === mode && (
+          <span className="absolute inset-0 rounded-xl bg-white/[0.07]" />
+        )}
+        <span className="relative flex items-center gap-2">
+          {mode === "pomodoro" ? (
+            <LuBrain className="h-3.5 w-3.5" />
+          ) : (
+            <LuTimer className="h-3.5 w-3.5" />
+          )}
+          {mode === "pomodoro" ? "Pomodoro" : "Cronômetro Livre"}
+        </span>
+      </button>
+    ))}
+  </div>
+);
+
+const PhaseButton = ({
+  phase,
+  isSelected,
+  config,
+  onPhaseChange,
+}: PhaseButtonProps) => {
+  const Icon = config.icon;
+  const phaseLabel = {
+    focus: "Foco",
+    shortBreak: "Pausa",
+    longBreak: "Descanso",
+  }[phase];
+
+  return (
+    <button
+      onClick={() => onPhaseChange(phase)}
+      className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[10px] font-bold tracking-wider uppercase transition-all duration-200 ${
+        isSelected
+          ? config.pill
+          : "border-white/5 text-zinc-600 hover:border-white/10 hover:text-zinc-400"
+      }`}
+    >
+      <Icon className="h-3 w-3" />
+      {phaseLabel}
+    </button>
+  );
+};
+
+const PhaseSelector = ({
+  appMode,
+  phase,
+  onPhaseChange,
+}: PhaseSelectorProps) => (
+  <div
+    className={`mb-8 w-full overflow-hidden transition-all duration-500 ease-in-out ${
+      appMode === "pomodoro" ? "max-h-20 opacity-100" : "max-h-0 opacity-0"
+    }`}
+  >
+    <div className="flex items-center justify-center gap-2">
+      {(Object.keys(POMODORO_CONFIG) as PomodoroPhase[]).map((p) => {
+        const cfg = POMODORO_CONFIG[p];
+        const isSelected = phase === p && appMode === "pomodoro";
+        return (
+          <PhaseButton
+            key={p}
+            phase={p}
+            isSelected={isSelected}
+            config={cfg}
+            onPhaseChange={onPhaseChange}
+          />
+        );
+      })}
+    </div>
+  </div>
+);
+
+const StatusIndicator = ({ currentConfig, isActive }: StatusIndicatorProps) => {
+  const Icon = currentConfig.icon;
+  return (
+    <div
+      className={`mb-6 flex items-center gap-2 rounded-full px-4 py-1.5 ${currentConfig.bg}`}
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${currentConfig.activeDot} ${
+          isActive ? "animate-pulse" : ""
+        }`}
+      />
+      <Icon className={`h-3.5 w-3.5 ${currentConfig.color}`} />
+      <span
+        className={`text-[10px] font-black tracking-[0.18em] uppercase ${currentConfig.color}`}
+      >
+        {currentConfig.label}
+      </span>
+    </div>
+  );
+};
+
+const TimerDisplay = ({
+  formattedDisplay,
+  currentConfig,
+}: TimerDisplayProps) => (
+  <div className="relative mb-10 select-none">
+    <h1
+      className="bg-gradient-to-b from-white via-white/90 to-zinc-500 bg-clip-text leading-none font-black text-transparent tabular-nums"
+      style={{ fontSize: "clamp(80px, 20vw, 108px)" }}
+    >
+      {formattedDisplay}
+    </h1>
+    <div
+      className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-[#0A0A0A] opacity-60 select-none"
+      aria-hidden
+    />
+  </div>
+);
+
+const ControlButtons = ({
+  isActive,
+  appMode,
+  elapsedTime,
+  onToggle,
+  onFinish,
+  onReset,
+}: ControlButtonsProps) => (
+  <div className="flex w-full items-center gap-3">
+    <Button
+      onClick={onToggle}
+      className={`h-14 flex-1 rounded-2xl text-sm font-black tracking-wide transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
+        isActive
+          ? "bg-white/[0.07] text-white hover:bg-white/10"
+          : "bg-[#007AFF] text-white shadow-[0_0_28px_rgba(0,122,255,0.35)] hover:bg-[#0066d6] hover:shadow-[0_0_40px_rgba(0,122,255,0.45)]"
+      }`}
+    >
+      <span className="flex items-center justify-center gap-2">
+        {isActive ? (
+          <>
+            <LuPause className="h-5 w-5" />
+            Pausar
+          </>
+        ) : (
+          <>
+            <LuPlay className="h-5 w-5 fill-current" />
+            Iniciar
+          </>
+        )}
+      </span>
+    </Button>
+
+    {appMode === "timer" && elapsedTime >= 60 && (
+      <Button
+        onClick={onFinish}
+        className="h-14 w-14 flex-shrink-0 rounded-2xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 hover:text-emerald-300"
+        title="Finalizar e Salvar XP"
+      >
+        <LuTrophy className="h-5 w-5" />
+      </Button>
+    )}
+
+    <Button
+      onClick={onReset}
+      variant="ghost"
+      className="h-14 w-14 flex-shrink-0 rounded-2xl bg-white/[0.04] text-zinc-600 hover:bg-white/[0.07] hover:text-zinc-300"
+      title="Reiniciar"
+    >
+      <LuRotateCcw className="h-4 w-4" />
+    </Button>
+  </div>
+);
+
+const FooterLink = ({ href, children }: FooterLinkProps) => (
+  <a
+    rel="noopener noreferrer"
+    href={href}
+    target="_blank"
+    className="text-zinc-800 transition-colors hover:text-[#007AFF]"
+  >
+    {children}
+  </a>
+);
+
+const Footer = () => (
+  <div className="relative z-10 mt-8 space-y-2 text-center">
+    <p className="text-[10px] font-semibold tracking-[0.2em] text-zinc-800">
+      - Can you hear the music?
+    </p>
+    <p className="text-[10px] font-semibold tracking-[0.2em]">
+      <FooterLink href="https://youtu.be/ClFyG_x2-9k?si=xZ2aneEOo_OpK1c0&t=45">
+        - Yes, I can.
+      </FooterLink>
+    </p>
+  </div>
+);
+
 export default function PomodoroClient() {
   const [appMode, setAppMode] = useState<AppMode>("pomodoro");
   const [phase, setPhase] = useState<PomodoroPhase>("focus");
-
   const [timeLeft, setTimeLeft] = useState(POMODORO_CONFIG.focus.time);
   const [elapsedTime, setElapsedTime] = useState(0);
-
   const [isActive, setIsActive] = useState(false);
   const [monthlyMinutes, setMonthlyMinutes] = useState(0);
 
@@ -106,7 +387,7 @@ export default function PomodoroClient() {
     audio.play().catch(() => {});
   };
 
-  async function handleFinishSession(minutes: number) {
+  const handleFinishSession = async (minutes: number) => {
     setIsActive(false);
     playAlarm();
     const sessionMode = appMode === "timer" ? "timer" : "focus";
@@ -117,7 +398,7 @@ export default function PomodoroClient() {
       setMonthlyMinutes(newTotal);
       resetTimer();
     }
-  }
+  };
 
   const resetTimer = () => {
     setIsActive(false);
@@ -144,6 +425,14 @@ export default function PomodoroClient() {
     setTimeLeft(POMODORO_CONFIG[newPhase].time);
   };
 
+  const handleToggleTimer = () => {
+    setIsActive(!isActive);
+  };
+
+  const handleFinish = () => {
+    handleFinishSession(Math.floor(elapsedTime / 60));
+  };
+
   const formattedDisplay = useMemo(() => {
     const s = appMode === "timer" ? elapsedTime : timeLeft;
     const m = Math.floor(s / 60)
@@ -153,7 +442,7 @@ export default function PomodoroClient() {
     return `${m}:${sec}`;
   }, [timeLeft, elapsedTime, appMode]);
 
-  const currentConfig =
+  const currentConfig: PomodoroConfig | TimerConfig =
     appMode === "pomodoro"
       ? POMODORO_CONFIG[phase]
       : {
@@ -166,8 +455,6 @@ export default function PomodoroClient() {
           activeDot: "bg-[#007AFF]",
         };
 
-  const Icon = currentConfig.icon;
-
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 py-8">
       <div
@@ -178,171 +465,41 @@ export default function PomodoroClient() {
         }}
       />
 
-      <div className="absolute top-6 right-6 z-10 flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 backdrop-blur-sm">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007AFF]/10">
-          <LuTrophy className="h-4 w-4 text-[#007AFF]" />
-        </div>
-        <div>
-          <p className="text-[9px] font-semibold tracking-[0.15em] text-zinc-600 uppercase">
-            Esforço Mensal
-          </p>
-          <p className="text-base font-black text-white tabular-nums">
-            {Math.floor(monthlyMinutes / 60)}
-            <span className="text-zinc-500">h</span> {monthlyMinutes % 60}
-            <span className="text-zinc-500">m</span>
-          </p>
-        </div>
-      </div>
+      <MonthlyStats monthlyMinutes={monthlyMinutes} />
 
-      <div className="relative z-10 mb-8 flex rounded-2xl border border-white/5 bg-white/[0.03] p-1 backdrop-blur-sm">
-        {(["pomodoro", "timer"] as AppMode[]).map((mode) => (
-          <button
-            key={mode}
-            onClick={() => switchAppMode(mode)}
-            className={`relative flex items-center gap-2 rounded-xl px-7 py-2.5 text-xs font-bold tracking-wide transition-all duration-300 ${
-              appMode === mode
-                ? "text-white"
-                : "text-zinc-600 hover:text-zinc-400"
-            } `}
-          >
-            {appMode === mode && (
-              <span className="absolute inset-0 rounded-xl bg-white/[0.07]" />
-            )}
-            <span className="relative flex items-center gap-2">
-              {mode === "pomodoro" ? (
-                <LuBrain className="h-3.5 w-3.5" />
-              ) : (
-                <LuTimer className="h-3.5 w-3.5" />
-              )}
-              {mode === "pomodoro" ? "Pomodoro" : "Cronômetro Livre"}
-            </span>
-          </button>
-        ))}
-      </div>
+      <ModeToggle appMode={appMode} onModeChange={switchAppMode} />
 
       <div
-        className={`relative z-10 flex w-full max-w-sm flex-col items-center rounded-[2rem] border border-white/[0.06] bg-[#0A0A0A] px-8 py-10 transition-shadow duration-700 ${isActive ? currentConfig.glow : "shadow-none"} `}
+        className={`relative z-10 flex w-full max-w-sm flex-col items-center rounded-[2rem] border border-white/[0.06] bg-[#0A0A0A] px-8 py-10 transition-shadow duration-700 ${
+          isActive ? currentConfig.glow : "shadow-none"
+        }`}
       >
         <div className="absolute top-0 right-8 left-8 h-px rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-        <div
-          className={`mb-8 w-full overflow-hidden transition-all duration-500 ease-in-out ${
-            appMode === "pomodoro"
-              ? "max-h-20 opacity-100"
-              : "max-h-0 opacity-0"
-          } `}
-        >
-          <div className="flex items-center justify-center gap-2">
-            {(Object.keys(POMODORO_CONFIG) as PomodoroPhase[]).map((p) => {
-              const cfg = POMODORO_CONFIG[p];
-              const PhaseIcon = cfg.icon;
-              const isSelected = phase === p && appMode === "pomodoro";
-              return (
-                <button
-                  key={p}
-                  onClick={() => switchPhase(p)}
-                  className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[10px] font-bold tracking-wider uppercase transition-all duration-200 ${
-                    isSelected
-                      ? cfg.pill
-                      : "border-white/5 text-zinc-600 hover:border-white/10 hover:text-zinc-400"
-                  } `}
-                >
-                  <PhaseIcon className="h-3 w-3" />
-                  {p === "focus"
-                    ? "Foco"
-                    : p === "shortBreak"
-                      ? "Pausa"
-                      : "Descanso"}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <PhaseSelector
+          appMode={appMode}
+          phase={phase}
+          onPhaseChange={switchPhase}
+        />
 
-        <div
-          className={`mb-6 flex items-center gap-2 rounded-full px-4 py-1.5 ${currentConfig.bg}`}
-        >
-          <span
-            className={`h-1.5 w-1.5 rounded-full ${currentConfig.activeDot} ${isActive ? "animate-pulse" : ""}`}
-          />
-          <Icon className={`h-3.5 w-3.5 ${currentConfig.color}`} />
-          <span
-            className={`text-[10px] font-black tracking-[0.18em] uppercase ${currentConfig.color}`}
-          >
-            {currentConfig.label}
-          </span>
-        </div>
+        <StatusIndicator currentConfig={currentConfig} isActive={isActive} />
 
-        <div className="relative mb-10 select-none">
-          <h1
-            className="bg-gradient-to-b from-white via-white/90 to-zinc-500 bg-clip-text leading-none font-black text-transparent tabular-nums"
-            style={{ fontSize: "clamp(80px, 20vw, 108px)" }}
-          >
-            {formattedDisplay}
-          </h1>
-          <div
-            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-[#0A0A0A] opacity-60 select-none"
-            aria-hidden
-          />
-        </div>
+        <TimerDisplay
+          formattedDisplay={formattedDisplay}
+          currentConfig={currentConfig}
+        />
 
-        <div className="flex w-full items-center gap-3">
-          <Button
-            onClick={() => setIsActive(!isActive)}
-            className={`h-14 flex-1 rounded-2xl text-sm font-black tracking-wide transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-              isActive
-                ? "bg-white/[0.07] text-white hover:bg-white/10"
-                : "bg-[#007AFF] text-white shadow-[0_0_28px_rgba(0,122,255,0.35)] hover:bg-[#0066d6] hover:shadow-[0_0_40px_rgba(0,122,255,0.45)]"
-            } `}
-          >
-            <span className="flex items-center justify-center gap-2">
-              {isActive ? (
-                <>
-                  <LuPause className="h-5 w-5" />
-                  Pausar
-                </>
-              ) : (
-                <>
-                  <LuPlay className="h-5 w-5 fill-current" />
-                  Iniciar
-                </>
-              )}
-            </span>
-          </Button>
-
-          {appMode === "timer" && elapsedTime >= 60 && (
-            <Button
-              onClick={() => handleFinishSession(Math.floor(elapsedTime / 60))}
-              className="h-14 w-14 flex-shrink-0 rounded-2xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 hover:text-emerald-300"
-              title="Finalizar e Salvar XP"
-            >
-              <LuTrophy className="h-5 w-5" />
-            </Button>
-          )}
-
-          <Button
-            onClick={resetTimer}
-            variant="ghost"
-            className="h-14 w-14 flex-shrink-0 rounded-2xl bg-white/[0.04] text-zinc-600 hover:bg-white/[0.07] hover:text-zinc-300"
-            title="Reiniciar"
-          >
-            <LuRotateCcw className="h-4 w-4" />
-          </Button>
-        </div>
+        <ControlButtons
+          isActive={isActive}
+          appMode={appMode}
+          elapsedTime={elapsedTime}
+          onToggle={handleToggleTimer}
+          onFinish={handleFinish}
+          onReset={resetTimer}
+        />
       </div>
 
-      <p className="relative z-10 mt-8 text-[10px] font-semibold tracking-[0.2em] text-zinc-800">
-        - Can you her the music?
-        <p className="t relative z-10 mt-2 text-[10px] font-semibold tracking-[0.2em] text-zinc-800 hover:text-[#007AFF]">
-          <a
-            rel="noopener noreferrer"
-            href="https://youtu.be/ClFyG_x2-9k?si=xZ2aneEOo_OpK1c0&t=45"
-            target="_blank"
-          >
-            - Yes, I can.
-          </a>
-        </p>
-      </p>
+      <Footer />
     </div>
   );
 }

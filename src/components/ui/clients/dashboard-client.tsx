@@ -148,7 +148,7 @@ export default function DashboardClient({
           <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
             <button
               type="button"
-              className="bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent transition-opacity outline-none hover:opacity-70"
+              className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-transparent transition-opacity outline-none hover:opacity-70"
               onClick={handleTitleClick}
             >
               Visão geral
