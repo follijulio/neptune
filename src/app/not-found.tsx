@@ -2,17 +2,7 @@ import { LuRocket } from "react-icons/lu";
 import { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "../auth";
-
-const STAR_BACKGROUND_STYLE: React.CSSProperties = {
-  backgroundImage: `
-    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
-    radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-    radial-gradient(circle at 75% 85%, rgba(255, 255, 255, 0.7) 1px, transparent 1px)
-  `,
-  backgroundSize: "150px 150px",
-};
+import styles from "./not-found.module.css";
 
 export const metadata: Metadata = {
   title: "Buraco negro - Netuno",
@@ -20,10 +10,7 @@ export const metadata: Metadata = {
 
 function StarField() {
   return (
-    <div
-      className="pointer-events-none absolute inset-0 opacity-60 sm:bg-size-[300px_300px]"
-      style={STAR_BACKGROUND_STYLE}
-    />
+    <div className={`pointer-events-none absolute inset-0 opacity-60 ${styles.starField}`} />
   );
 }
 
