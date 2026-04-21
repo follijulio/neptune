@@ -9,7 +9,7 @@ export interface GenerateQuestionsResponse {
   success?: boolean;
   error?: string;
   count?: number;
-  questions?: any[];
+  questions?: unknown[];
 }
 
 interface ExtractedQuestion {
@@ -249,7 +249,7 @@ ${answerImageUrl ? `Há também resposta manuscrita em imagem.` : ""}
 export interface GenerateBossResponse {
   success?: boolean;
   error?: string;
-  question?: any;
+  question?: unknown;
 }
 
 interface BossQuestionPayload {

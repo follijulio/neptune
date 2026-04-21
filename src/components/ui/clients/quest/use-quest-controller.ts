@@ -13,6 +13,39 @@ import {
 } from "@/src/app/actions/ai-actions";
 import { deleteStudyDocumentAction } from "@/src/app/actions/study-document-actions";
 
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string");
+}
+
+function toQuestion(value: unknown): Question | null {
+  if (!value || typeof value !== "object") return null;
+
+  const candidate = value as {
+    id?: unknown;
+    fullText?: unknown;
+    keyTopics?: unknown;
+    providedData?: unknown;
+  };
+
+  if (typeof candidate.id !== "string") return null;
+  if (typeof candidate.fullText !== "string") return null;
+
+  return {
+    id: candidate.id,
+    fullText: candidate.fullText,
+    keyTopics: toStringArray(candidate.keyTopics),
+    providedData: toStringArray(candidate.providedData),
+  };
+}
+
+function toQuestions(value: unknown): Question[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => toQuestion(item))
+    .filter((item): item is Question => item !== null);
+}
+
 export function useQuestController() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("training");
   const [documentId, setDocumentId] = useState<string | null>(null);
@@ -123,15 +156,14 @@ export function useQuestController() {
         setQuestError(response.error);
         toast.dismiss("gen-questions");
       } else if (response.questions) {
-        setQuestions(response.questions);
-        toast.success(`${response.questions.length} questões extraídas!`, {
+        const normalizedQuestions = toQuestions(response.questions);
+        setQuestions(normalizedQuestions);
+        toast.success(`${normalizedQuestions.length} questões extraídas!`, {
           id: "gen-questions",
         });
         setHistory((prev) =>
           prev.map((d) =>
-            d.id === documentId
-              ? { ...d, questions: response.questions ?? [] }
-              : d,
+            d.id === documentId ? { ...d, questions: normalizedQuestions } : d,
           ),
         );
       }
@@ -161,7 +193,15 @@ export function useQuestController() {
         setBossError(response.error);
         toast.dismiss("invoke-boss");
       } else if (response.question) {
-        setBossQuestion(response.question);
+        const normalizedBossQuestion = toQuestion(response.question);
+
+        if (!normalizedBossQuestion) {
+          setBossError("A IA retornou um desafio inválido.");
+          toast.dismiss("invoke-boss");
+          return;
+        }
+
+        setBossQuestion(normalizedBossQuestion);
         toast.success("O Desafio Netuno foi invocado!", { id: "invoke-boss" });
       }
     } catch (error: unknown) {

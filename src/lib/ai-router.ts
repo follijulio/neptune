@@ -85,6 +85,7 @@ export async function generateJsonByTask<T = JsonValue>({
         },
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const parts: any[] = [prompt];
       if (pdfBase64) {
         parts.push({

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
@@ -59,25 +59,16 @@ export default function DashboardClient({
   const { data, isLoading, error, execute } = useDashboardData();
 
   const [loadingTarget, setLoadingTarget] = useState<LoadingTarget>("all");
-  const [clickCount, setClickCount] = useState(1);
 
   const previousSemester = useRef<string | undefined>(undefined);
   const previousCurriculum = useRef<string | undefined>(undefined);
-
-  const handleTitleClick = useCallback(() => {
-    setClickCount((current) => {
-      if (current % 14 === 0) {
-        alert("14 o melhor número de todos!");
-      }
-      return current + 1;
-    });
-  }, []);
 
   useEffect(() => {
     const semester = searchParams.get("semester") || undefined;
     const filterCurriculum = searchParams.get("filterCurriculum") || undefined;
 
     if (semester !== previousSemester.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadingTarget("semester");
     } else if (filterCurriculum !== previousCurriculum.current) {
       setLoadingTarget("curriculum");
@@ -149,7 +140,6 @@ export default function DashboardClient({
             <button
               type="button"
               className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-transparent transition-opacity outline-none hover:opacity-70"
-              onClick={handleTitleClick}
             >
               Visão geral
             </button>

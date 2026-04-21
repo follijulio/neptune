@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LuBed,
   LuBrain,
@@ -123,7 +123,7 @@ interface FooterLinkProps {
 }
 
 const MonthlyStats = ({ monthlyMinutes }: MonthlyStatsProps) => (
-  <div className="absolute top-6 right-6 z-10 flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.03] px-4 py-3 backdrop-blur-sm">
+  <div className="absolute top-6 right-6 z-10 flex items-center gap-3 rounded-2xl border border-white/5 bg-white/3 px-4 py-3 backdrop-blur-sm">
     <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#007AFF]/10">
       <LuTrophy className="h-4 w-4 text-[#007AFF]" />
     </div>
@@ -141,7 +141,7 @@ const MonthlyStats = ({ monthlyMinutes }: MonthlyStatsProps) => (
 );
 
 const ModeToggle = ({ appMode, onModeChange }: ModeToggleProps) => (
-  <div className="relative z-10 mb-8 flex rounded-2xl border border-white/5 bg-white/[0.03] p-1 backdrop-blur-sm">
+  <div className="relative z-10 mb-8 flex rounded-2xl border border-white/5 bg-white/3 p-1 backdrop-blur-sm">
     {(["pomodoro", "timer"] as AppMode[]).map((mode) => (
       <button
         key={mode}
@@ -243,19 +243,13 @@ const StatusIndicator = ({ currentConfig, isActive }: StatusIndicatorProps) => {
   );
 };
 
-const TimerDisplay = ({
-  formattedDisplay,
-  currentConfig,
-}: TimerDisplayProps) => (
+const TimerDisplay = ({ formattedDisplay }: TimerDisplayProps) => (
   <div className="relative mb-10 select-none">
-    <h1
-      className="bg-gradient-to-b from-white via-white/90 to-zinc-500 bg-clip-text leading-none font-black text-transparent tabular-nums"
-      style={{ fontSize: "clamp(80px, 20vw, 108px)" }}
-    >
+    <h1 className="bg-linear-to-b from-white via-white/90 to-zinc-500 bg-clip-text text-[clamp(80px,20vw,108px)] leading-none font-black text-transparent tabular-nums">
       {formattedDisplay}
     </h1>
     <div
-      className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-[#0A0A0A] opacity-60 select-none"
+      className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-b from-transparent to-[#0A0A0A] opacity-60 select-none"
       aria-hidden
     />
   </div>
@@ -296,7 +290,7 @@ const ControlButtons = ({
     {appMode === "timer" && elapsedTime >= 60 && (
       <Button
         onClick={onFinish}
-        className="h-14 w-14 flex-shrink-0 rounded-2xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 hover:text-emerald-300"
+        className="h-14 w-14 shrink-0 rounded-2xl bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 hover:text-emerald-300"
         title="Finalizar e Salvar XP"
       >
         <LuTrophy className="h-5 w-5" />
@@ -306,7 +300,7 @@ const ControlButtons = ({
     <Button
       onClick={onReset}
       variant="ghost"
-      className="h-14 w-14 flex-shrink-0 rounded-2xl bg-white/[0.04] text-zinc-600 hover:bg-white/[0.07] hover:text-zinc-300"
+      className="h-14 w-14 shrink-0 rounded-2xl bg-white/4 text-zinc-600 hover:bg-white/7 hover:text-zinc-300"
       title="Reiniciar"
     >
       <LuRotateCcw className="h-4 w-4" />
@@ -350,6 +344,38 @@ export default function PomodoroClient() {
     getMonthlyStudyTimeAction().then(setMonthlyMinutes);
   }, []);
 
+  const playAlarm = useCallback(() => {
+    const audio = new Audio(
+      "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
+    );
+    audio.play().catch(() => {});
+  }, []);
+
+  const resetTimer = useCallback(() => {
+    setIsActive(false);
+    if (appMode === "pomodoro") {
+      setTimeLeft(POMODORO_CONFIG[phase].time);
+    } else {
+      setElapsedTime(0);
+    }
+  }, [appMode, phase]);
+
+  const handleFinishSession = useCallback(
+    async (minutes: number) => {
+      setIsActive(false);
+      playAlarm();
+      const sessionMode = appMode === "timer" ? "timer" : "focus";
+      const res = await saveStudySessionAction(minutes, sessionMode);
+      if (res.success) {
+        toast.success(`Sessão computada! +${res.xpGained} XP extraído.`);
+        const newTotal = await getMonthlyStudyTimeAction();
+        setMonthlyMinutes(newTotal);
+        resetTimer();
+      }
+    },
+    [appMode, playAlarm, resetTimer],
+  );
+
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined;
 
@@ -378,36 +404,7 @@ export default function PomodoroClient() {
     }
 
     return () => clearInterval(interval);
-  }, [isActive, appMode, phase]);
-
-  const playAlarm = () => {
-    const audio = new Audio(
-      "https://actions.google.com/sounds/v1/alarms/beep_short.ogg",
-    );
-    audio.play().catch(() => {});
-  };
-
-  const handleFinishSession = async (minutes: number) => {
-    setIsActive(false);
-    playAlarm();
-    const sessionMode = appMode === "timer" ? "timer" : "focus";
-    const res = await saveStudySessionAction(minutes, sessionMode);
-    if (res.success) {
-      toast.success(`Sessão computada! +${res.xpGained} XP extraído.`);
-      const newTotal = await getMonthlyStudyTimeAction();
-      setMonthlyMinutes(newTotal);
-      resetTimer();
-    }
-  };
-
-  const resetTimer = () => {
-    setIsActive(false);
-    if (appMode === "pomodoro") {
-      setTimeLeft(POMODORO_CONFIG[phase].time);
-    } else {
-      setElapsedTime(0);
-    }
-  };
+  }, [isActive, appMode, phase, handleFinishSession, playAlarm]);
 
   const switchAppMode = (mode: AppMode) => {
     setAppMode(mode);
@@ -457,24 +454,18 @@ export default function PomodoroClient() {
 
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 py-8">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(0,122,255,0.07) 0%, transparent 70%)",
-        }}
-      />
+      <div className="pointer-events-none absolute inset-0 opacity-40 [background:radial-gradient(ellipse_60%_50%_at_50%_60%,rgba(0,122,255,0.07)_0%,transparent_70%)]" />
 
       <MonthlyStats monthlyMinutes={monthlyMinutes} />
 
       <ModeToggle appMode={appMode} onModeChange={switchAppMode} />
 
       <div
-        className={`relative z-10 flex w-full max-w-sm flex-col items-center rounded-[2rem] border border-white/[0.06] bg-[#0A0A0A] px-8 py-10 transition-shadow duration-700 ${
+        className={`relative z-10 flex w-full max-w-sm flex-col items-center rounded-[2rem] border border-white/6 bg-[#0A0A0A] px-8 py-10 transition-shadow duration-700 ${
           isActive ? currentConfig.glow : "shadow-none"
         }`}
       >
-        <div className="absolute top-0 right-8 left-8 h-px rounded-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="absolute top-0 right-8 left-8 h-px rounded-full bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
         <PhaseSelector
           appMode={appMode}

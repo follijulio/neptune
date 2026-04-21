@@ -29,8 +29,11 @@ export async function saveStudySessionAction(
       }),
     ]);
     return { success: true, xpGained };
-  } catch (e) {
-    return { error: "Erro ao salvar sessão" };
+  } catch (error) {
+    return {
+      error: "Erro ao salvar sessão",
+      details: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 

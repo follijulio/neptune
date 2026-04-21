@@ -94,8 +94,6 @@ interface ColorSelectorProps {
   onColorChange: (color: string) => void;
 }
 
-interface EmptyStateProps {}
-
 interface NoteGridProps {
   notes: Note[];
   isDeleting: string | null;
@@ -301,7 +299,7 @@ const SortableNoteCard = ({
   );
 };
 
-const EmptyState = ({}: EmptyStateProps) => (
+const EmptyState = () => (
   <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
     <p className="text-base text-zinc-500 sm:text-lg">Mural vazio...</p>
   </div>

@@ -70,8 +70,6 @@ interface BrandingSectionProps {
   currentView: AuthView;
 }
 
-interface AuthDividerProps {}
-
 const ErrorAlert = ({ error, currentView }: ErrorAlertProps) => {
   if (!error) return null;
 
@@ -126,7 +124,7 @@ const AuthHeader = ({ title, description }: AuthHeaderProps) => (
   </CardHeader>
 );
 
-const AuthDivider = ({}: AuthDividerProps) => (
+const AuthDivider = () => (
   <div className="mt-6">
     <div className="relative">
       <div className="absolute inset-0 flex items-center">
