@@ -1,5 +1,6 @@
 "use client";
 
+import { GiHarpoonTrident } from "react-icons/gi";
 import {
   LuBrainCircuit,
   LuCircleCheck,
@@ -10,20 +11,20 @@ import {
   LuSwords,
   LuTrash2,
 } from "react-icons/lu";
-import { GiHarpoonTrident } from "react-icons/gi";
 import { TbAlertTriangle } from "react-icons/tb";
 import ReactMarkdown from "react-markdown";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import { toast } from "sonner";
 import { generateUploadButton } from "@uploadthing/react";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import { toast } from "sonner";
+
+import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
 
 import type { OurFileRouter } from "@/src/app/api/uploadthing/core";
 import { Alert } from "@/src/components/shadcn-ui/alert";
 import { Button } from "@/src/components/shadcn-ui/button";
 import { Dialog, DialogContent } from "@/src/components/shadcn-ui/dialog";
 import { Spinner } from "@/src/components/shadcn-ui/spinner";
-import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
 
 const UploadButton = generateUploadButton<OurFileRouter>();
 

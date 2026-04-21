@@ -1,7 +1,9 @@
 import { LuRocket } from "react-icons/lu";
 import { Metadata } from "next";
 import Link from "next/link";
+
 import { auth } from "../auth";
+
 import styles from "./not-found.module.css";
 
 export const metadata: Metadata = {

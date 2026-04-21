@@ -1,8 +1,9 @@
 "use server";
 
+import { generateJsonByTask } from "../../lib/ai-router";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { generateJsonByTask } from "../../lib/ai-router";
 
 export interface GenerateQuestionsResponse {
   success?: boolean;

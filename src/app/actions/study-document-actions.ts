@@ -1,8 +1,9 @@
 "use server";
 
+import { UTApi } from "uploadthing/server";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
-import { UTApi } from "uploadthing/server";
 
 const utapi = new UTApi();
 

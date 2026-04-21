@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import { Navigation } from "./navigation";
+
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 

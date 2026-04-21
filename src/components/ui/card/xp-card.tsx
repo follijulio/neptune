@@ -1,9 +1,10 @@
 "use client";
 
-import { getUserPlanet } from "@/src/lib/gamification";
 import { FiHexagon } from "react-icons/fi";
 import { IoMdPlanet } from "react-icons/io";
 import { RiErrorWarningLine } from "react-icons/ri";
+
+import { getUserPlanet } from "@/src/lib/gamification";
 
 interface XpCardProps {
   xp: number;

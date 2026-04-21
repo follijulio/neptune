@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { LuHexagon, LuLogOut, LuMenu, LuSettings } from "react-icons/lu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -157,6 +157,7 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
   useEffect(() => {
     const savedWidth = localStorage.getItem("netuno_sidebar_width");
     if (savedWidth) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSidebarWidth(Number(savedWidth));
     }
   }, []);
@@ -273,7 +274,7 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
 
         <div
           onMouseDown={() => setIsResizing(true)}
-          className={`absolute top-0 right-[-2px] z-50 h-full w-[4px] cursor-col-resize transition-colors duration-200 ${
+          className={`absolute top-0 -right-0.5 z-50 h-full w-1 cursor-col-resize transition-colors duration-200 ${
             isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
           }`}
         />
@@ -346,7 +347,6 @@ const MobileNav = () => {
 const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   profileImageUrl,
   firstLetter,
-  userName,
 }) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]">
@@ -394,7 +394,7 @@ const DesktopUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
       <LuSettings className="text-zinc-400" />
     </DropdownMenuTrigger>
     <DropdownMenuContent
-      className="w-[220px] border-[#1A1A1A] bg-[#121212] text-white"
+      className="w-55 border-[#1A1A1A] bg-[#121212] text-white"
       align="end"
       side="right"
       sideOffset={16}

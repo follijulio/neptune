@@ -5,6 +5,7 @@ import { LuCheck, LuCircleAlert, LuFileText, LuUpload } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 import { Alert } from "../shadcn-ui/alert";
+import { Spinner } from "../shadcn-ui/spinner";
 
 import type { ParsedSubject } from "@/src/app/actions/pdf-actions";
 import {
@@ -18,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/shadcn-ui/card";
-import { Spinner } from "../shadcn-ui/spinner";
 
 interface UploadState {
   file: File | null;

@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
 import { authConfig } from "./auth.config";
+
 import { prisma } from "@/prisma/lib/prisma";
 
 const DUMMY_HASH =

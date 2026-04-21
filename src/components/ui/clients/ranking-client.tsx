@@ -8,8 +8,8 @@ import {
   LuTrendingUp,
   LuTrophy,
 } from "react-icons/lu";
-import { toast } from "sonner";
 import Image from "next/image";
+import { toast } from "sonner";
 
 import { getLeaderboardAction } from "@/src/app/actions/gamification-actions";
 

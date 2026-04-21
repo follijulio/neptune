@@ -1,5 +1,6 @@
-import { prisma } from "@/prisma/lib/prisma";
 import { randomInt } from "crypto";
+
+import { prisma } from "@/prisma/lib/prisma";
 
 export async function generateTwoFactorToken(email: string) {
   const token = randomInt(100000, 1000000).toString();

@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo } from "react";
 import { IoMdTrendingUp } from "react-icons/io";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import type { AxisDomain } from "recharts/types/util/types";
+
 import { Card, CardContent } from "../../shadcn-ui/card";
 import {
   type ChartConfig,
@@ -10,7 +12,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../../shadcn-ui/chart";
-import { useMemo } from "react";
 
 interface ChartLineLabelProps {
   semesters_data: { semester: string; yield_coefficient: number | null }[];

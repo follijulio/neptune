@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { deleteStudyDocumentAction } from "@/src/app/actions/study-document-actions";
+import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
+
 import {
   evaluateAnswerAction,
   generateBossChallengeAction,
   generateQuestionsAction,
   getUserQuestHistoryAction,
 } from "@/src/app/actions/ai-actions";
-import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
+import { deleteStudyDocumentAction } from "@/src/app/actions/study-document-actions";
 
 export function useQuestController() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("training");
