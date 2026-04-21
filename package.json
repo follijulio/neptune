@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "vai_logo_porra": "next build && next start",
     "format": "prettier --write . && eslint --fix .",
     "check": "tsc --noEmit && eslint .",
     "usage": "knip"

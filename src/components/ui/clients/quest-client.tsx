@@ -1,6 +1,11 @@
 "use client";
 
-import { BossTab, QuestionDialog, TabSwitcher, TrainingTab } from "./quest/quest-view";
+import {
+  BossTab,
+  QuestionDialog,
+  TabSwitcher,
+  TrainingTab,
+} from "./quest/quest-view";
 import { useQuestController } from "./quest/use-quest-controller";
 
 export default function QuestsClient() {
@@ -51,7 +56,9 @@ export default function QuestsClient() {
 
         <div className="mt-8">
           {isLoadingHistory && (
-            <p className="mb-4 text-sm text-zinc-500">Carregando histórico...</p>
+            <p className="mb-4 text-sm text-zinc-500">
+              Carregando histórico...
+            </p>
           )}
           {activeTab === "training" ? (
             <TrainingTab

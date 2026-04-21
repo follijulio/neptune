@@ -20,7 +20,9 @@ export function useQuestController() {
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
+    null,
+  );
   const [answerText, setAnswerText] = useState("");
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -68,7 +70,10 @@ export function useQuestController() {
 
   function handleUploadComplete(docId: string, name: string) {
     setDocumentId(docId);
-    setHistory((prev) => [{ id: docId, title: name, createdAt: new Date(), questions: [] }, ...prev]);
+    setHistory((prev) => [
+      { id: docId, title: name, createdAt: new Date(), questions: [] },
+      ...prev,
+    ]);
   }
 
   async function handleDeleteDocument(docId: string, title: string) {
@@ -106,7 +111,9 @@ export function useQuestController() {
     if (!documentId) return;
     setIsGenerating(true);
     setQuestError(null);
-    toast.loading("O Agente Netuno está lendo o documento...", { id: "gen-questions" });
+    toast.loading("O Agente Netuno está lendo o documento...", {
+      id: "gen-questions",
+    });
 
     try {
       const response = await generateQuestionsAction(documentId);
@@ -116,9 +123,15 @@ export function useQuestController() {
         toast.dismiss("gen-questions");
       } else if (response.questions) {
         setQuestions(response.questions);
-        toast.success(`${response.questions.length} questões extraídas!`, { id: "gen-questions" });
+        toast.success(`${response.questions.length} questões extraídas!`, {
+          id: "gen-questions",
+        });
         setHistory((prev) =>
-          prev.map((d) => (d.id === documentId ? { ...d, questions: response.questions ?? [] } : d)),
+          prev.map((d) =>
+            d.id === documentId
+              ? { ...d, questions: response.questions ?? [] }
+              : d,
+          ),
         );
       }
     } catch (error: unknown) {
@@ -136,7 +149,9 @@ export function useQuestController() {
   async function handleInvokeBoss() {
     setIsInvokingBoss(true);
     setBossError(null);
-    toast.loading("O sistema está analisando suas vulnerabilidades...", { id: "invoke-boss" });
+    toast.loading("O sistema está analisando suas vulnerabilidades...", {
+      id: "invoke-boss",
+    });
 
     try {
       const response = await generateBossChallengeAction();
@@ -166,7 +181,10 @@ export function useQuestController() {
     toast.loading("Avaliando sua lógica...", { id: "eval-answer" });
 
     try {
-      const response = await evaluateAnswerAction(selectedQuestion.id, answerText);
+      const response = await evaluateAnswerAction(
+        selectedQuestion.id,
+        answerText,
+      );
 
       if (response.error) {
         toast.error(response.error, { id: "eval-answer" });
@@ -176,7 +194,9 @@ export function useQuestController() {
         if (evaluation.isFullyCorrect) {
           toast.success("Raciocínio impecável!", { id: "eval-answer" });
         } else {
-          toast.warning("Foram detectadas falhas na sua lógica.", { id: "eval-answer" });
+          toast.warning("Foram detectadas falhas na sua lógica.", {
+            id: "eval-answer",
+          });
         }
       }
     } catch {
