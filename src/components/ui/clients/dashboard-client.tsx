@@ -13,6 +13,7 @@ import { Button } from "@/src/components/shadcn-ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
   DialogTrigger,
 } from "@/src/components/shadcn-ui/dialog";
 import PdfUploader from "@/src/components/ui/pdf-uploader";
@@ -134,7 +135,7 @@ export default function DashboardClient({
 
   return (
     <section className="pb-12">
-      <section className="mx-auto flex h-full w-full max-w-screen-2xl flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
+      <section className="mx-auto flex h-full w-full max-w-screen-3xl flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
             <button
@@ -157,7 +158,12 @@ export default function DashboardClient({
                 </span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="w-[95vw] max-w-3xl overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#080808] p-0 text-white shadow-2xl shadow-black/60">
+            <DialogContent className="w-[95vw] max-w-3xl overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#080808] px-2 text-white shadow-2xl shadow-black/60">
+              <DialogTitle>
+                <p className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-center text-lg font-bold text-transparent">
+                  Sincronizar Histórico Acadêmico
+                </p>
+              </DialogTitle>
               <PdfUploader />
             </DialogContent>
           </Dialog>

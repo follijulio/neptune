@@ -23,7 +23,7 @@ import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
 import type { OurFileRouter } from "@/src/app/api/uploadthing/core";
 import { Alert } from "@/src/components/shadcn-ui/alert";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { Dialog, DialogContent } from "@/src/components/shadcn-ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/src/components/shadcn-ui/dialog";
 import { Spinner } from "@/src/components/shadcn-ui/spinner";
 
 const UploadButton = generateUploadButton<OurFileRouter>();
@@ -564,6 +564,7 @@ export function QuestionDialog({
       onOpenChange={(open) => !open && onClose()}
     >
       <DialogContent className="w-2/3 max-w-5xl overflow-y-auto rounded-2xl border-[#1A1A1A] bg-[#121212] p-0 text-white">
+       <DialogTitle></DialogTitle>
         {selectedQuestion && (
           <div className="flex w-full flex-col">
             <div
