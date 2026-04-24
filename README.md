@@ -86,3 +86,5 @@ O repositório mantém verificação contínua de qualidade técnica:
 - Ordenação de importações automatizada via `eslint-plugin-simple-import-sort`.
 - Checagem de tipagem estrita via `tsc --noEmit`.
 - Análise de dependências mortas e código não utilizado garantida por scripts de validação interna.
+
+https://youtu.be/ANbew0T9mcs
