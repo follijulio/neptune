@@ -111,6 +111,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
                 Carga Horária Total (Horas)
               </label>
               <input
+                title="input"
                 type="number"
                 value={totalHours}
                 onChange={(e) => setTotalHours(Number(e.target.value))}

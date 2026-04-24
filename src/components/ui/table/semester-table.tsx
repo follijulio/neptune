@@ -221,27 +221,5 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
   );
 };
 
-// interface SubjectLinkProps {
-//   href: string;
-//   icon: React.ComponentType<{ className?: string }>;
-//   label: string;
-// }
-
-// const SubjectLink: React.FC<SubjectLinkProps> = ({
-//   href,
-//   icon: Icon,
-//   label,
-// }) => {
-//   return (
-//     <Link
-//       href={href}
-//       className="flex items-center gap-2 text-[#888888] transition-colors hover:text-[#007AFF]"
-//     >
-//       <Icon className="text-base sm:text-lg" />
-//       <span className="text-sm sm:text-base">{label}</span>
-//     </Link>
-//   );
-// };
-
 export default SemesterTable;
 export { FilterButtons };

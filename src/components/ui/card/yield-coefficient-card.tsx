@@ -24,28 +24,23 @@ interface YieldCoefficientCardProps {
   semesters: SemesterData[];
 }
 
-const CHART_CONFIG = {
-  yield_coefficient: {
-    label: "CR",
-    color: "#00FF88",
-  },
+const chartConfig = {
+  yield_coefficient: { label: "CR", color: "#00FF88" },
 } satisfies ChartConfig;
 
 const COLORS = {
   positive: "#00FF88",
   negative: "#FF3B30",
-  subtitle: "#888888",
 } as const;
 
 const calculateDifference = (current: number, previous: number) => {
   const value = current - previous;
   const isPositive = value > 0;
-  const prefix = value > 0 ? "+" : "";
 
   return {
     value,
     isPositive,
-    formatted: value !== 0 ? `${prefix}${value.toFixed(2)}` : "",
+    formatted: value === 0 ? "" : `${isPositive ? "+" : ""}${value.toFixed(2)}`,
   };
 };
 
@@ -56,36 +51,46 @@ const YieldCoefficientChart = ({
 }) => {
   if (semesters.length <= 1) {
     return (
-      <div className="flex h-full items-center justify-center text-xs text-[#888888] sm:text-sm">
+      <div className="flex h-full min-h-[140px] items-center justify-center px-3 text-center text-xs text-zinc-600 sm:min-h-[160px] sm:text-sm">
         Sem dados suficientes para gerar o gráfico...
       </div>
     );
   }
 
   return (
-    <ChartContainer config={CHART_CONFIG} className="h-full w-full">
+    <ChartContainer config={chartConfig} className="h-full min-h-0 w-full">
       <AreaChart accessibilityLayer data={semesters}>
+        <defs>
+          <linearGradient id="fillYield" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#00FF88" stopOpacity={0.25} />
+            <stop offset="95%" stopColor="#00FF88" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+
         <CartesianGrid vertical={false} horizontal={false} />
+
         <XAxis
           dataKey="semester"
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 10, fill: "#555555" }}
         />
+
         <ChartTooltip
           cursor={false}
           content={
             <ChartTooltipContent
               indicator="line"
-              className="bg-black text-xs text-white sm:text-sm"
+              className="border-[#1A1A1A] bg-[#0A0A0A] text-xs text-white"
             />
           }
         />
+
         <Area
           dataKey="yield_coefficient"
           type="linear"
-          fill="transparent"
+          fill="url(#fillYield)"
           strokeWidth={2}
           stroke="var(--color-yield_coefficient)"
         />
@@ -107,29 +112,27 @@ export const YieldCoefficientCard = ({
   const TrendIcon = difference.isPositive
     ? RiArrowRightUpLine
     : RiArrowRightDownLine;
+
   const trendColor = difference.isPositive ? COLORS.positive : COLORS.negative;
 
   return (
-    <Card className="flex h-64 w-full flex-col rounded-2xl border border-white/50 bg-transparent p-4 text-white sm:h-72 sm:rounded-3xl sm:p-5">
-      <section className="mb-2 flex shrink-0 flex-col gap-1 sm:mb-4 sm:gap-2">
-        <h1 className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-[#888888] uppercase sm:gap-2 sm:text-sm">
-          <IoMdTrendingUp className="inline text-sm sm:text-base" /> Coeficiente
-          de Rendimento
+    <Card className="flex h-full w-full flex-col rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 text-white shadow-lg sm:p-5 md:p-6">
+      <section className="mb-3 flex shrink-0 flex-col gap-2 sm:mb-4 sm:gap-3">
+        <h1 className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-zinc-400 uppercase sm:text-sm">
+          <IoMdTrendingUp className="shrink-0 text-sm" />
+          Coeficiente de Rendimento
         </h1>
 
-        <div className="flex items-end gap-2">
-          <span className="text-4xl leading-none font-light sm:text-5xl md:text-6xl">
+        <div className="flex flex-wrap items-end gap-2 sm:gap-3">
+          <span className="text-4xl leading-none font-light tabular-nums sm:text-5xl md:text-6xl">
             {currentValue}
           </span>
 
           {difference.formatted && (
-            <div className="mb-0.5 flex flex-row items-center sm:mb-1">
-              <TrendIcon
-                className="text-base sm:text-lg"
-                style={{ color: trendColor }}
-              />
+            <div className="mb-0.5 flex items-center gap-1">
+              <TrendIcon className="text-base" style={{ color: trendColor }} />
               <span
-                className="text-sm font-semibold sm:text-base"
+                className="text-sm font-semibold"
                 style={{ color: trendColor }}
               >
                 {difference.formatted}

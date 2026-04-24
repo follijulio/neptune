@@ -97,3 +97,28 @@ export type Exam = Prisma.ExamModel
  * 
  */
 export type SubjectMaterial = Prisma.SubjectMaterialModel
+/**
+ * Model StudyDocument
+ * 
+ */
+export type StudyDocument = Prisma.StudyDocumentModel
+/**
+ * Model Question
+ * 
+ */
+export type Question = Prisma.QuestionModel
+/**
+ * Model Attempt
+ * 
+ */
+export type Attempt = Prisma.AttemptModel
+/**
+ * Model DifficultyTag
+ * 
+ */
+export type DifficultyTag = Prisma.DifficultyTagModel
+/**
+ * Model StudySession
+ * 
+ */
+export type StudySession = Prisma.StudySessionModel

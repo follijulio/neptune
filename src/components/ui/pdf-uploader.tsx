@@ -5,6 +5,7 @@ import { LuCheck, LuCircleAlert, LuFileText, LuUpload } from "react-icons/lu";
 import { useRouter } from "next/navigation";
 
 import { Alert } from "../shadcn-ui/alert";
+import { Spinner } from "../shadcn-ui/spinner";
 
 import type { ParsedSubject } from "@/src/app/actions/pdf-actions";
 import {
@@ -43,6 +44,7 @@ function FileInputZone({
   return (
     <div className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#1A1A1A] bg-[#000000]/50 p-6 text-center transition-colors hover:border-[#007AFF] sm:p-8">
       <input
+        placeholder="file"
         type="file"
         accept="application/pdf"
         onChange={onChange}
@@ -205,7 +207,7 @@ function SubjectsList({
   );
 }
 
-function SuccessState({ onUpdate }: { onUpdate: () => void }) {
+function SuccessState() {
   return (
     <div className="animate-in zoom-in mt-6 rounded-xl border border-[#00FF88]/30 bg-[#00FF88]/10 p-5 text-center duration-300 sm:mt-8 sm:p-6">
       <LuCheck className="mx-auto mb-3 text-4xl text-[#00FF88] sm:mb-4 sm:text-5xl" />
@@ -215,12 +217,10 @@ function SuccessState({ onUpdate }: { onUpdate: () => void }) {
       <p className="text-xs text-[#888888] sm:text-sm">
         Suas disciplinas e notas já estão no seu dashboard.
       </p>
-      <button
-        onClick={onUpdate}
-        className="mt-4 rounded-lg bg-[#00FF88]/20 px-4 py-2 text-xs font-bold text-[#00FF88] transition-colors hover:bg-[#00FF88]/30 sm:mt-5 sm:text-sm"
-      >
-        Atualizar Dashboard
-      </button>
+      <div className="mt-4 flex items-center justify-center rounded-lg bg-[#00FF88]/20 px-4 py-2 text-xs font-bold text-[#00FF88] transition-colors hover:bg-[#00FF88]/30 sm:mt-5 sm:text-sm">
+        Só 1 segundo... Estamos te redirecionando para o dashboard...
+        <Spinner />
+      </div>
     </div>
   );
 }
@@ -300,10 +300,6 @@ export default function PdfUploader() {
     }
   };
 
-  const handleUpdate = () => {
-    window.location.reload();
-  };
-
   return (
     <Card className="mx-auto mt-6 w-full max-w-2xl border-[#1A1A1A] bg-[#121212] text-[#E0E0E0] sm:mt-10">
       <CardHeader className="p-4 sm:p-6">
@@ -333,7 +329,7 @@ export default function PdfUploader() {
           />
         )}
 
-        {state.savedSuccess && <SuccessState onUpdate={handleUpdate} />}
+        {state.savedSuccess && <SuccessState />}
       </CardContent>
     </Card>
   );

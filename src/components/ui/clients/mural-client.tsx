@@ -54,7 +54,12 @@ type Note = {
   createdAt: Date;
 };
 
-const NOTE_COLORS = [
+type NoteColor = {
+  name: string;
+  value: string;
+};
+
+const NOTE_COLORS: NoteColor[] = [
   { name: "Azul Netuno", value: "#007AFF" },
   { name: "Vermelho Urgente", value: "#FF3B30" },
   { name: "Verde Aprovado", value: "#34C759" },
@@ -63,19 +68,145 @@ const NOTE_COLORS = [
   { name: "Cinza Neutro", value: "#8E8E93" },
 ];
 
-function SortableNoteCard({
-  note,
-  onDelete,
-  onEdit,
-  isDeleting,
-  index,
-}: {
+interface SortableNoteCardProps {
   note: Note;
   onDelete: (id: string) => void;
   onEdit: (note: Note) => void;
   isDeleting: boolean;
   index: number;
-}) {
+}
+
+interface DialogFormProps {
+  editingNote: Note | null;
+  noteTitle: string;
+  noteContent: string;
+  selectedColor: string;
+  error: string | null;
+  isSaving: boolean;
+  onTitleChange: (value: string) => void;
+  onContentChange: (value: string) => void;
+  onColorChange: (color: string) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+interface ColorSelectorProps {
+  selectedColor: string;
+  onColorChange: (color: string) => void;
+}
+
+interface NoteGridProps {
+  notes: Note[];
+  isDeleting: string | null;
+  onDelete: (id: string) => void;
+  onEdit: (note: Note) => void;
+  onDragEnd: (event: DragEndEvent) => void;
+}
+
+const ColorSelector = ({
+  selectedColor,
+  onColorChange,
+}: ColorSelectorProps) => (
+  <div className="space-y-2 sm:space-y-3">
+    <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
+      Cor da Tag
+    </label>
+    <div className="flex flex-wrap gap-2 sm:gap-3">
+      {NOTE_COLORS.map((c) => (
+        <button
+          key={c.value}
+          type="button"
+          onClick={() => onColorChange(c.value)}
+          className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 sm:h-8 sm:w-8 ${
+            selectedColor === c.value
+              ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]"
+              : ""
+          }`}
+          style={{ backgroundColor: c.value }}
+          title={c.name}
+        >
+          {selectedColor === c.value && (
+            <LuCheck className="h-3 w-3 text-white drop-shadow-md sm:h-4 sm:w-4" />
+          )}
+        </button>
+      ))}
+    </div>
+  </div>
+);
+
+const NoteFormDialog = ({
+  editingNote,
+  noteTitle,
+  noteContent,
+  selectedColor,
+  error,
+  isSaving,
+  onTitleChange,
+  onContentChange,
+  onColorChange,
+  onSubmit,
+}: DialogFormProps) => (
+  <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
+    <DialogHeader>
+      <DialogTitle className="text-lg font-bold sm:text-2xl">
+        {editingNote ? "Editar Anotação" : "Criar Anotação"}
+      </DialogTitle>
+    </DialogHeader>
+    <form onSubmit={onSubmit} className="space-y-4 pt-2 sm:space-y-6 sm:pt-4">
+      {error && (
+        <p className="text-xs font-medium text-red-500 sm:text-sm">{error}</p>
+      )}
+
+      <div className="space-y-1.5 sm:space-y-2">
+        <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
+          Título
+        </label>
+        <Input
+          value={noteTitle}
+          onChange={(e) => onTitleChange(e.target.value)}
+          placeholder="Ex: Prova de..."
+          className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
+        />
+      </div>
+
+      <div className="space-y-1.5 sm:space-y-2">
+        <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
+          Conteúdo
+        </label>
+        <Textarea
+          value={noteContent}
+          onChange={(e) => onContentChange(e.target.value)}
+          placeholder="Resumo, ideias..."
+          className="min-h-24 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:min-h-30 sm:text-base"
+        />
+      </div>
+
+      <ColorSelector
+        selectedColor={selectedColor}
+        onColorChange={onColorChange}
+      />
+
+      <Button
+        type="submit"
+        disabled={isSaving}
+        className="h-10 w-full rounded-xl bg-[#007AFF] text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:text-base"
+      >
+        {isSaving
+          ? "Salvando..."
+          : editingNote
+            ? "Salvar Alterações"
+            : "Salvar Post-it"}
+      </Button>
+    </form>
+  </DialogContent>
+);
+
+const SortableNoteCard = ({
+  note,
+  onDelete,
+  onEdit,
+  isDeleting,
+  index,
+}: SortableNoteCardProps) => {
   const {
     attributes,
     listeners,
@@ -101,11 +232,23 @@ function SortableNoteCard({
     [note.createdAt],
   );
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDelete(note.id);
+  };
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdit(note);
+  };
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-60 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 sm:min-h-70 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""}`}
+      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-60 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 sm:min-h-70 ${
+        isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""
+      }`}
     >
       <div
         className="absolute top-0 left-0 h-1.5 w-full sm:h-2"
@@ -134,10 +277,7 @@ function SortableNoteCard({
 
           <div className="flex items-center gap-1">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(note);
-              }}
+              onClick={handleEdit}
               className="relative z-10 rounded-lg p-1.5 text-zinc-500 transition-all hover:bg-[#007AFF]/10 hover:text-[#007AFF] sm:p-2 sm:opacity-0 sm:group-hover:opacity-100"
               title="Editar anotação"
             >
@@ -145,10 +285,7 @@ function SortableNoteCard({
             </button>
 
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(note.id);
-              }}
+              onClick={handleDelete}
               disabled={isDeleting}
               className="relative z-10 -mr-1 rounded-lg p-1.5 text-zinc-500 transition-all hover:bg-[#FF3B30]/10 hover:text-[#FF3B30] disabled:opacity-50 sm:-mr-2 sm:p-2 sm:opacity-0 sm:group-hover:opacity-100"
               title="Apagar anotação"
@@ -160,7 +297,80 @@ function SortableNoteCard({
       </div>
     </div>
   );
+};
+
+const EmptyState = () => (
+  <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
+    <p className="text-base text-zinc-500 sm:text-lg">Mural vazio...</p>
+  </div>
+);
+
+const NoteGrid = ({
+  notes,
+  isDeleting,
+  onDelete,
+  onEdit,
+  onDragEnd,
+}: NoteGridProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={onDragEnd}
+    >
+      <SortableContext items={notes} strategy={rectSortingStrategy}>
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {notes.map((note, index) => (
+            <SortableNoteCard
+              key={note.id}
+              note={note}
+              index={index}
+              onDelete={onDelete}
+              onEdit={onEdit}
+              isDeleting={isDeleting === note.id}
+            />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
+  );
+};
+
+interface HeaderProps {
+  onCreateClick: () => void;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
 }
+
+const Header = ({
+  onCreateClick,
+  isOpen,
+  onOpenChange,
+  children,
+}: HeaderProps) => (
+  <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button
+          onClick={onCreateClick}
+          className="h-10 gap-2 rounded-xl bg-[#007AFF] px-4 text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:px-6 sm:text-base"
+        >
+          <LuPlus className="h-4 w-4 sm:h-5 sm:w-5" /> Novo Post-it
+        </Button>
+      </DialogTrigger>
+
+      {children}
+    </Dialog>
+  </header>
+);
 
 export default function MuralClient({
   initialNotes,
@@ -183,14 +393,7 @@ export default function MuralClient({
     setNotes(initialNotes);
   }, [initialNotes]);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
-
-  async function handleDragEnd(event: DragEndEvent) {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
@@ -203,34 +406,34 @@ export default function MuralClient({
       const orderedIds = newOrder.map((n) => n.id);
       await reorderNotesAction(orderedIds);
     }
-  }
+  };
 
-  async function handleDelete(noteId: string) {
+  const handleDelete = async (noteId: string) => {
     setIsDeleting(noteId);
     const result = await deleteNoteAction(noteId);
     if (result.success) setNotes((prev) => prev.filter((n) => n.id !== noteId));
     setIsDeleting(null);
-  }
+  };
 
-  function openEditModal(note: Note) {
+  const openEditModal = (note: Note) => {
     setEditingNote(note);
     setNoteTitle(note.title);
     setNoteContent(note.content);
     setSelectedColor(note.color || NOTE_COLORS[0].value);
     setError(null);
     setIsOpen(true);
-  }
+  };
 
-  function openCreateModal() {
+  const openCreateModal = () => {
     setEditingNote(null);
     setNoteTitle("");
     setNoteContent("");
     setSelectedColor(NOTE_COLORS[0].value);
     setError(null);
     setIsOpen(true);
-  }
+  };
 
-  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
@@ -282,124 +485,39 @@ export default function MuralClient({
     }
 
     setIsSaving(false);
-  }
+  };
 
   return (
     <section className="px-4 sm:px-0">
-      <header className="flex items-end justify-between border-[#1A1A1A] pb-4">
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={openCreateModal}
-              className="h-10 gap-2 rounded-xl bg-[#007AFF] px-4 text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:px-6 sm:text-base"
-            >
-              <LuPlus className="h-4 w-4 sm:h-5 sm:w-5" /> Novo Post-it
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-bold sm:text-2xl">
-                {editingNote ? "Editar Anotação" : "Criar Anotação"}
-              </DialogTitle>
-            </DialogHeader>
-            <form
-              onSubmit={handleSave}
-              className="space-y-4 pt-2 sm:space-y-6 sm:pt-4"
-            >
-              {error && (
-                <p className="text-xs font-medium text-red-500 sm:text-sm">
-                  {error}
-                </p>
-              )}
-
-              <div className="space-y-1.5 sm:space-y-2">
-                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
-                  Título
-                </label>
-                <Input
-                  value={noteTitle}
-                  onChange={(e) => setNoteTitle(e.target.value)}
-                  placeholder="Ex: Prova de..."
-                  className="h-10 rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:h-12 sm:text-base"
-                />
-              </div>
-
-              <div className="space-y-1.5 sm:space-y-2">
-                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
-                  Conteúdo
-                </label>
-                <Textarea
-                  value={noteContent}
-                  onChange={(e) => setNoteContent(e.target.value)}
-                  placeholder="Resumo, ideias..."
-                  className="min-h-24 resize-none rounded-xl border-zinc-800 bg-zinc-900/50 text-sm text-white focus-visible:ring-[#007AFF] sm:min-h-30 sm:text-base"
-                />
-              </div>
-
-              <div className="space-y-2 sm:space-y-3">
-                <label className="text-xs font-semibold text-zinc-300 sm:text-sm">
-                  Cor da Tag
-                </label>
-                <div className="flex flex-wrap gap-2 sm:gap-3">
-                  {NOTE_COLORS.map((c) => (
-                    <button
-                      key={c.value}
-                      type="button"
-                      onClick={() => setSelectedColor(c.value)}
-                      className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c.value ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
-                      style={{ backgroundColor: c.value }}
-                      title={c.name}
-                    >
-                      {selectedColor === c.value && (
-                        <LuCheck className="h-3 w-3 text-white drop-shadow-md sm:h-4 sm:w-4" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isSaving}
-                className="h-10 w-full rounded-xl bg-[#007AFF] text-sm font-bold text-white hover:bg-[#005bb5] sm:h-12 sm:text-base"
-              >
-                {isSaving
-                  ? "Salvando..."
-                  : editingNote
-                    ? "Salvar Alterações"
-                    : "Salvar Post-it"}
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </header>
+      <Header
+        onCreateClick={openCreateModal}
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+      >
+        <NoteFormDialog
+          editingNote={editingNote}
+          noteTitle={noteTitle}
+          noteContent={noteContent}
+          selectedColor={selectedColor}
+          error={error}
+          isSaving={isSaving}
+          onTitleChange={setNoteTitle}
+          onContentChange={setNoteContent}
+          onColorChange={setSelectedColor}
+          onSubmit={handleSave}
+        />
+      </Header>
 
       {notes.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
-          <p className="text-base text-zinc-500 sm:text-lg">Mural vazio...</p>
-        </div>
+        <EmptyState />
       ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
+        <NoteGrid
+          notes={notes}
+          isDeleting={isDeleting}
+          onDelete={handleDelete}
+          onEdit={openEditModal}
           onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={notes} strategy={rectSortingStrategy}>
-            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {notes.map((note, index) => (
-                <SortableNoteCard
-                  key={note.id}
-                  note={note}
-                  index={index}
-                  onDelete={handleDelete}
-                  onEdit={openEditModal}
-                  isDeleting={isDeleting === note.id}
-                />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
+        />
       )}
     </section>
   );

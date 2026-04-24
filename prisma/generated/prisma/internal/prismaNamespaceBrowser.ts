@@ -66,7 +66,12 @@ export const ModelName = {
   Link: 'Link',
   SubjectNote: 'SubjectNote',
   Exam: 'Exam',
-  SubjectMaterial: 'SubjectMaterial'
+  SubjectMaterial: 'SubjectMaterial',
+  StudyDocument: 'StudyDocument',
+  Question: 'Question',
+  Attempt: 'Attempt',
+  DifficultyTag: 'DifficultyTag',
+  StudySession: 'StudySession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -92,7 +97,9 @@ export const UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   image: 'image',
-  emailVerified: 'emailVerified'
+  emailVerified: 'emailVerified',
+  xp: 'xp',
+  level: 'level'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -289,6 +296,72 @@ export const SubjectMaterialScalarFieldEnum = {
 } as const
 
 export type SubjectMaterialScalarFieldEnum = (typeof SubjectMaterialScalarFieldEnum)[keyof typeof SubjectMaterialScalarFieldEnum]
+
+
+export const StudyDocumentScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  fileUrl: 'fileUrl',
+  fileKey: 'fileKey',
+  rawText: 'rawText',
+  userId: 'userId',
+  subjectId: 'subjectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyDocumentScalarFieldEnum = (typeof StudyDocumentScalarFieldEnum)[keyof typeof StudyDocumentScalarFieldEnum]
+
+
+export const QuestionScalarFieldEnum = {
+  id: 'id',
+  referenceIndex: 'referenceIndex',
+  fullText: 'fullText',
+  providedData: 'providedData',
+  keyTopics: 'keyTopics',
+  expectedType: 'expectedType',
+  documentId: 'documentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
+
+
+export const AttemptScalarFieldEnum = {
+  id: 'id',
+  studentAnswer: 'studentAnswer',
+  isFullyCorrect: 'isFullyCorrect',
+  logicalScore: 'logicalScore',
+  aiFeedback: 'aiFeedback',
+  userId: 'userId',
+  questionId: 'questionId',
+  createdAt: 'createdAt',
+  answerImageUrl: 'answerImageUrl'
+} as const
+
+export type AttemptScalarFieldEnum = (typeof AttemptScalarFieldEnum)[keyof typeof AttemptScalarFieldEnum]
+
+
+export const DifficultyTagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type DifficultyTagScalarFieldEnum = (typeof DifficultyTagScalarFieldEnum)[keyof typeof DifficultyTagScalarFieldEnum]
+
+
+export const StudySessionScalarFieldEnum = {
+  id: 'id',
+  duration: 'duration',
+  mode: 'mode',
+  createdAt: 'createdAt',
+  userId: 'userId'
+} as const
+
+export type StudySessionScalarFieldEnum = (typeof StudySessionScalarFieldEnum)[keyof typeof StudySessionScalarFieldEnum]
 
 
 export const SortOrder = {

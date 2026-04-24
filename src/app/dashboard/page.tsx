@@ -16,12 +16,16 @@ export default async function Page() {
     redirect("/login");
   }
 
-  const [hasSemester, hasWorkload] = await Promise.all([
+  const [hasSemester, hasWorkload, user] = await Promise.all([
     prisma.semester.findFirst({
       where: { userId: session.user.id },
     }),
     prisma.workload.findFirst({
       where: { userId: session.user.id },
+    }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { xp: true, name: true },
     }),
   ]);
 
@@ -31,7 +35,11 @@ export default async function Page() {
 
   return (
     <div className="mx-auto w-full px-0 sm:px-4">
-      <DashboardClient userId={session.user.id} />
+      <DashboardClient
+        userId={session.user.id}
+        userName={user?.name}
+        initialXp={user?.xp || 0}
+      />
     </div>
   );
 }

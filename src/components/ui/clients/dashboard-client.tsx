@@ -18,45 +18,67 @@ import {
 } from "@/src/components/shadcn-ui/dialog";
 import PdfUploader from "@/src/components/ui/pdf-uploader";
 
+type LoadingTarget = "all" | "semester" | "curriculum";
+
+function BentoSkeleton() {
+  return (
+    <section className="mx-auto flex h-full w-full max-w-screen-2xl animate-pulse flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="h-7 w-36 rounded-xl bg-zinc-800/70 sm:h-8 sm:w-48" />
+        <div className="h-9 w-full max-w-52 rounded-xl bg-zinc-800/70 sm:h-10" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+        <div className="h-48 rounded-2xl border border-zinc-800/50 bg-zinc-900/40 md:col-span-2" />
+        <div className="h-48 rounded-2xl border border-zinc-800/50 bg-zinc-900/40" />
+        <div className="h-48 rounded-2xl border border-zinc-800/50 bg-zinc-900/40" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+        <div className="h-72 rounded-2xl border border-zinc-800/50 bg-zinc-900/40 md:col-span-2" />
+        <div className="h-72 rounded-2xl border border-zinc-800/50 bg-zinc-900/40" />
+        <div className="h-72 rounded-2xl border border-zinc-800/50 bg-zinc-900/40" />
+      </div>
+
+      <div className="flex flex-col gap-4 sm:gap-5">
+        <div className="h-72 rounded-2xl border border-zinc-800/50 bg-zinc-900/40 sm:h-80" />
+        <div className="h-56 rounded-2xl border border-zinc-800/50 bg-zinc-900/40 sm:h-64" />
+      </div>
+    </section>
+  );
+}
+
 export default function DashboardClient({
   userId,
+  initialXp,
 }: {
   userId: string;
   userName?: string | null;
+  initialXp?: number;
 }) {
   const searchParams = useSearchParams();
   const { data, isLoading, error, execute } = useDashboardData();
 
-  const [loadingTarget, setLoadingTarget] = useState<
-    "all" | "semester" | "curriculum"
-  >("all");
-  const [count, setCoount] = useState(1);
+  const [loadingTarget, setLoadingTarget] = useState<LoadingTarget>("all");
 
-  const prevSemester = useRef<string | undefined>(undefined);
-  const prevCurriculum = useRef<string | undefined>(undefined);
-
-  const easterEgg = () => {
-    if (count % 14 == 0) {
-      alert("14 o melhor número de todos!");
-    }
-    setCoount(count + 1);
-  };
+  const previousSemester = useRef<string | undefined>(undefined);
+  const previousCurriculum = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     const semester = searchParams.get("semester") || undefined;
     const filterCurriculum = searchParams.get("filterCurriculum") || undefined;
 
-    if (semester !== prevSemester.current) {
+    if (semester !== previousSemester.current) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadingTarget("semester");
-    } else if (filterCurriculum !== prevCurriculum.current) {
+    } else if (filterCurriculum !== previousCurriculum.current) {
       setLoadingTarget("curriculum");
     } else {
       setLoadingTarget("all");
     }
 
-    prevSemester.current = semester;
-    prevCurriculum.current = filterCurriculum;
+    previousSemester.current = semester;
+    previousCurriculum.current = filterCurriculum;
 
     execute({ userId, semester, filterCurriculum });
   }, [searchParams, execute, userId]);
@@ -64,25 +86,7 @@ export default function DashboardClient({
   if (isLoading && !data) {
     return (
       <section>
-        <section className="flex h-full w-full animate-pulse flex-col gap-6 px-4 sm:gap-10 sm:px-10">
-          <div className="flex w-full items-center justify-between">
-            <div className="h-6 w-32 rounded bg-zinc-800 bg-linear-to-l sm:h-8 sm:w-48" />
-            <div className="h-8 w-40 rounded bg-zinc-800 sm:h-10 sm:w-52" />
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 sm:gap-10 md:grid-cols-2 lg:grid-cols-3">
-            <div className="h-40 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-48" />
-            <div className="h-40 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-48" />
-            <div className="h-40 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-48" />
-            <div className="col-span-1 h-56 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-64 md:col-span-2" />
-            <div className="h-56 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-64" />
-          </div>
-
-          <div className="flex flex-col gap-6 sm:gap-10">
-            <div className="h-64 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-80" />
-            <div className="h-56 rounded-lg border border-zinc-800 bg-zinc-900 sm:h-64" />
-          </div>
-        </section>
+        <BentoSkeleton />
       </section>
     );
   }
@@ -90,23 +94,23 @@ export default function DashboardClient({
   if (error) {
     return (
       <section>
-        <div className="flex h-full w-full items-center justify-center bg-black p-4 text-white">
+        <div className="flex h-full w-full items-center justify-center bg-[#0A0A0A] p-4 text-white">
           <Alert
             variant="destructive"
-            className="flex max-w-lg border border-red-900/50 bg-red-950/50 p-4 sm:p-6"
+            className="flex w-full max-w-lg rounded-2xl border border-red-900/40 bg-red-950/30 p-5 shadow-xl shadow-red-950/20 sm:p-6"
           >
             <div className="space-y-3 sm:space-y-4">
               <div>
                 <h3 className="mb-1.5 text-base font-semibold text-red-400 sm:mb-2 sm:text-lg">
-                  Erro ao Carregar Dashboard
+                  Erro ao carregar dashboard
                 </h3>
-                <p className="flex-wrap rounded border border-red-900/30 bg-black/30 p-2 font-mono text-xs text-zinc-400 sm:p-3 sm:text-sm">
+                <p className="rounded-xl border border-red-900/30 bg-black/40 p-2 font-mono text-xs text-zinc-400 sm:p-3 sm:text-sm">
                   {error}
                 </p>
               </div>
               <p className="text-xs text-zinc-300 sm:text-sm">
-                Não foi possível carregar os dados no momento. Por favor, tente
-                novamente mais tarde.
+                Não foi possível carregar os dados no momento. Tente novamente
+                mais tarde.
               </p>
               <p className="text-[10px] text-zinc-400 sm:text-xs">
                 Se o problema persistir, entre em contato com o{" "}
@@ -114,7 +118,7 @@ export default function DashboardClient({
                   href="https://github.com/follijulio"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline transition-colors hover:text-blue-300"
+                  className="text-[#007AFF] underline underline-offset-2 transition-colors hover:text-blue-300"
                 >
                   suporte técnico
                 </a>
@@ -130,58 +134,75 @@ export default function DashboardClient({
   if (!data) return null;
 
   return (
-    <section className="pb-8">
-      <section className="flex h-full w-full flex-col gap-6 px-4 sm:gap-10 sm:px-10">
-        <div className="flex w-full items-center justify-between">
-          <h2 className="text-xl font-bold sm:text-2xl">
+    <section className="pb-12">
+      <section className="mx-auto flex h-full w-full max-w-screen-3xl flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
             <button
-              className="transition-opacity outline-none hover:opacity-80"
-              onClick={() => easterEgg()}
+              type="button"
+              className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-transparent transition-opacity outline-none hover:opacity-70"
             >
-              Visão Geral
+              Visão geral
             </button>
           </h2>
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="h-9 gap-2 border-[#1A1A1A] bg-[#121212] px-3 text-white transition-all duration-300 hover:scale-105 hover:bg-[#1A1A1A] hover:invert sm:h-10 sm:px-4">
-                <UploadCloud className="h-4 w-4" />
-                <DialogTitle className="hidden text-xs sm:block sm:text-sm">
+              <Button className="h-10 w-full gap-2 rounded-xl border border-[#1A1A1A] bg-[#111111] px-4 text-white shadow-md shadow-black/40 transition-all duration-300 hover:border-[#007AFF]/30 hover:bg-[#141414] hover:shadow-[#007AFF]/10 sm:w-auto">
+                <UploadCloud className="h-4 w-4 text-[#007AFF]" />
+                <span className="hidden text-sm font-medium sm:inline">
                   Sincronizar Histórico
-                </DialogTitle>
-                <DialogTitle className="text-xs sm:hidden">
+                </span>
+                <span className="text-sm font-medium sm:hidden">
                   Sincronizar
-                </DialogTitle>
+                </span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="w-[95vw] max-w-3xl overflow-hidden rounded-xl border-none border-[#1A1A1A] bg-[#000000] p-0 text-white">
+            <DialogContent className="w-[95vw] max-w-3xl overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#080808] px-2 text-white shadow-2xl shadow-black/60">
+              <DialogTitle>
+                <p className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-center text-lg font-bold text-transparent">
+                  Sincronizar Histórico Acadêmico
+                </p>
+              </DialogTitle>
               <PdfUploader />
             </DialogContent>
           </Dialog>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-          <Cards.YieldCoefficient
-            semesters={data.performanceChart}
-            currentValue={data.currentYieldCoefficient}
-            previousValue={data.previousYieldCoefficient}
-          />
+        <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+          <div className="h-60 sm:h-64 md:col-span-2">
+            <Cards.YieldCoefficient
+              semesters={data.performanceChart}
+              currentValue={data.currentYieldCoefficient}
+              previousValue={data.previousYieldCoefficient}
+            />
+          </div>
+          <div className="h-60 sm:h-64">
+            <Cards.XpProgress xp={initialXp ?? 0} />
+          </div>
+          <div className="h-60 sm:h-64">
+            <Cards.CourseProgress
+              hoursCompleted={data.completedHours}
+              hoursTotal={data.totalHours}
+            />
+          </div>
+        </div>
 
-          <Cards.CourseProgress
-            hoursCompleted={data.completedHours}
-            hoursTotal={data.totalHours}
-          />
-
-          <Cards.AttentionRequired subjects={data.coursesAttention} />
-
-          <div className="col-span-1 h-full w-full md:col-span-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 xl:gap-5">
+          <div className="h-64 sm:h-72 md:col-span-2">
             <Cards.AverageRating semesters_data={data.performanceChart} />
           </div>
 
-          <Cards.DistributionWork ChartData={data.workloadChart} />
+          <div className="h-64 sm:h-72">
+            <Cards.DistributionWork ChartData={data.workloadChart} />
+          </div>
+
+          <div className="h-64 sm:h-72">
+            <Cards.AttentionRequired subjects={data.coursesAttention} />
+          </div>
         </div>
 
-        <div className="flex flex-col gap-6 sm:gap-10">
+        <div className="flex flex-col gap-4 sm:gap-5">
           <Table.CourseStatus
             courses={data.enrolledCourses.map((course) => ({
               ...course,

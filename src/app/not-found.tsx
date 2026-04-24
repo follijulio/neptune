@@ -2,16 +2,9 @@ import { LuRocket } from "react-icons/lu";
 import { Metadata } from "next";
 import Link from "next/link";
 
-const STAR_BACKGROUND_STYLE: React.CSSProperties = {
-  backgroundImage: `
-    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
-    radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
-    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
-    radial-gradient(circle at 75% 85%, rgba(255, 255, 255, 0.7) 1px, transparent 1px)
-  `,
-  backgroundSize: "150px 150px", // Reduced size for better mobile density
-};
+import { auth } from "../auth";
+
+import styles from "./not-found.module.css";
 
 export const metadata: Metadata = {
   title: "Buraco negro - Netuno",
@@ -20,8 +13,7 @@ export const metadata: Metadata = {
 function StarField() {
   return (
     <div
-      className="pointer-events-none absolute inset-0 opacity-60 sm:bg-size-[300px_300px]" // Larger stars on desktop
-      style={STAR_BACKGROUND_STYLE}
+      className={`pointer-events-none absolute inset-0 opacity-60 ${styles.starField}`}
     />
   );
 }
@@ -47,10 +39,12 @@ function OrbitRing() {
   );
 }
 
-function ReturnButton() {
+async function ReturnButton() {
+  const session = await auth();
+  const url = session?.user ? "/dashboard" : "/";
   return (
     <Link
-      href="/"
+      href={url}
       className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-[#007AFF] px-6 py-3.5 text-xs font-bold text-white transition-all hover:scale-105 hover:bg-[#005bb5] hover:shadow-[0_0_50px_rgba(0,122,255,0.6)] sm:mt-12 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-sm"
     >
       <LuRocket className="h-4 w-4 sm:h-5 sm:w-5" />
