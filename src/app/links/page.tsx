@@ -22,7 +22,7 @@ export default async function Page() {
   });
 
   return (
-    <div className="mx-auto w-full px-0 sm:px-4">
+    <div>
       <LinksClient initialLinks={links} />
     </div>
   );

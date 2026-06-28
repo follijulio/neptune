@@ -64,7 +64,7 @@ export async function parseAcademicHistoryAction(formData: FormData) {
 
     const prompt = `
 Você é um assistente especializado em extrair dados de históricos escolares brasileiros.
-Analise o texto abaixo e extraia disciplinas cursadas.
+Analise o texto abaixo e extraia disciplinas cursadas e futuras.
 
 Retorne ESTRITAMENTE um array JSON com objetos contendo:
 - "name" (string): nome da disciplina (ex: Matemática, Português, Cálculo 1)

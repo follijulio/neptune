@@ -1,8 +1,14 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import CalendarClient from "@/src/components/ui/clients/calendar-client";
+
+
+export const metadata: Metadata = {
+  title: "Netuno - Calendário",
+};
 
 export default async function Page() {
   const session = await auth();
@@ -17,7 +23,7 @@ export default async function Page() {
   });
 
   return (
-    <div className="mx-auto w-full px-0 sm:px-4">
+    <div>
       <CalendarClient initialEvents={events} />
     </div>
   );

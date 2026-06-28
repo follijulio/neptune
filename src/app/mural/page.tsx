@@ -20,7 +20,7 @@ export default async function Page() {
   const notes = await findNotesAction(session.user.id);
 
   return (
-    <div className="mx-auto w-full px-0 sm:px-4">
+    <div>
       <MuralClient initialNotes={notes} />
     </div>
   );

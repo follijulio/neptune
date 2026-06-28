@@ -34,7 +34,7 @@ export default async function Page() {
   }
 
   return (
-    <div className="mx-auto w-full px-0 sm:px-4">
+    <div>
       <DashboardClient
         userId={session.user.id}
         userName={user?.name}

@@ -94,6 +94,7 @@ const benefits = [
   "Murais de anotações organizados por disciplina",
   "Links personalizados para recursos externos",
   "Interface dark otimizada para longas sessões de estudo",
+  "Interface clara e intuitiva, sem confusão de planilhas",
   "Dados 100% privados e sob seu controle",
 ];
 

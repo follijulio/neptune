@@ -150,18 +150,19 @@ function SemesterSelector({
   onChange: (id: string) => void;
 }) {
   return (
-    <div className="mt-2 flex items-center gap-2 sm:gap-3">
-      <span className="text-xs font-medium text-zinc-500 sm:text-sm">
+    <div className="mt-2 flex items-center gap-3 sm:gap-4">
+      <span className="text-sm font-semibold text-white sm:text-xl">
         Período:
       </span>
       <select
         title="select-semester"
         value={activeSemesterId}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900 px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-[#007AFF] sm:w-auto sm:px-3 sm:py-1.5 sm:text-sm"
+        className="w-full cursor-pointer rounded-xl border border-[#007AFF] bg-[#071033] px-3 py-2 text-sm font-semibold text-white shadow-sm outline-none focus:ring-2 focus:ring-[#007AFF]/60 sm:w-auto sm:px-4 sm:py-2.5 sm:text-base"
+        aria-label="Selecionar período"
       >
         {semesters.map((s) => (
-          <option key={s.id} value={s.id}>
+          <option key={s.id} value={s.id} className="bg-[#071033] text-white">
             {s.title}
           </option>
         ))}

@@ -22,7 +22,7 @@ type LoadingTarget = "all" | "semester" | "curriculum";
 
 function BentoSkeleton() {
   return (
-    <section className="mx-auto flex h-full w-full max-w-screen-2xl animate-pulse flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
+    <section className="mx-auto flex h-full w-full max-w-screen-2xl animate-pulse flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="h-7 w-36 rounded-xl bg-zinc-800/70 sm:h-8 sm:w-48" />
         <div className="h-9 w-full max-w-52 rounded-xl bg-zinc-800/70 sm:h-10" />
@@ -135,15 +135,10 @@ export default function DashboardClient({
 
   return (
     <section className="pb-12">
-      <section className="mx-auto flex h-full w-full max-w-screen-3xl flex-col gap-4 px-4 sm:gap-6 sm:px-6 lg:gap-8 lg:px-10">
+      <section className="flex flex-col gap-2">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
-            <button
-              type="button"
-              className="bg-linear-to-r from-white to-zinc-400 bg-clip-text text-transparent transition-opacity outline-none hover:opacity-70"
-            >
-              Visão geral
-            </button>
+            Visão geral
           </h2>
 
           <Dialog>

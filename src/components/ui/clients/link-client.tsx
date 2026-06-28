@@ -227,11 +227,10 @@ export default function LinksClient({
                           key={iconName}
                           type="button"
                           onClick={() => setSelectedIcon(iconName)}
-                          className={`rounded-lg border p-2 transition-all sm:rounded-xl sm:p-3 ${
-                            selectedIcon === iconName
+                          className={`rounded-lg border p-2 transition-all sm:rounded-xl sm:p-3 ${selectedIcon === iconName
                               ? "border-[#007AFF] bg-[#007AFF]/20 text-[#007AFF]"
                               : "border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                          }`}
+                            }`}
                         >
                           <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
                         </button>
