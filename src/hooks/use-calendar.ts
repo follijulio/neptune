@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addMonths,
   eachDayOfInterval,
@@ -27,10 +27,15 @@ export type CalendarEvent = {
 
 export function useCalendar(initialEvents: CalendarEvent[] = []) {
   const router = useRouter();
-  const events = useMemo(
-    () => initialEvents.map((ev) => ({ ...ev, date: new Date(ev.date) })),
-    [initialEvents],
-  );
+
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+
+  useEffect(() => {
+    //! vai ficar dando erro mesmo, não sei como fazer isso sem erro...
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEvents(initialEvents.map((ev) => ({ ...ev, date: new Date(ev.date) })));
+  }, [initialEvents]);
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -66,6 +71,9 @@ export function useCalendar(initialEvents: CalendarEvent[] = []) {
       setEditingEvent(null);
       setFormState((prev) => ({
         ...prev,
+        //TODO: deixar o usuário escolher o horário, por enquanto é fixo
+        //?     tem um input no componente, não implementei de bobo
+        //TODO: puxar o input
         time: "14:00",
         descCount: 0,
         error: null,
@@ -150,6 +158,29 @@ export function useCalendar(initialEvents: CalendarEvent[] = []) {
         setFormState((prev) => ({ ...prev, loading: false }));
         router.refresh();
       }
+    },
+    moveEvent: async (eventId: string, newDate: Date) => {
+      //? atualiza na interface, depois o banco, tem que ver uma jeito mais bonitinho de fazer isso...
+      //TODO: Pesquisar sobre otimização de performance para não precisar atualizar o banco de dados toda vez que arrastar um evento, talvez usar debonce ou algo do tipo.
+      const eventToMove = events.find((e) => e.id === eventId);
+      if (!eventToMove) return;
+
+      const originalDate = new Date(eventToMove.date);
+      newDate.setHours(originalDate.getHours(), originalDate.getMinutes());
+
+      setEvents((prev) =>
+        prev.map((ev) => (ev.id === eventId ? { ...ev, date: newDate } : ev)),
+      );
+
+      await updateFullCalendarEventAction({
+        id: eventToMove.id,
+        title: eventToMove.title,
+        description: eventToMove.description || "",
+        date: newDate.toISOString(),
+        color: eventToMove.color || undefined,
+      });
+
+      router.refresh();
     },
   };
 

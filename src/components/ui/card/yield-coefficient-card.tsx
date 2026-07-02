@@ -116,12 +116,13 @@ export const YieldCoefficientCard = ({
   const trendColor = difference.isPositive ? COLORS.positive : COLORS.negative;
 
   return (
-    <Card className="flex h-full w-full flex-col rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 text-white shadow-lg sm:p-5 md:p-6">
+    <Card className="flex h-full w-full flex-col rounded-xl border border-[#1A1A1A] bg-black p-4 text-white sm:p-5 md:p-6">
       <section className="mb-3 flex shrink-0 flex-col gap-2 sm:mb-4 sm:gap-3">
-        <h1 className="flex items-center gap-1.5 text-xs font-semibold tracking-wider text-zinc-400 uppercase sm:text-sm">
-          <IoMdTrendingUp className="shrink-0 text-sm" />
-          Coeficiente de Rendimento
-        </h1>
+
+        <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400 ">
+          <IoMdTrendingUp className="shrink-0" />
+          <span>Coeficiente de Rendimento</span>
+        </header>
 
         <div className="flex flex-wrap items-end gap-2 sm:gap-3">
           <span className="text-4xl leading-none font-light tabular-nums sm:text-5xl md:text-6xl">

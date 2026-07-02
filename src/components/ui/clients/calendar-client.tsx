@@ -26,6 +26,7 @@ export default function CalendarClient({ initialEvents = [] }: CalendarClientPro
             events={state.events}
             onDayClick={actions.selectDay}
             onEventClick={actions.selectEvent}
+            onEventDrop={actions.moveEvent}
           />
         </div>
         <aside className="flex w-full shrink-0 flex-col gap-4 sm:gap-6 xl:w-80">

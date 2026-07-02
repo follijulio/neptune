@@ -103,7 +103,7 @@ export default function LandingPage() {
     <div className="flex h-full w-full flex-col overflow-x-hidden bg-[#000000] text-[#E0E0E0] selection:bg-[#007AFF]/30">
       <main className="flex flex-1 flex-col items-center">
         <section className="mx-auto flex w-full flex-col items-center gap-6 px-4 py-16 text-center sm:gap-8 sm:px-6 sm:py-24 lg:py-40">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:px-4 sm:py-1.5 sm:text-sm">
+          <div className="inline-flex items-center gap-1.5 rounded-2xl border border-[#007AFF]/20 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:px-4 sm:py-1.5 sm:text-sm">
             <LuGraduationCap className="shrink-0 text-sm sm:text-base" />
             <span className="truncate">
               Feito de estudantes para estudantes
@@ -124,7 +124,7 @@ export default function LandingPage() {
             href="/login?tab=register"
             className="mt-4 w-full sm:mt-6 sm:w-auto"
           >
-            <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#007AFF] px-6 text-base font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-transform hover:scale-105 hover:bg-[#007AFF]/90 sm:h-14 sm:w-auto sm:px-8 sm:text-lg">
+            <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#007AFF] px-6 text-base font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-transform hover:scale-105 hover:bg-[#007AFF]/90 sm:h-14 sm:w-auto sm:px-8 sm:text-lg">
               Criar conta gratuitamente
               <LuArrowRight className="shrink-0 text-lg sm:text-xl" />
             </Button>
@@ -135,7 +135,7 @@ export default function LandingPage() {
           <div className="mx-auto w-full px-4 sm:px-6">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
               <div className="order-2 flex flex-col gap-5 sm:gap-6 lg:order-1">
-                <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[#007AFF]/30 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:text-sm">
+                <div className="inline-flex w-fit items-center gap-1.5 rounded-2xl border border-[#007AFF]/30 bg-[#007AFF]/10 px-3 py-1 text-xs font-medium text-[#007AFF] sm:gap-2 sm:text-sm">
                   <LuSparkles className="shrink-0 text-sm sm:text-base" />
                   <span>Recurso exclusivo</span>
                 </div>
@@ -253,7 +253,7 @@ export default function LandingPage() {
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-2 border-[#007AFF]/30 bg-[#007AFF]/10 text-xl font-bold text-[#007AFF] sm:h-16 sm:w-16 sm:text-2xl">
                       {step.number}
                     </div>
-                    <div className="absolute top-[52px] right-4 hidden h-10 w-10 items-center justify-center rounded-full border border-[#1A1A1A] bg-[#000000] text-[#007AFF] md:flex lg:right-12">
+                    <div className="absolute top-[52px] right-4 hidden h-10 w-10 items-center justify-center rounded-2xl border border-[#1A1A1A] bg-[#000000] text-[#007AFF] md:flex lg:right-12">
                       {step.icon}
                     </div>
 
@@ -319,7 +319,7 @@ export default function LandingPage() {
               universitária. É gratuito para começar.
             </p>
             <Link href="/login?tab=register" className="mt-2 w-full sm:w-auto">
-              <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#007AFF] px-6 text-base font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-transform hover:scale-105 hover:bg-[#007AFF]/90 sm:h-14 sm:w-auto sm:px-8 sm:text-lg">
+              <Button className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#007AFF] px-6 text-base font-bold text-white shadow-lg shadow-[#007AFF]/20 transition-transform hover:scale-105 hover:bg-[#007AFF]/90 sm:h-14 sm:w-auto sm:px-8 sm:text-lg">
                 Criar conta gratuitamente
                 <LuArrowRight className="shrink-0 text-lg sm:text-xl" />
               </Button>

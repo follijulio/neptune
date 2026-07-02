@@ -86,8 +86,8 @@ function getPlanetData(xp: number) {
     nextPlanet.name === currentPlanet.name
       ? 100
       : ((xp - currentPlanet.xpRequired) /
-          (nextPlanet.xpRequired - currentPlanet.xpRequired)) *
-        100;
+        (nextPlanet.xpRequired - currentPlanet.xpRequired)) *
+      100;
 
   return { currentPlanet, nextPlanet, progress };
 }
@@ -123,7 +123,7 @@ export default function RankingClient({
             Compare seu progresso e conquiste o sistema solar.
           </p>
         </div>
-        <div className="flex items-center gap-3 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-xl">
+        <div className="flex items-center gap-3 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-xl">
           <div className="rounded-xl bg-[#007AFF]/10 p-3 text-[#007AFF]">
             <LuTrendingUp className="h-6 w-6" />
           </div>
@@ -181,9 +181,8 @@ export default function RankingClient({
               return (
                 <div
                   key={user.id}
-                  className={`flex flex-col items-start justify-between gap-6 border-b border-[#1A1A1A] p-6 transition-colors last:border-0 hover:bg-zinc-900/30 sm:flex-row sm:items-center sm:p-8 ${
-                    isCurrentUser ? "relative bg-[#007AFF]/5" : ""
-                  }`}
+                  className={`flex flex-col items-start justify-between gap-6 border-b border-[#1A1A1A] p-6 transition-colors last:border-0 hover:bg-zinc-900/30 sm:flex-row sm:items-center sm:p-8 ${isCurrentUser ? "relative bg-[#007AFF]/5" : ""
+                    }`}
                 >
                   {isCurrentUser && (
                     <div className="absolute top-0 bottom-0 left-0 w-1 bg-[#007AFF] shadow-[0_0_20px_rgba(0,122,255,0.5)]" />
@@ -201,10 +200,10 @@ export default function RankingClient({
                           alt="Avatar"
                           width={50}
                           height={50}
-                          className="rounded-full border border-zinc-800"
+                          className="rounded-2xl border border-zinc-800"
                         />
                       ) : (
-                        <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-lg font-bold text-zinc-500">
+                        <div className="flex h-[50px] w-[50px] items-center justify-center rounded-2xl border border-zinc-700 bg-zinc-800 text-lg font-bold text-zinc-500">
                           {(user.name || "?").charAt(0).toUpperCase()}
                         </div>
                       )}
@@ -212,7 +211,7 @@ export default function RankingClient({
                         <p className="flex items-center gap-2 text-lg font-bold text-white">
                           {user.name || "Viajante Anônimo"}
                           {isCurrentUser && (
-                            <span className="rounded-full bg-[#007AFF] px-2 py-0.5 text-[10px] tracking-wider text-white uppercase">
+                            <span className="rounded-2xl bg-[#007AFF] px-2 py-0.5 text-[10px] tracking-wider text-white uppercase">
                               Você
                             </span>
                           )}
@@ -233,7 +232,7 @@ export default function RankingClient({
                         <span className="text-zinc-600">{nextPlanet.name}</span>
                       )}
                     </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full border border-[#1A1A1A] bg-zinc-900">
+                    <div className="h-2 w-full overflow-hidden rounded-2xl border border-[#1A1A1A] bg-zinc-900">
                       <div
                         className={`h-full ${currentPlanet.color.replace("text-", "bg-")} transition-all duration-1000 ease-out`}
                         style={{

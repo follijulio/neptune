@@ -116,7 +116,7 @@ const ColorSelector = ({
           key={c.value}
           type="button"
           onClick={() => onColorChange(c.value)}
-          className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c.value
+          className={`flex h-7 w-7 items-center justify-center rounded-2xl transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c.value
             ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]"
             : ""
             }`}
@@ -144,7 +144,7 @@ const NoteFormDialog = ({
   onColorChange,
   onSubmit,
 }: DialogFormProps) => (
-  <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
+  <DialogContent className="w-[95vw] max-w-100 rounded-xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
     <DialogHeader>
       <DialogTitle className="text-lg font-bold sm:text-2xl">
         {editingNote ? "Editar Anotação" : "Criar Anotação"}
@@ -298,7 +298,7 @@ const SortableNoteCard = ({
 };
 
 const EmptyState = () => (
-  <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
+  <div className="rounded-xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
     <p className="text-base text-zinc-500 sm:text-lg">Mural vazio...</p>
   </div>
 );

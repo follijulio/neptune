@@ -81,17 +81,17 @@ export const AbsenceCell: React.FC<AbsenceCellProps> = ({
           onClick={handleBarClick}
           onMouseMove={handleBarMove}
           onMouseLeave={() => setBarGhostPct(null)}
-          className="relative h-1.5 w-16 shrink-0 cursor-crosshair overflow-hidden rounded-full bg-white/10 sm:h-1.25 sm:w-24"
+          className="relative h-1.5 w-16 shrink-0 cursor-crosshair overflow-hidden rounded-2xl bg-white/10 sm:h-1.25 sm:w-24"
         >
           {barGhostPct !== null && (
             <div
-              className="absolute inset-y-0 left-0 rounded-full opacity-20"
+              className="absolute inset-y-0 left-0 rounded-2xl opacity-20"
               style={{ width: `${barGhostPct * 100}%`, background: barHex }}
             />
           )}
           <div
             className={cn(
-              "relative z-10 h-full rounded-full transition-all duration-300",
+              "relative z-10 h-full rounded-2xl transition-all duration-300",
               barTw,
             )}
             style={{ width: `${ratio * 100}%` }}

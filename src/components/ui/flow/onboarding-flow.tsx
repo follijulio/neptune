@@ -42,9 +42,9 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-4 sm:px-6">
       <div className="relative mb-8 flex w-full items-center justify-between sm:mb-12">
-        <div className="absolute top-1/2 left-0 -z-10 h-1 w-full -translate-y-1/2 rounded-full bg-[#1A1A1A]">
+        <div className="absolute top-1/2 left-0 -z-10 h-1 w-full -translate-y-1/2 rounded-2xl bg-[#1A1A1A]">
           <div
-            className="h-full rounded-full bg-[#007AFF] transition-all duration-500 ease-out"
+            className="h-full rounded-2xl bg-[#007AFF] transition-all duration-500 ease-out"
             style={{ width: `${((step - 1) / 2) * 100}%` }}
           />
         </div>
@@ -55,7 +55,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
             className="flex flex-col items-center gap-1.5 sm:gap-2"
           >
             <div
-              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300 sm:h-12 sm:w-12 ${step >= item.num ? "bg-[#007AFF] text-white shadow-[0_0_15px_rgba(0,122,255,0.4)]" : "bg-[#1A1A1A] text-[#555555]"}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-2xl transition-colors duration-300 sm:h-12 sm:w-12 ${step >= item.num ? "bg-[#007AFF] text-white shadow-[0_0_15px_rgba(0,122,255,0.4)]" : "bg-[#1A1A1A] text-[#555555]"}`}
             >
               <item.icon className="text-lg sm:text-xl" />
             </div>
@@ -68,7 +68,7 @@ export default function OnboardingFlow({ userName }: { userName: string }) {
         ))}
       </div>
 
-      <div className="relative flex min-h-100 w-full flex-col overflow-hidden rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-2xl sm:min-h-[500px] sm:p-8">
+      <div className="relative flex min-h-100 w-full flex-col overflow-hidden rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-6 shadow-2xl sm:min-h-[500px] sm:p-8">
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-right-8 flex flex-1 flex-col justify-center text-center duration-500">
             <h1 className="mb-3 flex flex-col items-center justify-center gap-2 text-2xl font-bold text-[#E0E0E0] sm:mb-4 sm:flex-row sm:text-4xl">

@@ -89,21 +89,19 @@ export function TabSwitcher({ activeTab, onChange }: TabSwitcherProps) {
     <div className="flex rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-1">
       <button
         onClick={() => onChange("training")}
-        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
-          activeTab === "training"
-            ? "bg-[#1A1A1A] text-[#007AFF]"
-            : "text-zinc-500 hover:text-white"
-        }`}
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${activeTab === "training"
+          ? "bg-[#1A1A1A] text-[#007AFF]"
+          : "text-zinc-500 hover:text-white"
+          }`}
       >
         <LuDna className="h-4 w-4" /> Treinamento
       </button>
       <button
         onClick={() => onChange("boss")}
-        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
-          activeTab === "boss"
-            ? "bg-[#1A1A1A] text-[#FF3B30]"
-            : "text-zinc-500 hover:text-white"
-        }`}
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${activeTab === "boss"
+          ? "bg-[#1A1A1A] text-[#FF3B30]"
+          : "text-zinc-500 hover:text-white"
+          }`}
       >
         <LuSwords className="h-4 w-4" /> Desafio Boss
       </button>
@@ -133,11 +131,10 @@ function DocumentHistoryBar({
       <Button
         variant="outline"
         onClick={onNew}
-        className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
-          !documentId
-            ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
-            : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"
-        }`}
+        className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${!documentId
+          ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
+          : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"
+          }`}
       >
         + Novo Material
       </Button>
@@ -145,19 +142,17 @@ function DocumentHistoryBar({
       {history.map((doc) => (
         <div
           key={doc.id}
-          className={`group flex shrink-0 items-center gap-1 rounded-xl border px-2 py-1.5 transition-all ${
-            documentId === doc.id
-              ? "border-[#007AFF]/50 bg-[#1A1A1A]"
-              : "border-[#1A1A1A] bg-[#0A0A0A]"
-          }`}
+          className={`group flex shrink-0 items-center gap-1 rounded-xl border px-2 py-1.5 transition-all ${documentId === doc.id
+            ? "border-[#007AFF]/50 bg-[#1A1A1A]"
+            : "border-[#1A1A1A] bg-[#0A0A0A]"
+            }`}
         >
           <button
             onClick={() => onSelect(doc)}
-            className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-bold ${
-              documentId === doc.id
-                ? "text-[#007AFF]"
-                : "text-zinc-500 hover:text-white"
-            }`}
+            className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-bold ${documentId === doc.id
+              ? "text-[#007AFF]"
+              : "text-zinc-500 hover:text-white"
+              }`}
           >
             <LuHistory className="h-4 w-4" />
             <span className="max-w-[140px] truncate">{doc.title}</span>
@@ -187,7 +182,7 @@ type UploadZoneProps = {
 
 function UploadZone({ onUploadComplete }: UploadZoneProps) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center">
       <LuCloudUpload className="h-10 w-10 text-[#007AFF]" />
       <h3 className="mt-4 text-lg font-bold text-white">Módulo de Ingestão</h3>
       <p className="mt-2 max-w-sm text-sm text-zinc-500">
@@ -226,7 +221,7 @@ function GenerateQuestionsPrompt({
   onGenerate,
 }: GenerateQuestionsPromptProps) {
   return (
-    <div className="rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center">
+    <div className="rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center">
       <LuBrainCircuit className="mx-auto h-10 w-10 text-[#007AFF]" />
       <h3 className="mt-4 text-lg font-bold text-white">Análise Pronta</h3>
       <Button
@@ -249,7 +244,7 @@ type QuestionCardProps = {
 
 function QuestionCard({ question, index, onOpen }: QuestionCardProps) {
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5">
+    <div className="flex flex-col justify-between rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-5">
       <div>
         <span className="text-xs font-bold text-[#007AFF]">
           QUESTÃO {index + 1}
@@ -358,7 +353,7 @@ type BossInvokeCardProps = {
 
 function BossInvokeCard({ isInvoking, onInvoke }: BossInvokeCardProps) {
   return (
-    <div className="w-full max-w-2xl rounded-3xl border border-[#FF3B30]/30 bg-black/40 p-6 shadow-[0_0_40px_rgba(255,59,48,0.12)]">
+    <div className="w-full max-w-2xl rounded-2xl border border-[#FF3B30]/30 bg-black/40 p-6 shadow-[0_0_40px_rgba(255,59,48,0.12)]">
       <div className="mb-4 flex items-center gap-2">
         <GiHarpoonTrident className="h-5 w-5 text-[#FF3B30]" />
         <span className="text-xs font-black tracking-[0.2em] text-[#FF3B30] uppercase">
@@ -375,7 +370,7 @@ function BossInvokeCard({ isInvoking, onInvoke }: BossInvokeCardProps) {
       <Button
         onClick={onInvoke}
         disabled={isInvoking}
-        className="mt-6 h-16 w-full rounded-2xl bg-[#FF3B30] px-10 text-lg font-black shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all hover:scale-[1.02] hover:bg-[#D32F2F] disabled:cursor-not-allowed disabled:opacity-70"
+        className="mt-6 h-16 w-full rounded-xl bg-[#FF3B30] px-10 text-lg font-black shadow-[0_0_30px_rgba(255,59,48,0.3)] transition-all hover:scale-[1.02] hover:bg-[#D32F2F] disabled:cursor-not-allowed disabled:opacity-70"
       >
         {isInvoking
           ? "MONTANDO O DESAFIO..."
@@ -392,7 +387,7 @@ type BossQuestionCardProps = {
 
 function BossQuestionCard({ question, onEnterBattle }: BossQuestionCardProps) {
   return (
-    <div className="w-full max-w-2xl rounded-3xl border-2 border-[#FF3B30]/30 bg-black p-8 shadow-[0_0_50px_rgba(255,59,48,0.1)]">
+    <div className="w-full max-w-2xl rounded-2xl border-2 border-[#FF3B30]/30 bg-black p-8 shadow-[0_0_50px_rgba(255,59,48,0.1)]">
       <div className="mb-4 flex items-center gap-2 text-[#FF3B30]">
         <LuSwords className="h-5 w-5" />
         <span className="text-sm font-bold tracking-widest uppercase">
@@ -435,7 +430,7 @@ export function BossTab({
       <div className="text-center">
         <div className="relative inline-block">
           <GiHarpoonTrident className="h-20 w-20 animate-pulse text-[#FF3B30]" />
-          <div className="absolute -inset-4 -z-10 rounded-full bg-[#FF3B30]/10 blur-2xl" />
+          <div className="absolute -inset-4 -z-10 rounded-2xl bg-[#FF3B30]/10 blur-2xl" />
         </div>
         <h2 className="mt-6 text-3xl font-black tracking-tighter text-white">
           ARENA NETUNO
@@ -563,8 +558,8 @@ export function QuestionDialog({
       open={!!selectedQuestion}
       onOpenChange={(open) => !open && onClose()}
     >
-      <DialogContent className="w-2/3 max-w-5xl overflow-y-auto rounded-2xl border-[#1A1A1A] bg-[#121212] p-0 text-white">
-       <DialogTitle></DialogTitle>
+      <DialogContent className="w-2/3 max-w-5xl overflow-y-auto rounded-xl border-[#1A1A1A] bg-[#121212] p-0 text-white">
+        <DialogTitle></DialogTitle>
         {selectedQuestion && (
           <div className="flex w-full flex-col">
             <div

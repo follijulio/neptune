@@ -15,16 +15,15 @@ export default function UserBadge({
   const isNetuno = current.name === "Netuno";
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 transition-all hover:bg-zinc-900/50">
-      <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-[#1A1A1A] bg-black">
+    <div className="flex items-center gap-3 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 transition-all hover:bg-zinc-900/50">
+      <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-[#1A1A1A] bg-black">
         <FiHexagon
-          className={`h-5 w-5 animate-[spin_10s_linear_infinite] ${current.color} ${
-            isNetuno ? "drop-shadow-[0_0_10px_rgba(0,122,255,0.8)]" : ""
-          }`}
+          className={`h-5 w-5 animate-[spin_10s_linear_infinite] ${current.color} ${isNetuno ? "drop-shadow-[0_0_10px_rgba(0,122,255,0.8)]" : ""
+            }`}
         />
 
         {isNetuno && (
-          <div className="absolute inset-0 animate-pulse rounded-full border border-[#007AFF]/30 bg-[#007AFF]/5 blur-sm" />
+          <div className="absolute inset-0 animate-pulse rounded-2xl border border-[#007AFF]/30 bg-[#007AFF]/5 blur-sm" />
         )}
 
         <svg className="absolute -inset-1 h-[52px] w-[52px] -rotate-90">

@@ -215,7 +215,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
   return (
     <Drawer direction="right" open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger asChild>
-        <Button className="h-8 w-8 cursor-pointer rounded-full border border-zinc-800 bg-zinc-900 p-2 text-white transition-all hover:bg-zinc-800 sm:h-10 sm:w-10">
+        <Button className="h-8 w-8 cursor-pointer rounded-2xl border border-zinc-800 bg-zinc-900 p-2 text-white transition-all hover:bg-zinc-800 sm:h-10 sm:w-10">
           <GoPlus className="text-lg sm:text-xl" />
         </Button>
       </DrawerTrigger>
@@ -396,7 +396,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                                 )}
                               </span>
                             </div>
-                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 transition-colors group-hover:bg-[#007AFF] group-hover:text-white sm:h-8 sm:w-8">
+                            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-2xl bg-zinc-800 text-zinc-400 transition-colors group-hover:bg-[#007AFF] group-hover:text-white sm:h-8 sm:w-8">
                               <LuDownload className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             </div>
                           </a>
@@ -607,7 +607,7 @@ const CourseDrawerAction: React.FC<CourseDrawerActionProps> = ({ course }) => {
                     key={c.value}
                     type="button"
                     onClick={() => setSelectedColor(c)}
-                    className={`flex h-7 w-7 items-center justify-center rounded-full transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
+                    className={`flex h-7 w-7 items-center justify-center rounded-2xl transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]" : ""}`}
                     style={{ backgroundColor: c.value }}
                     title={c.name}
                   >

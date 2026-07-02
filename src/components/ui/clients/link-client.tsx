@@ -174,7 +174,7 @@ export default function LinksClient({
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
+            <DialogContent className="w-[95vw] max-w-100 rounded-xl border-[#1A1A1A] bg-[#121212] p-4 text-white sm:max-w-md sm:p-6">
               <DialogHeader>
                 <DialogTitle className="text-xl font-bold sm:text-2xl">
                   {editingLink ? "Editar Link" : "Adicionar Link"}
@@ -228,8 +228,8 @@ export default function LinksClient({
                           type="button"
                           onClick={() => setSelectedIcon(iconName)}
                           className={`rounded-lg border p-2 transition-all sm:rounded-xl sm:p-3 ${selectedIcon === iconName
-                              ? "border-[#007AFF] bg-[#007AFF]/20 text-[#007AFF]"
-                              : "border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                            ? "border-[#007AFF] bg-[#007AFF]/20 text-[#007AFF]"
+                            : "border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:bg-zinc-800 hover:text-white"
                             }`}
                         >
                           <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -256,7 +256,7 @@ export default function LinksClient({
         </header>
 
         {isEmpty ? (
-          <div className="rounded-2xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
+          <div className="rounded-xl border border-dashed border-[#1A1A1A] bg-[#0A0A0A] py-16 text-center sm:py-24">
             <p className="text-base text-zinc-500 sm:text-lg">
               Não há links salvos...
             </p>
@@ -271,7 +271,7 @@ export default function LinksClient({
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative flex items-center gap-3 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-lg transition-all duration-300 hover:border-[#007AFF]/50 hover:bg-[#007AFF]/5 sm:gap-4 sm:rounded-2xl sm:p-5"
+                  className="group relative flex items-center gap-3 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-lg transition-all duration-300 hover:border-[#007AFF]/50 hover:bg-[#007AFF]/5 sm:gap-4 sm:rounded-xl sm:p-5"
                 >
                   <div className="shrink-0 rounded-lg border border-zinc-800 bg-black p-2.5 transition-colors group-hover:border-[#007AFF] group-hover:text-[#007AFF] sm:rounded-xl sm:p-3">
                     <Icon className="h-5 w-5 text-zinc-300 group-hover:text-[#007AFF] sm:h-6 sm:w-6" />

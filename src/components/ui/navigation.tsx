@@ -405,7 +405,7 @@ const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   firstLetter,
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]">
+    <DropdownMenuTrigger className="rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-[#007AFF]">
       <Avatar className="h-8 w-8 cursor-pointer border border-[#1A1A1A] transition-colors hover:border-zinc-700">
         <AvatarImage src={profileImageUrl} alt="Perfil do usuário" />
         <AvatarFallback className="bg-[#007AFF] font-bold text-white">

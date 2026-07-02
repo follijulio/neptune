@@ -108,7 +108,7 @@ function LoadingAlert() {
   return (
     <Alert className="mt-2 flex w-full rounded-xl border-[#1A1A1A] bg-[#0B0B0B]/80 px-3 py-3 backdrop-blur-sm sm:px-4">
       <div className="flex items-start gap-3">
-        <span className="mt-1 h-2 w-2 shrink-0 animate-pulse rounded-full bg-[#007AFF] sm:h-2.5 sm:w-2.5" />
+        <span className="mt-1 h-2 w-2 shrink-0 animate-pulse rounded-2xl bg-[#007AFF] sm:h-2.5 sm:w-2.5" />
         <div className="w-full">
           <p className="text-xs font-medium text-[#E0E0E0] sm:text-sm">
             Analisando seu histórico...
@@ -116,8 +116,8 @@ function LoadingAlert() {
           <p className="mt-1 text-[10px] text-[#888888] sm:text-xs">
             Isso pode levar alguns segundos, dependendo do tamanho do PDF.
           </p>
-          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#1A1A1A]">
-            <div className="h-full w-2/3 animate-pulse rounded-full bg-[#007AFF]" />
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-2xl bg-[#1A1A1A]">
+            <div className="h-full w-2/3 animate-pulse rounded-2xl bg-[#007AFF]" />
           </div>
         </div>
       </div>

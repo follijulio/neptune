@@ -125,7 +125,7 @@ function EmptySemestersState() {
 
 function EmptySubjectsState({ onAdd }: { onAdd: () => void }) {
   return (
-    <div className="mx-4 rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/20 py-12 text-center sm:mx-0 sm:py-20">
+    <div className="mx-4 rounded-xl border border-dashed border-zinc-800 bg-zinc-900/20 py-12 text-center sm:mx-0 sm:py-20">
       <p className="mb-2 text-sm text-zinc-500 sm:text-base">
         Este semestre ainda não tem disciplinas.
       </p>
@@ -190,7 +190,7 @@ function SubjectFormModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-100 rounded-2xl border-[#1A1A1A] bg-[#0A0A0A] p-4 text-white sm:max-w-md sm:p-6">
+      <DialogContent className="w-[95vw] max-w-100 rounded-xl border-[#1A1A1A] bg-[#0A0A0A] p-4 text-white sm:max-w-md sm:p-6">
         <DialogHeader>
           <DialogTitle className="text-lg font-bold sm:text-xl">
             {editingSubject
@@ -317,9 +317,9 @@ function AbsenceTracker({
           className={`${GRADE_INPUT_CLASS} h-8 w-16 text-sm sm:h-10 sm:w-20 sm:text-base`}
         />
       </div>
-      <div className="h-1 w-full overflow-hidden rounded-full bg-zinc-900 sm:h-1.5">
+      <div className="h-1 w-full overflow-hidden rounded-2xl bg-zinc-900 sm:h-1.5">
         <div
-          className={`h-full rounded-full transition-all duration-500 ${isDanger ? "bg-[#FF3B30]" : "bg-[#007AFF]"}`}
+          className={`h-full rounded-2xl transition-all duration-500 ${isDanger ? "bg-[#FF3B30]" : "bg-[#007AFF]"}`}
           style={{ width: `${absencePercent}%` }}
         />
       </div>
@@ -481,7 +481,7 @@ function SubjectCard({
   return (
     <form
       onSubmit={(e) => onSaveGrades(e, subject.id)}
-      className="group flex flex-col gap-4 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-2xl transition-colors hover:border-zinc-800 sm:gap-6 sm:rounded-2xl sm:p-6"
+      className="group flex flex-col gap-4 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-2xl transition-colors hover:border-zinc-800 sm:gap-6 sm:rounded-xl sm:p-6"
     >
       <div className="flex items-start justify-between">
         <div className="flex flex-col pr-2">

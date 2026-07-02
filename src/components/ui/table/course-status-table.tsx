@@ -69,7 +69,7 @@ const SemesterNavigator: React.FC<{
       onClick={() => onNavigate("previous")}
       disabled={disabled}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-full bg-black p-1 transition-all hover:invert sm:h-10 sm:w-10",
+        "flex h-8 w-8 items-center justify-center rounded-2xl bg-black p-1 transition-all hover:invert sm:h-10 sm:w-10",
         disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
       )}
       aria-label="Semestre anterior"
@@ -86,7 +86,7 @@ const SemesterNavigator: React.FC<{
       onClick={() => onNavigate("next")}
       disabled={disabled}
       className={cn(
-        "flex h-8 w-8 items-center justify-center rounded-full bg-black p-1 transition-all hover:invert sm:h-10 sm:w-10",
+        "flex h-8 w-8 items-center justify-center rounded-2xl bg-black p-1 transition-all hover:invert sm:h-10 sm:w-10",
         disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
       )}
       aria-label="Próximo semestre"
@@ -109,13 +109,13 @@ const CourseRowSkeleton = () => (
     </TableCell>
     <TableCell className="hidden p-3 sm:p-4 md:table-cell">
       <div className="flex items-center gap-2">
-        <div className="h-2 w-2 animate-pulse rounded-full bg-white/10 sm:h-3 sm:w-3" />
+        <div className="h-2 w-2 animate-pulse rounded-2xl bg-white/10 sm:h-3 sm:w-3" />
         <div className="h-3 w-16 animate-pulse rounded bg-white/10 sm:h-4 sm:w-20" />
       </div>
     </TableCell>
     <TableCell className="hidden p-3 sm:p-4 lg:table-cell">
       <div className="flex h-full items-center gap-2 sm:gap-4">
-        <div className="h-1.5 w-16 animate-pulse rounded-full bg-white/10 sm:h-2 sm:w-24" />
+        <div className="h-1.5 w-16 animate-pulse rounded-2xl bg-white/10 sm:h-2 sm:w-24" />
         <div className="h-3 w-6 animate-pulse rounded bg-white/10 sm:h-4 sm:w-8" />
       </div>
     </TableCell>
@@ -123,7 +123,7 @@ const CourseRowSkeleton = () => (
       <div className="h-3 w-6 animate-pulse rounded bg-white/10 sm:h-4 sm:w-8" />
     </TableCell>
     <TableCell className="p-3 text-right sm:p-4">
-      <div className="ml-auto h-5 w-5 animate-pulse rounded-full bg-white/10 sm:h-6 sm:w-6" />
+      <div className="ml-auto h-5 w-5 animate-pulse rounded-2xl bg-white/10 sm:h-6 sm:w-6" />
     </TableCell>
   </TableRow>
 );

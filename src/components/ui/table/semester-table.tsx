@@ -55,7 +55,7 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   );
 
   return (
-    <Card className="min-h-52 w-full border-0 bg-black p-2 text-white sm:p-4">
+    <Card className="min-h-52 w-full border border-[#1A1A1A] bg-black p-2 text-white sm:p-4 ">
       <h2 className="mb-4 text-xl font-semibold sm:text-2xl">
         Grade Curricular
       </h2>
@@ -210,7 +210,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({ subject }) => {
         >
           <span
             className={cn(
-              "h-1.5 w-1.5 rounded-full sm:h-2 sm:w-2",
+              "h-1.5 w-1.5 rounded-2xl sm:h-2 sm:w-2",
               dotColorClass,
             )}
           />

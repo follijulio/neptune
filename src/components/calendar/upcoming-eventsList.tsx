@@ -13,7 +13,7 @@ export default function UpcomingEventsList({
   onEventClick: (e: React.MouseEvent, event: CalendarEvent) => void;
 }) {
   return (
-    <div className="sticky top-20 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-xl sm:top-24 sm:rounded-2xl sm:p-6">
+    <div className="sticky top-20 rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 shadow-xl sm:top-24 sm:rounded-xl sm:p-6">
       <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white sm:mb-6 sm:text-xl">
         <LuCalendarDays className="h-5 w-5 text-[#007AFF] sm:h-6 sm:w-6" />
         Eventos próximos

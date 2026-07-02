@@ -133,11 +133,12 @@ export const AverageRatingCard: React.FC<ChartLineLabelProps> = ({
   semesters_data,
 }) => {
   return (
-    <Card className="flex h-full w-full flex-col rounded-2xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
-      <h1 className="mb-3 flex shrink-0 items-center gap-1.5 text-xs font-semibold tracking-wider text-zinc-400 uppercase sm:gap-2">
-        <IoMdTrendingUp className="shrink-0 text-sm" />
-        <span className="truncate">Evolução do Rendimento</span>
-      </h1>
+    <Card className="flex h-full w-full flex-col rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
+
+      <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400 ">
+        <IoMdTrendingUp className="shrink-0" />
+        <span>Evolução do Rendimento</span>
+      </header>
       <section className="min-h-0 w-full flex-1">
         <ChartLineLabel semesters_data={semesters_data} />
       </section>

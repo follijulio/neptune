@@ -92,21 +92,19 @@ const AuthTabs = ({ currentView, onSwitchView }: AuthTabsProps) => (
   <div className="grid h-12 w-full grid-cols-2 rounded-xl bg-[#121212] p-1 lg:h-14 lg:p-1.5">
     <button
       onClick={() => onSwitchView("login")}
-      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
-        currentView === "login"
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${currentView === "login"
           ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
           : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-      }`}
+        }`}
     >
       Entrar
     </button>
     <button
       onClick={() => onSwitchView("register")}
-      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
-        currentView === "register"
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${currentView === "register"
           ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
           : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-      }`}
+        }`}
     >
       Cadastrar
     </button>
@@ -415,7 +413,7 @@ export default function LoginClient() {
       <div className="w-full max-w-md lg:max-w-lg">
         {currentView === "login" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
+            <Card className="rounded-xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
               <AuthHeader
                 title={
                   showTwoFactor
@@ -451,7 +449,7 @@ export default function LoginClient() {
 
         {currentView === "register" && (
           <div className="animate-in fade-in zoom-in-95 duration-300 ease-out">
-            <Card className="rounded-2xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
+            <Card className="rounded-xl border-0 bg-[#121212] p-6 text-[#E0E0E0] shadow-none sm:p-8">
               <AuthHeader
                 title="Criar uma conta"
                 description="Comece a gerenciar sua grade curricular hoje mesmo."
