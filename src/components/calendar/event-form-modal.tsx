@@ -4,12 +4,16 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import { Button } from "../shadcn-ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shadcn-ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../shadcn-ui/dialog";
 import { Input } from "../shadcn-ui/input";
 import { Textarea } from "../shadcn-ui/textarea";
 
 import { CalendarEvent } from "@/src/hooks/use-calendar";
-
 
 type EventFormModalProps = {
   isOpen: boolean;

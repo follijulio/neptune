@@ -116,7 +116,7 @@ export const DistributionWorkCard: React.FC<ChartPieDonutProps> = ({
 }) => {
   return (
     <Card className="flex h-full w-full flex-col rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-5 text-white shadow-lg">
-      <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400 ">
+      <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400">
         <FaRegClock className="shrink-0" />
         <span>Distribuição de Carga Horária</span>
       </header>

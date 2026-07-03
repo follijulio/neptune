@@ -51,8 +51,16 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: <LuLayoutDashboard size={20} /> },
-  { label: "Calendário", href: "/calendar", icon: <LuCalendarDays size={20} /> },
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: <LuLayoutDashboard size={20} />,
+  },
+  {
+    label: "Calendário",
+    href: "/calendar",
+    icon: <LuCalendarDays size={20} />,
+  },
   { label: "Mural", href: "/mural", icon: <LuPanelsTopLeft size={20} /> },
   { label: "Links", href: "/links", icon: <LuLink2 size={20} /> },
   { label: "Semestre", href: "/semester", icon: <LuGraduationCap size={20} /> },
@@ -112,7 +120,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           userName={userName}
         />
         <main className="h-full w-full flex-1 overflow-x-hidden overflow-y-auto bg-[#0A0A0A] p-4 sm:p-6 md:p-8 lg:p-10">
-          <div className="h-full w-full flex flex-col gap-4 sm:gap-5">
+          <div className="flex h-full w-full flex-col gap-4 sm:gap-5">
             {children}
           </div>
         </main>
@@ -248,15 +256,25 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
       <TooltipProvider delayDuration={300}>
         <aside
           ref={sidebarRef}
-          style={{ width: isCollapsed ? `${COLLAPSED_WIDTH}px` : `${sidebarWidth}px` }}
-          className={`relative hidden shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] transition-[width] duration-300 ease-in-out lg:flex ${isResizing ? "select-none" : ""
-            }`}
+          style={{
+            width: isCollapsed ? `${COLLAPSED_WIDTH}px` : `${sidebarWidth}px`,
+          }}
+          className={`relative hidden shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] transition-[width] duration-300 ease-in-out lg:flex ${
+            isResizing ? "select-none" : ""
+          }`}
         >
-          <div className={`flex h-20 items-center border-b border-[#1A1A1A] transition-all duration-300 ${isCollapsed ? "justify-center" : "px-6"}`}>
-            <Link href="/dashboard" className="flex items-center text-xl select-none sm:text-2xl">
+          <div
+            className={`flex h-20 items-center border-b border-[#1A1A1A] transition-all duration-300 ${isCollapsed ? "justify-center" : "px-6"}`}
+          >
+            <Link
+              href="/dashboard"
+              className="flex items-center text-xl select-none sm:text-2xl"
+            >
               <span className="flex items-center font-bold tracking-wider text-white">
                 <LuHexagon className="inline flex-shrink-0 text-2xl text-[#007AFF]" />
-                <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? "max-w-0 opacity-0 ml-0" : "max-w-[150px] opacity-100 ml-2"}`}>
+                <span
+                  className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? "ml-0 max-w-0 opacity-0" : "ml-2 max-w-[150px] opacity-100"}`}
+                >
                   Netuno
                 </span>
               </span>
@@ -284,16 +302,21 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
                   ref={(el) => {
                     linkRefs.current[index] = el;
                   }}
-                  className={`relative z-10 mx-1 flex items-center rounded-lg py-3 text-sm font-medium transition-all duration-300 ${isCollapsed ? "justify-center px-3" : "px-4"
-                    } ${isActive
+                  className={`relative z-10 mx-1 flex items-center rounded-lg py-3 text-sm font-medium transition-all duration-300 ${
+                    isCollapsed ? "justify-center px-3" : "px-4"
+                  } ${
+                    isActive
                       ? "bg-[#1A1A1A] text-[#007AFF]"
                       : "text-zinc-400 hover:bg-[#121212] hover:text-white"
-                    }`}
+                  }`}
                 >
                   <div className="flex-shrink-0 text-lg">{item.icon}</div>
                   <span
-                    className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? "max-w-0 opacity-0 ml-0" : "max-w-[200px] opacity-100 ml-3"
-                      }`}
+                    className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
+                      isCollapsed
+                        ? "ml-0 max-w-0 opacity-0"
+                        : "ml-3 max-w-[200px] opacity-100"
+                    }`}
                   >
                     {item.label}
                   </span>
@@ -303,7 +326,10 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
               return isCollapsed ? (
                 <Tooltip key={item.href}>
                   <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
-                  <TooltipContent side="right" className="border-[#1A1A1A] bg-[#121212] text-white">
+                  <TooltipContent
+                    side="right"
+                    className="border-[#1A1A1A] bg-[#121212] text-white"
+                  >
                     {item.label}
                   </TooltipContent>
                 </Tooltip>
@@ -318,14 +344,21 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
               <TooltipTrigger asChild>
                 <button
                   onClick={handleToggleCollapse}
-                  aria-label={isCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
+                  aria-label={
+                    isCollapsed ? "Expandir sidebar" : "Recolher sidebar"
+                  }
                   className="mb-2 flex h-9 w-full items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-[#1A1A1A] hover:text-white"
                 >
-                  <LuChevronLeft className={`h-4 w-4 shrink-0 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} />
+                  <LuChevronLeft
+                    className={`h-4 w-4 shrink-0 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`}
+                  />
                 </button>
               </TooltipTrigger>
               {isCollapsed && (
-                <TooltipContent side="right" className="border-[#1A1A1A] bg-[#121212] text-white">
+                <TooltipContent
+                  side="right"
+                  className="border-[#1A1A1A] bg-[#121212] text-white"
+                >
                   Expandir
                 </TooltipContent>
               )}
@@ -342,8 +375,9 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
           {!isCollapsed && (
             <div
               onMouseDown={() => setIsResizing(true)}
-              className={`absolute top-0 -right-0.5 z-50 h-full w-1 cursor-col-resize transition-colors duration-200 ${isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
-                }`}
+              className={`absolute top-0 -right-0.5 z-50 h-full w-1 cursor-col-resize transition-colors duration-200 ${
+                isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
+              }`}
             />
           )}
         </aside>
@@ -353,7 +387,10 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
 };
 
 const Logo = () => (
-  <Link href="/dashboard" className="flex items-center text-xl select-none sm:text-2xl">
+  <Link
+    href="/dashboard"
+    className="flex items-center text-xl select-none sm:text-2xl"
+  >
     <span className="flex items-center gap-2 font-bold tracking-wider text-white">
       <LuHexagon className="inline text-2xl text-[#007AFF]" />
       <p>Netuno</p>
@@ -376,18 +413,27 @@ const MobileNav = () => {
           <LuMenu className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-4 w-56 border-[#1A1A1A] bg-[#121212] text-white" align="end">
+      <DropdownMenuContent
+        className="mr-4 w-56 border-[#1A1A1A] bg-[#121212] text-white"
+        align="end"
+      >
         <DropdownMenuLabel className="text-zinc-400">Menu</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-[#1A1A1A]" />
         <DropdownMenuGroup>
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
+            const isActive =
+              pathname === item.href || pathname?.startsWith(`${item.href}/`);
             return (
-              <DropdownMenuItem asChild key={item.href} className="cursor-pointer focus:bg-zinc-800/50">
+              <DropdownMenuItem
+                asChild
+                key={item.href}
+                className="cursor-pointer focus:bg-zinc-800/50"
+              >
                 <Link
                   href={item.href}
-                  className={`flex w-full items-center py-2 ${isActive ? "font-semibold text-[#007AFF]" : "text-zinc-400"
-                    }`}
+                  className={`flex w-full items-center py-2 ${
+                    isActive ? "font-semibold text-[#007AFF]" : "text-zinc-400"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -413,8 +459,13 @@ const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
         </AvatarFallback>
       </Avatar>
     </DropdownMenuTrigger>
-    <DropdownMenuContent className="w-48 border-[#1A1A1A] bg-[#121212] text-white" align="end">
-      <DropdownMenuLabel className="text-zinc-400">Minha Conta</DropdownMenuLabel>
+    <DropdownMenuContent
+      className="w-48 border-[#1A1A1A] bg-[#121212] text-white"
+      align="end"
+    >
+      <DropdownMenuLabel className="text-zinc-400">
+        Minha Conta
+      </DropdownMenuLabel>
       <DropdownMenuSeparator className="bg-[#1A1A1A]" />
       <SettingsMenuGroup />
       <DropdownMenuSeparator className="bg-[#1A1A1A]" />
@@ -423,18 +474,16 @@ const MobileUserMenu: React.FC<Omit<NavigationProps, "children">> = ({
   </DropdownMenu>
 );
 
-const SidebarUserMenu: React.FC<Omit<NavigationProps, "children"> & { isCollapsed: boolean }> = ({
-  profileImageUrl,
-  firstLetter,
-  userName,
-  isCollapsed,
-}) => (
+const SidebarUserMenu: React.FC<
+  Omit<NavigationProps, "children"> & { isCollapsed: boolean }
+> = ({ profileImageUrl, firstLetter, userName, isCollapsed }) => (
   <DropdownMenu>
     <Tooltip>
       <TooltipTrigger asChild>
         <DropdownMenuTrigger
-          className={`flex w-full items-center rounded-lg p-2 transition-all duration-300 outline-none hover:bg-[#1A1A1A] focus-visible:ring-2 focus-visible:ring-[#007AFF] ${isCollapsed ? "justify-center" : "text-left"
-            }`}
+          className={`flex w-full items-center rounded-lg p-2 transition-all duration-300 outline-none hover:bg-[#1A1A1A] focus-visible:ring-2 focus-visible:ring-[#007AFF] ${
+            isCollapsed ? "justify-center" : "text-left"
+          }`}
         >
           <Avatar className="h-8 w-8 shrink-0 border border-[#1A1A1A]">
             <AvatarImage src={profileImageUrl} alt="Perfil" />
@@ -444,8 +493,11 @@ const SidebarUserMenu: React.FC<Omit<NavigationProps, "children"> & { isCollapse
           </Avatar>
 
           <div
-            className={`flex flex-col overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed ? "max-w-0 opacity-0 ml-0" : "max-w-[150px] opacity-100 ml-3 flex-1"
-              }`}
+            className={`flex flex-col overflow-hidden whitespace-nowrap transition-all duration-300 ${
+              isCollapsed
+                ? "ml-0 max-w-0 opacity-0"
+                : "ml-3 max-w-[150px] flex-1 opacity-100"
+            }`}
           >
             <span className="truncate text-sm font-medium text-white">
               {userName ? `Olá, ${userName}!` : "Minha conta"}
@@ -454,15 +506,19 @@ const SidebarUserMenu: React.FC<Omit<NavigationProps, "children"> & { isCollapse
           </div>
 
           <div
-            className={`shrink-0 overflow-hidden transition-all duration-300 ${isCollapsed ? "max-w-0 opacity-0" : "max-w-10 opacity-100"
-              }`}
+            className={`shrink-0 overflow-hidden transition-all duration-300 ${
+              isCollapsed ? "max-w-0 opacity-0" : "max-w-10 opacity-100"
+            }`}
           >
-            <LuSettings className="text-zinc-400 hover:scale-110 hover:text-white bg-black/40 transition-all duration-200" />
+            <LuSettings className="bg-black/40 text-zinc-400 transition-all duration-200 hover:scale-110 hover:text-white" />
           </div>
         </DropdownMenuTrigger>
       </TooltipTrigger>
       {isCollapsed && (
-        <TooltipContent side="right" className="border-[#1A1A1A] bg-[#121212] text-white">
+        <TooltipContent
+          side="right"
+          className="border-[#1A1A1A] bg-[#121212] text-white"
+        >
           Minha conta
         </TooltipContent>
       )}
@@ -483,7 +539,10 @@ const SidebarUserMenu: React.FC<Omit<NavigationProps, "children"> & { isCollapse
 
 const SettingsMenuGroup = () => (
   <DropdownMenuGroup>
-    <DropdownMenuItem asChild className="cursor-pointer *:text-white hover:bg-zinc-800/50 focus:bg-zinc-800/50">
+    <DropdownMenuItem
+      asChild
+      className="cursor-pointer *:text-white hover:bg-zinc-800/50 focus:bg-zinc-800/50"
+    >
       <Link href="/settings" className="flex items-center gap-2">
         <LuSettings className="text-lg text-zinc-400" />
         <span>Configurações</span>

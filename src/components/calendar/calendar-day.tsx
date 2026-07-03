@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { useDraggable,useDroppable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
+import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { format, isSameMonth, isToday } from "date-fns";
 
 import { CalendarEvent } from "@/src/hooks/use-calendar";
@@ -15,7 +14,7 @@ function DraggableEvent({
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: event.id,
   });
-  
+
   // Apenas altera a opacidade, sem usar o CSS.Translate
   const style = { opacity: isDragging ? 0.3 : 1 };
 
@@ -26,7 +25,7 @@ function DraggableEvent({
       {...listeners}
       {...attributes}
       onClick={(e) => onEventClick(e, event)}
-      className="shrink-0 cursor-grab active:cursor-grabbing truncate rounded border border-[#007AFF]/40 bg-[#007AFF]/20 px-1 py-0.5 text-[8px] font-semibold text-[#007AFF] shadow-sm transition-all hover:bg-[#007AFF]/40 sm:px-2 sm:py-1 sm:py-1.5 sm:text-xs sm:text-[10px]"
+      className="shrink-0 cursor-grab truncate rounded border border-[#007AFF]/40 bg-[#007AFF]/20 px-1 py-0.5 text-[8px] font-semibold text-[#007AFF] shadow-sm transition-all hover:bg-[#007AFF]/40 active:cursor-grabbing sm:px-2 sm:py-1 sm:py-1.5 sm:text-xs sm:text-[10px]"
       title={event.title}
     >
       <span className="mr-0.5 hidden opacity-75 sm:mr-1 sm:inline">

@@ -25,7 +25,7 @@ export default async function Page() {
     }),
     prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { xp: true, name: true },
+      select: { name: true },
     }),
   ]);
 
@@ -38,7 +38,6 @@ export default async function Page() {
       <DashboardClient
         userId={session.user.id}
         userName={user?.name}
-        initialXp={user?.xp || 0}
       />
     </div>
   );

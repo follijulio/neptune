@@ -86,8 +86,8 @@ function getPlanetData(xp: number) {
     nextPlanet.name === currentPlanet.name
       ? 100
       : ((xp - currentPlanet.xpRequired) /
-        (nextPlanet.xpRequired - currentPlanet.xpRequired)) *
-      100;
+          (nextPlanet.xpRequired - currentPlanet.xpRequired)) *
+        100;
 
   return { currentPlanet, nextPlanet, progress };
 }
@@ -181,8 +181,9 @@ export default function RankingClient({
               return (
                 <div
                   key={user.id}
-                  className={`flex flex-col items-start justify-between gap-6 border-b border-[#1A1A1A] p-6 transition-colors last:border-0 hover:bg-zinc-900/30 sm:flex-row sm:items-center sm:p-8 ${isCurrentUser ? "relative bg-[#007AFF]/5" : ""
-                    }`}
+                  className={`flex flex-col items-start justify-between gap-6 border-b border-[#1A1A1A] p-6 transition-colors last:border-0 hover:bg-zinc-900/30 sm:flex-row sm:items-center sm:p-8 ${
+                    isCurrentUser ? "relative bg-[#007AFF]/5" : ""
+                  }`}
                 >
                   {isCurrentUser && (
                     <div className="absolute top-0 bottom-0 left-0 w-1 bg-[#007AFF] shadow-[0_0_20px_rgba(0,122,255,0.5)]" />

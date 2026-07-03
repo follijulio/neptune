@@ -12,12 +12,16 @@ interface CalendarClientProps {
   initialEvents?: CalendarEvent[];
 }
 
-export default function CalendarClient({ initialEvents = [] }: CalendarClientProps) {
+export default function CalendarClient({
+  initialEvents = [],
+}: CalendarClientProps) {
   const { state, actions, setters } = useCalendar(initialEvents);
 
   return (
     <section className="flex flex-col gap-2 sm:gap-2 lg:gap-2">
-      <h2 className="text-xl font-bold tracking-tight sm:text-2xl">Calendário</h2>
+      <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
+        Calendário
+      </h2>
       <div className="flex flex-col gap-6 xl:flex-row xl:gap-8">
         <div className="min-w-0 flex-1">
           <CalendarGrid
@@ -35,7 +39,10 @@ export default function CalendarClient({ initialEvents = [] }: CalendarClientPro
             onPrevMonth={actions.prevMonth}
             onNextMonth={actions.nextMonth}
           />
-          <UpcomingEventsList events={state.upcomingEvents} onEventClick={actions.selectEvent} />
+          <UpcomingEventsList
+            events={state.upcomingEvents}
+            onEventClick={actions.selectEvent}
+          />
         </aside>
       </div>
 

@@ -5,7 +5,6 @@ import { prisma } from "@/prisma/lib/prisma";
 import { auth } from "@/src/auth";
 import CalendarClient from "@/src/components/ui/clients/calendar-client";
 
-
 export const metadata: Metadata = {
   title: "Netuno - Calendário",
 };

@@ -5,10 +5,14 @@ import { ptBR } from "date-fns/locale";
 import { Trash2 } from "lucide-react";
 
 import { Button } from "../shadcn-ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shadcn-ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../shadcn-ui/dialog";
 
 import { CalendarEvent } from "@/src/hooks/use-calendar";
-
 
 export default function EventDetailsModal({
   isOpen,

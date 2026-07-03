@@ -23,7 +23,11 @@ import type { ActiveTab, DocumentHistory, Feedback, Question } from "./types";
 import type { OurFileRouter } from "@/src/app/api/uploadthing/core";
 import { Alert } from "@/src/components/shadcn-ui/alert";
 import { Button } from "@/src/components/shadcn-ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/src/components/shadcn-ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/src/components/shadcn-ui/dialog";
 import { Spinner } from "@/src/components/shadcn-ui/spinner";
 
 const UploadButton = generateUploadButton<OurFileRouter>();
@@ -89,19 +93,21 @@ export function TabSwitcher({ activeTab, onChange }: TabSwitcherProps) {
     <div className="flex rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-1">
       <button
         onClick={() => onChange("training")}
-        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${activeTab === "training"
-          ? "bg-[#1A1A1A] text-[#007AFF]"
-          : "text-zinc-500 hover:text-white"
-          }`}
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
+          activeTab === "training"
+            ? "bg-[#1A1A1A] text-[#007AFF]"
+            : "text-zinc-500 hover:text-white"
+        }`}
       >
         <LuDna className="h-4 w-4" /> Treinamento
       </button>
       <button
         onClick={() => onChange("boss")}
-        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${activeTab === "boss"
-          ? "bg-[#1A1A1A] text-[#FF3B30]"
-          : "text-zinc-500 hover:text-white"
-          }`}
+        className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition-all ${
+          activeTab === "boss"
+            ? "bg-[#1A1A1A] text-[#FF3B30]"
+            : "text-zinc-500 hover:text-white"
+        }`}
       >
         <LuSwords className="h-4 w-4" /> Desafio Boss
       </button>
@@ -131,10 +137,11 @@ function DocumentHistoryBar({
       <Button
         variant="outline"
         onClick={onNew}
-        className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${!documentId
-          ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
-          : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"
-          }`}
+        className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all ${
+          !documentId
+            ? "border-[#007AFF]/50 bg-[#1A1A1A] text-[#007AFF]"
+            : "border-[#1A1A1A] bg-[#0A0A0A] text-zinc-500 hover:text-black"
+        }`}
       >
         + Novo Material
       </Button>
@@ -142,17 +149,19 @@ function DocumentHistoryBar({
       {history.map((doc) => (
         <div
           key={doc.id}
-          className={`group flex shrink-0 items-center gap-1 rounded-xl border px-2 py-1.5 transition-all ${documentId === doc.id
-            ? "border-[#007AFF]/50 bg-[#1A1A1A]"
-            : "border-[#1A1A1A] bg-[#0A0A0A]"
-            }`}
+          className={`group flex shrink-0 items-center gap-1 rounded-xl border px-2 py-1.5 transition-all ${
+            documentId === doc.id
+              ? "border-[#007AFF]/50 bg-[#1A1A1A]"
+              : "border-[#1A1A1A] bg-[#0A0A0A]"
+          }`}
         >
           <button
             onClick={() => onSelect(doc)}
-            className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-bold ${documentId === doc.id
-              ? "text-[#007AFF]"
-              : "text-zinc-500 hover:text-white"
-              }`}
+            className={`flex items-center gap-2 rounded-lg px-2 py-1 text-xs font-bold ${
+              documentId === doc.id
+                ? "text-[#007AFF]"
+                : "text-zinc-500 hover:text-white"
+            }`}
           >
             <LuHistory className="h-4 w-4" />
             <span className="max-w-[140px] truncate">{doc.title}</span>

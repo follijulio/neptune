@@ -116,10 +116,11 @@ const ColorSelector = ({
           key={c.value}
           type="button"
           onClick={() => onColorChange(c.value)}
-          className={`flex h-7 w-7 items-center justify-center rounded-2xl transition-transform hover:scale-110 sm:h-8 sm:w-8 ${selectedColor === c.value
-            ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]"
-            : ""
-            }`}
+          className={`flex h-7 w-7 items-center justify-center rounded-2xl transition-transform hover:scale-110 sm:h-8 sm:w-8 ${
+            selectedColor === c.value
+              ? "ring-2 ring-white ring-offset-2 ring-offset-[#121212]"
+              : ""
+          }`}
           style={{ backgroundColor: c.value }}
           title={c.name}
         >
@@ -245,8 +246,9 @@ const SortableNoteCard = ({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-60 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 sm:min-h-70 ${isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""
-        }`}
+      className={`group slide-in-from-bottom-4 fill-mode-both relative flex min-h-60 flex-col overflow-hidden rounded border border-[#1A1A1A] bg-[#0A0A0A] shadow-lg transition-colors duration-500 hover:border-zinc-700 sm:min-h-70 ${
+        isDragging ? "cursor-grabbing shadow-2xl ring-2 ring-[#007AFF]/50" : ""
+      }`}
     >
       <div
         className="absolute top-0 left-0 h-1.5 w-full sm:h-2"
@@ -457,11 +459,11 @@ export default function MuralClient({
           prev.map((n) =>
             n.id === editingNote.id
               ? {
-                ...n,
-                title: noteTitle,
-                content: noteContent,
-                color: selectedColor,
-              }
+                  ...n,
+                  title: noteTitle,
+                  content: noteContent,
+                  color: selectedColor,
+                }
               : n,
           ),
         );

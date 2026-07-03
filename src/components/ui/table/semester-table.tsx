@@ -55,7 +55,7 @@ const SemesterTable: React.FC<{ data: Semester[]; isLoading?: boolean }> = ({
   );
 
   return (
-    <Card className="min-h-52 w-full border border-[#1A1A1A] bg-black p-2 text-white sm:p-4 ">
+    <Card className="min-h-52 w-full border border-[#1A1A1A] bg-black p-2 text-white sm:p-4">
       <h2 className="mb-4 text-xl font-semibold sm:text-2xl">
         Grade Curricular
       </h2>

@@ -92,19 +92,21 @@ const AuthTabs = ({ currentView, onSwitchView }: AuthTabsProps) => (
   <div className="grid h-12 w-full grid-cols-2 rounded-xl bg-[#121212] p-1 lg:h-14 lg:p-1.5">
     <button
       onClick={() => onSwitchView("login")}
-      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${currentView === "login"
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
+        currentView === "login"
           ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
           : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-        }`}
+      }`}
     >
       Entrar
     </button>
     <button
       onClick={() => onSwitchView("register")}
-      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${currentView === "register"
+      className={`flex h-full items-center justify-center rounded-lg text-xs font-medium transition-all duration-300 lg:text-sm ${
+        currentView === "register"
           ? "bg-[#1A1A1A] text-[#E0E0E0] shadow-sm"
           : "bg-transparent text-[#888888] hover:text-[#E0E0E0]"
-        }`}
+      }`}
     >
       Cadastrar
     </button>

@@ -4,7 +4,6 @@ import { ptBR } from "date-fns/locale";
 
 import { CalendarEvent } from "@/src/hooks/use-calendar";
 
-
 export default function UpcomingEventsList({
   events,
   onEventClick,

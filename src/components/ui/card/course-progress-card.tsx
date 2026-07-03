@@ -37,7 +37,7 @@ export const CourseProgressCard: React.FC<CourseProgressCardProps> = ({
   return (
     <div className="flex h-full w-full flex-col justify-between overflow-hidden rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] p-4 text-white shadow-lg sm:p-5 lg:p-6">
       <div>
-        <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400 ">
+        <header className="flex items-center gap-2 text-sm font-semibold tracking-wider text-zinc-400">
           <TbTargetArrow className="shrink-0" />
           <span>Progresso do Curso</span>
         </header>
