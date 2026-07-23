@@ -165,7 +165,7 @@ export type SubjectNoteGroupByOutputType = {
   _max: SubjectNoteMaxAggregateOutputType | null
 }
 
-type GetSubjectNoteGroupByPayload<T extends SubjectNoteGroupByArgs> = Prisma.PrismaPromise<
+export type GetSubjectNoteGroupByPayload<T extends SubjectNoteGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SubjectNoteGroupByOutputType, T['by']> &
       {
@@ -1157,6 +1157,11 @@ export type SubjectNoteFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` SubjectNotes.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of SubjectNotes.
+   */
   distinct?: Prisma.SubjectNoteScalarFieldEnum | Prisma.SubjectNoteScalarFieldEnum[]
 }
 

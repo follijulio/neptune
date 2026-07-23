@@ -20,20 +20,8 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
-}
-
-export type UserAvgAggregateOutputType = {
-  xp: number | null
-  level: number | null
-}
-
-export type UserSumAggregateOutputType = {
-  xp: number | null
-  level: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -44,8 +32,6 @@ export type UserMinAggregateOutputType = {
   passwordHash: string | null
   image: string | null
   emailVerified: Date | null
-  xp: number | null
-  level: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -56,8 +42,6 @@ export type UserMaxAggregateOutputType = {
   passwordHash: string | null
   image: string | null
   emailVerified: Date | null
-  xp: number | null
-  level: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -68,21 +52,9 @@ export type UserCountAggregateOutputType = {
   passwordHash: number
   image: number
   emailVerified: number
-  xp: number
-  level: number
   _all: number
 }
 
-
-export type UserAvgAggregateInputType = {
-  xp?: true
-  level?: true
-}
-
-export type UserSumAggregateInputType = {
-  xp?: true
-  level?: true
-}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -92,8 +64,6 @@ export type UserMinAggregateInputType = {
   passwordHash?: true
   image?: true
   emailVerified?: true
-  xp?: true
-  level?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -104,8 +74,6 @@ export type UserMaxAggregateInputType = {
   passwordHash?: true
   image?: true
   emailVerified?: true
-  xp?: true
-  level?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -116,8 +84,6 @@ export type UserCountAggregateInputType = {
   passwordHash?: true
   image?: true
   emailVerified?: true
-  xp?: true
-  level?: true
   _all?: true
 }
 
@@ -159,18 +125,6 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: UserAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: UserSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -201,8 +155,6 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
-  _avg?: UserAvgAggregateInputType
-  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -215,16 +167,12 @@ export type UserGroupByOutputType = {
   passwordHash: string | null
   image: string | null
   emailVerified: Date | null
-  xp: number
-  level: number
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
 
-type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+export type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<UserGroupByOutputType, T['by']> &
       {
@@ -250,8 +198,6 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  xp?: Prisma.IntFilter<"User"> | number
-  level?: Prisma.IntFilter<"User"> | number
   sessions?: Prisma.SessionListRelationFilter
   semesters?: Prisma.SemesterListRelationFilter
   workloads?: Prisma.WorkloadListRelationFilter
@@ -266,6 +212,7 @@ export type UserWhereInput = {
   attempts?: Prisma.AttemptListRelationFilter
   difficultyTags?: Prisma.DifficultyTagListRelationFilter
   studySessions?: Prisma.StudySessionListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -276,8 +223,6 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   semesters?: Prisma.SemesterOrderByRelationAggregateInput
   workloads?: Prisma.WorkloadOrderByRelationAggregateInput
@@ -292,6 +237,7 @@ export type UserOrderByWithRelationInput = {
   attempts?: Prisma.AttemptOrderByRelationAggregateInput
   difficultyTags?: Prisma.DifficultyTagOrderByRelationAggregateInput
   studySessions?: Prisma.StudySessionOrderByRelationAggregateInput
+  tasks?: Prisma.TaskOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -305,8 +251,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   image?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  xp?: Prisma.IntFilter<"User"> | number
-  level?: Prisma.IntFilter<"User"> | number
   sessions?: Prisma.SessionListRelationFilter
   semesters?: Prisma.SemesterListRelationFilter
   workloads?: Prisma.WorkloadListRelationFilter
@@ -321,6 +265,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   attempts?: Prisma.AttemptListRelationFilter
   difficultyTags?: Prisma.DifficultyTagListRelationFilter
   studySessions?: Prisma.StudySessionListRelationFilter
+  tasks?: Prisma.TaskListRelationFilter
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -331,13 +276,9 @@ export type UserOrderByWithAggregationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
-  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
-  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -351,8 +292,6 @@ export type UserScalarWhereWithAggregatesInput = {
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  xp?: Prisma.IntWithAggregatesFilter<"User"> | number
-  level?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -363,8 +302,6 @@ export type UserCreateInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -379,6 +316,7 @@ export type UserCreateInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -389,8 +327,6 @@ export type UserUncheckedCreateInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -405,6 +341,7 @@ export type UserUncheckedCreateInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -415,8 +352,6 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -431,6 +366,7 @@ export type UserUpdateInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -441,8 +377,6 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -457,6 +391,7 @@ export type UserUncheckedUpdateInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -467,8 +402,6 @@ export type UserCreateManyInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -479,8 +412,6 @@ export type UserUpdateManyMutationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -491,8 +422,6 @@ export type UserUncheckedUpdateManyInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -503,13 +432,6 @@ export type UserCountOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   image?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-}
-
-export type UserAvgOrderByAggregateInput = {
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -520,8 +442,6 @@ export type UserMaxOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   image?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -532,13 +452,6 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   image?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
-}
-
-export type UserSumOrderByAggregateInput = {
-  xp?: Prisma.SortOrder
-  level?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -558,12 +471,18 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type UserCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTasksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.UserUpsertWithoutTasksInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTasksInput, Prisma.UserUpdateWithoutTasksInput>, Prisma.UserUncheckedUpdateWithoutTasksInput>
 }
 
 export type UserCreateNestedOneWithoutSessionsInput = {
@@ -762,7 +681,7 @@ export type UserUpdateOneRequiredWithoutStudySessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStudySessionsInput, Prisma.UserUpdateWithoutStudySessionsInput>, Prisma.UserUncheckedUpdateWithoutStudySessionsInput>
 }
 
-export type UserCreateWithoutSessionsInput = {
+export type UserCreateWithoutTasksInput = {
   id?: string
   name: string
   username?: string | null
@@ -770,8 +689,7 @@ export type UserCreateWithoutSessionsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
@@ -787,7 +705,7 @@ export type UserCreateWithoutSessionsInput = {
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutSessionsInput = {
+export type UserUncheckedCreateWithoutTasksInput = {
   id?: string
   name: string
   username?: string | null
@@ -795,8 +713,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
@@ -810,6 +727,118 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTasksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
+}
+
+export type UserUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTasksInput, Prisma.UserUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTasksInput, Prisma.UserUncheckedCreateWithoutTasksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTasksInput, Prisma.UserUncheckedUpdateWithoutTasksInput>
+}
+
+export type UserUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
+  workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUpdateManyWithoutUserNestedInput
+  links?: Prisma.LinkUpdateManyWithoutUserNestedInput
+  subjectMaterials?: Prisma.SubjectMaterialUpdateManyWithoutUserNestedInput
+  studyDocuments?: Prisma.StudyDocumentUpdateManyWithoutUserNestedInput
+  attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
+  difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
+  workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedUpdateOneWithoutUserNestedInput
+  notes?: Prisma.NoteUncheckedUpdateManyWithoutUserNestedInput
+  calendarEvents?: Prisma.CalendarEventUncheckedUpdateManyWithoutUserNestedInput
+  links?: Prisma.LinkUncheckedUpdateManyWithoutUserNestedInput
+  subjectMaterials?: Prisma.SubjectMaterialUncheckedUpdateManyWithoutUserNestedInput
+  studyDocuments?: Prisma.StudyDocumentUncheckedUpdateManyWithoutUserNestedInput
+  attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
+  difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
+  studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSessionsInput = {
+  id?: string
+  name: string
+  username?: string | null
+  email: string
+  passwordHash?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
+  workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventCreateNestedManyWithoutUserInput
+  links?: Prisma.LinkCreateNestedManyWithoutUserInput
+  subjectMaterials?: Prisma.SubjectMaterialCreateNestedManyWithoutUserInput
+  studyDocuments?: Prisma.StudyDocumentCreateNestedManyWithoutUserInput
+  attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
+  difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
+  studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  name: string
+  username?: string | null
+  email: string
+  passwordHash?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
+  workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationUncheckedCreateNestedOneWithoutUserInput
+  notes?: Prisma.NoteUncheckedCreateNestedManyWithoutUserInput
+  calendarEvents?: Prisma.CalendarEventUncheckedCreateNestedManyWithoutUserInput
+  links?: Prisma.LinkUncheckedCreateNestedManyWithoutUserInput
+  subjectMaterials?: Prisma.SubjectMaterialUncheckedCreateNestedManyWithoutUserInput
+  studyDocuments?: Prisma.StudyDocumentUncheckedCreateNestedManyWithoutUserInput
+  attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
+  difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
+  studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -836,8 +865,6 @@ export type UserUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
@@ -851,6 +878,7 @@ export type UserUpdateWithoutSessionsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -861,8 +889,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
@@ -876,6 +902,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutWorkloadsInput = {
@@ -886,8 +913,6 @@ export type UserCreateWithoutWorkloadsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
@@ -901,6 +926,7 @@ export type UserCreateWithoutWorkloadsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutWorkloadsInput = {
@@ -911,8 +937,6 @@ export type UserUncheckedCreateWithoutWorkloadsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
@@ -926,6 +950,7 @@ export type UserUncheckedCreateWithoutWorkloadsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutWorkloadsInput = {
@@ -952,8 +977,6 @@ export type UserUpdateWithoutWorkloadsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
@@ -967,6 +990,7 @@ export type UserUpdateWithoutWorkloadsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWorkloadsInput = {
@@ -977,8 +1001,6 @@ export type UserUncheckedUpdateWithoutWorkloadsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
@@ -992,6 +1014,7 @@ export type UserUncheckedUpdateWithoutWorkloadsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotesInput = {
@@ -1002,8 +1025,6 @@ export type UserCreateWithoutNotesInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1017,6 +1038,7 @@ export type UserCreateWithoutNotesInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotesInput = {
@@ -1027,8 +1049,6 @@ export type UserUncheckedCreateWithoutNotesInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1042,6 +1062,7 @@ export type UserUncheckedCreateWithoutNotesInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotesInput = {
@@ -1068,8 +1089,6 @@ export type UserUpdateWithoutNotesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1083,6 +1102,7 @@ export type UserUpdateWithoutNotesInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotesInput = {
@@ -1093,8 +1113,6 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1108,6 +1126,7 @@ export type UserUncheckedUpdateWithoutNotesInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1118,8 +1137,6 @@ export type UserCreateWithoutAccountsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1133,6 +1150,7 @@ export type UserCreateWithoutAccountsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1143,8 +1161,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1158,6 +1174,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1184,8 +1201,6 @@ export type UserUpdateWithoutAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1199,6 +1214,7 @@ export type UserUpdateWithoutAccountsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1209,8 +1225,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1224,6 +1238,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSemestersInput = {
@@ -1234,8 +1249,6 @@ export type UserCreateWithoutSemestersInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
@@ -1249,6 +1262,7 @@ export type UserCreateWithoutSemestersInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSemestersInput = {
@@ -1259,8 +1273,6 @@ export type UserUncheckedCreateWithoutSemestersInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
@@ -1274,6 +1286,7 @@ export type UserUncheckedCreateWithoutSemestersInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSemestersInput = {
@@ -1300,8 +1313,6 @@ export type UserUpdateWithoutSemestersInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
@@ -1315,6 +1326,7 @@ export type UserUpdateWithoutSemestersInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSemestersInput = {
@@ -1325,8 +1337,6 @@ export type UserUncheckedUpdateWithoutSemestersInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
@@ -1340,6 +1350,7 @@ export type UserUncheckedUpdateWithoutSemestersInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
@@ -1350,8 +1361,6 @@ export type UserCreateWithoutEnrollmentsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1365,6 +1374,7 @@ export type UserCreateWithoutEnrollmentsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -1375,8 +1385,6 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1390,6 +1398,7 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -1416,8 +1425,6 @@ export type UserUpdateWithoutEnrollmentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1431,6 +1438,7 @@ export type UserUpdateWithoutEnrollmentsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -1441,8 +1449,6 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1456,6 +1462,7 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTwoFactorConfirmationInput = {
@@ -1466,8 +1473,6 @@ export type UserCreateWithoutTwoFactorConfirmationInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1481,6 +1486,7 @@ export type UserCreateWithoutTwoFactorConfirmationInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTwoFactorConfirmationInput = {
@@ -1491,8 +1497,6 @@ export type UserUncheckedCreateWithoutTwoFactorConfirmationInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1506,6 +1510,7 @@ export type UserUncheckedCreateWithoutTwoFactorConfirmationInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTwoFactorConfirmationInput = {
@@ -1532,8 +1537,6 @@ export type UserUpdateWithoutTwoFactorConfirmationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1547,6 +1550,7 @@ export type UserUpdateWithoutTwoFactorConfirmationInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTwoFactorConfirmationInput = {
@@ -1557,8 +1561,6 @@ export type UserUncheckedUpdateWithoutTwoFactorConfirmationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1572,6 +1574,7 @@ export type UserUncheckedUpdateWithoutTwoFactorConfirmationInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCalendarEventsInput = {
@@ -1582,8 +1585,6 @@ export type UserCreateWithoutCalendarEventsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1597,6 +1598,7 @@ export type UserCreateWithoutCalendarEventsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCalendarEventsInput = {
@@ -1607,8 +1609,6 @@ export type UserUncheckedCreateWithoutCalendarEventsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1622,6 +1622,7 @@ export type UserUncheckedCreateWithoutCalendarEventsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCalendarEventsInput = {
@@ -1648,8 +1649,6 @@ export type UserUpdateWithoutCalendarEventsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1663,6 +1662,7 @@ export type UserUpdateWithoutCalendarEventsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCalendarEventsInput = {
@@ -1673,8 +1673,6 @@ export type UserUncheckedUpdateWithoutCalendarEventsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1688,6 +1686,7 @@ export type UserUncheckedUpdateWithoutCalendarEventsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLinksInput = {
@@ -1698,8 +1697,6 @@ export type UserCreateWithoutLinksInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1713,6 +1710,7 @@ export type UserCreateWithoutLinksInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLinksInput = {
@@ -1723,8 +1721,6 @@ export type UserUncheckedCreateWithoutLinksInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1738,6 +1734,7 @@ export type UserUncheckedCreateWithoutLinksInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLinksInput = {
@@ -1764,8 +1761,6 @@ export type UserUpdateWithoutLinksInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1779,6 +1774,7 @@ export type UserUpdateWithoutLinksInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLinksInput = {
@@ -1789,8 +1785,6 @@ export type UserUncheckedUpdateWithoutLinksInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1804,6 +1798,7 @@ export type UserUncheckedUpdateWithoutLinksInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubjectMaterialsInput = {
@@ -1814,8 +1809,6 @@ export type UserCreateWithoutSubjectMaterialsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1829,6 +1822,7 @@ export type UserCreateWithoutSubjectMaterialsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubjectMaterialsInput = {
@@ -1839,8 +1833,6 @@ export type UserUncheckedCreateWithoutSubjectMaterialsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1854,6 +1846,7 @@ export type UserUncheckedCreateWithoutSubjectMaterialsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubjectMaterialsInput = {
@@ -1880,8 +1873,6 @@ export type UserUpdateWithoutSubjectMaterialsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -1895,6 +1886,7 @@ export type UserUpdateWithoutSubjectMaterialsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubjectMaterialsInput = {
@@ -1905,8 +1897,6 @@ export type UserUncheckedUpdateWithoutSubjectMaterialsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -1920,6 +1910,7 @@ export type UserUncheckedUpdateWithoutSubjectMaterialsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudyDocumentsInput = {
@@ -1930,8 +1921,6 @@ export type UserCreateWithoutStudyDocumentsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -1945,6 +1934,7 @@ export type UserCreateWithoutStudyDocumentsInput = {
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyDocumentsInput = {
@@ -1955,8 +1945,6 @@ export type UserUncheckedCreateWithoutStudyDocumentsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -1970,6 +1958,7 @@ export type UserUncheckedCreateWithoutStudyDocumentsInput = {
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyDocumentsInput = {
@@ -1996,8 +1985,6 @@ export type UserUpdateWithoutStudyDocumentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -2011,6 +1998,7 @@ export type UserUpdateWithoutStudyDocumentsInput = {
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyDocumentsInput = {
@@ -2021,8 +2009,6 @@ export type UserUncheckedUpdateWithoutStudyDocumentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -2036,6 +2022,7 @@ export type UserUncheckedUpdateWithoutStudyDocumentsInput = {
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAttemptsInput = {
@@ -2046,8 +2033,6 @@ export type UserCreateWithoutAttemptsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -2061,6 +2046,7 @@ export type UserCreateWithoutAttemptsInput = {
   studyDocuments?: Prisma.StudyDocumentCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAttemptsInput = {
@@ -2071,8 +2057,6 @@ export type UserUncheckedCreateWithoutAttemptsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -2086,6 +2070,7 @@ export type UserUncheckedCreateWithoutAttemptsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAttemptsInput = {
@@ -2112,8 +2097,6 @@ export type UserUpdateWithoutAttemptsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -2127,6 +2110,7 @@ export type UserUpdateWithoutAttemptsInput = {
   studyDocuments?: Prisma.StudyDocumentUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAttemptsInput = {
@@ -2137,8 +2121,6 @@ export type UserUncheckedUpdateWithoutAttemptsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -2152,6 +2134,7 @@ export type UserUncheckedUpdateWithoutAttemptsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDifficultyTagsInput = {
@@ -2162,8 +2145,6 @@ export type UserCreateWithoutDifficultyTagsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -2177,6 +2158,7 @@ export type UserCreateWithoutDifficultyTagsInput = {
   studyDocuments?: Prisma.StudyDocumentCreateNestedManyWithoutUserInput
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDifficultyTagsInput = {
@@ -2187,8 +2169,6 @@ export type UserUncheckedCreateWithoutDifficultyTagsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -2202,6 +2182,7 @@ export type UserUncheckedCreateWithoutDifficultyTagsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedCreateNestedManyWithoutUserInput
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   studySessions?: Prisma.StudySessionUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDifficultyTagsInput = {
@@ -2228,8 +2209,6 @@ export type UserUpdateWithoutDifficultyTagsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -2243,6 +2222,7 @@ export type UserUpdateWithoutDifficultyTagsInput = {
   studyDocuments?: Prisma.StudyDocumentUpdateManyWithoutUserNestedInput
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDifficultyTagsInput = {
@@ -2253,8 +2233,6 @@ export type UserUncheckedUpdateWithoutDifficultyTagsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -2268,6 +2246,7 @@ export type UserUncheckedUpdateWithoutDifficultyTagsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedUpdateManyWithoutUserNestedInput
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   studySessions?: Prisma.StudySessionUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudySessionsInput = {
@@ -2278,8 +2257,6 @@ export type UserCreateWithoutStudySessionsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadCreateNestedManyWithoutUserInput
@@ -2293,6 +2270,7 @@ export type UserCreateWithoutStudySessionsInput = {
   studyDocuments?: Prisma.StudyDocumentCreateNestedManyWithoutUserInput
   attempts?: Prisma.AttemptCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudySessionsInput = {
@@ -2303,8 +2281,6 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   passwordHash?: string | null
   image?: string | null
   emailVerified?: Date | string | null
-  xp?: number
-  level?: number
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   semesters?: Prisma.SemesterUncheckedCreateNestedManyWithoutUserInput
   workloads?: Prisma.WorkloadUncheckedCreateNestedManyWithoutUserInput
@@ -2318,6 +2294,7 @@ export type UserUncheckedCreateWithoutStudySessionsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedCreateNestedManyWithoutUserInput
   attempts?: Prisma.AttemptUncheckedCreateNestedManyWithoutUserInput
   difficultyTags?: Prisma.DifficultyTagUncheckedCreateNestedManyWithoutUserInput
+  tasks?: Prisma.TaskUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudySessionsInput = {
@@ -2344,8 +2321,6 @@ export type UserUpdateWithoutStudySessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUpdateManyWithoutUserNestedInput
@@ -2359,6 +2334,7 @@ export type UserUpdateWithoutStudySessionsInput = {
   studyDocuments?: Prisma.StudyDocumentUpdateManyWithoutUserNestedInput
   attempts?: Prisma.AttemptUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudySessionsInput = {
@@ -2369,8 +2345,6 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  xp?: Prisma.IntFieldUpdateOperationsInput | number
-  level?: Prisma.IntFieldUpdateOperationsInput | number
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   semesters?: Prisma.SemesterUncheckedUpdateManyWithoutUserNestedInput
   workloads?: Prisma.WorkloadUncheckedUpdateManyWithoutUserNestedInput
@@ -2384,6 +2358,7 @@ export type UserUncheckedUpdateWithoutStudySessionsInput = {
   studyDocuments?: Prisma.StudyDocumentUncheckedUpdateManyWithoutUserNestedInput
   attempts?: Prisma.AttemptUncheckedUpdateManyWithoutUserNestedInput
   difficultyTags?: Prisma.DifficultyTagUncheckedUpdateManyWithoutUserNestedInput
+  tasks?: Prisma.TaskUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -2405,6 +2380,7 @@ export type UserCountOutputType = {
   attempts: number
   difficultyTags: number
   studySessions: number
+  tasks: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2421,6 +2397,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   attempts?: boolean | UserCountOutputTypeCountAttemptsArgs
   difficultyTags?: boolean | UserCountOutputTypeCountDifficultyTagsArgs
   studySessions?: boolean | UserCountOutputTypeCountStudySessionsArgs
+  tasks?: boolean | UserCountOutputTypeCountTasksArgs
 }
 
 /**
@@ -2524,6 +2501,13 @@ export type UserCountOutputTypeCountStudySessionsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.StudySessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2533,8 +2517,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   image?: boolean
   emailVerified?: boolean
-  xp?: boolean
-  level?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   semesters?: boolean | Prisma.User$semestersArgs<ExtArgs>
   workloads?: boolean | Prisma.User$workloadsArgs<ExtArgs>
@@ -2549,6 +2531,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   attempts?: boolean | Prisma.User$attemptsArgs<ExtArgs>
   difficultyTags?: boolean | Prisma.User$difficultyTagsArgs<ExtArgs>
   studySessions?: boolean | Prisma.User$studySessionsArgs<ExtArgs>
+  tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2560,8 +2543,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   image?: boolean
   emailVerified?: boolean
-  xp?: boolean
-  level?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2572,8 +2553,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   image?: boolean
   emailVerified?: boolean
-  xp?: boolean
-  level?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -2584,11 +2563,9 @@ export type UserSelectScalar = {
   passwordHash?: boolean
   image?: boolean
   emailVerified?: boolean
-  xp?: boolean
-  level?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "passwordHash" | "image" | "emailVerified" | "xp" | "level", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "username" | "email" | "passwordHash" | "image" | "emailVerified", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   semesters?: boolean | Prisma.User$semestersArgs<ExtArgs>
@@ -2604,6 +2581,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   attempts?: boolean | Prisma.User$attemptsArgs<ExtArgs>
   difficultyTags?: boolean | Prisma.User$difficultyTagsArgs<ExtArgs>
   studySessions?: boolean | Prisma.User$studySessionsArgs<ExtArgs>
+  tasks?: boolean | Prisma.User$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2626,6 +2604,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     attempts: Prisma.$AttemptPayload<ExtArgs>[]
     difficultyTags: Prisma.$DifficultyTagPayload<ExtArgs>[]
     studySessions: Prisma.$StudySessionPayload<ExtArgs>[]
+    tasks: Prisma.$TaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2635,8 +2614,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordHash: string | null
     image: string | null
     emailVerified: Date | null
-    xp: number
-    level: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -3045,6 +3022,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   attempts<T extends Prisma.User$attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   difficultyTags<T extends Prisma.User$difficultyTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$difficultyTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DifficultyTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   studySessions<T extends Prisma.User$studySessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$studySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StudySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tasks<T extends Prisma.User$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3081,8 +3059,6 @@ export interface UserFieldRefs {
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly emailVerified: Prisma.FieldRef<"User", 'DateTime'>
-  readonly xp: Prisma.FieldRef<"User", 'Int'>
-  readonly level: Prisma.FieldRef<"User", 'Int'>
 }
     
 
@@ -3279,6 +3255,11 @@ export type UserFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Skip the first `n` Users.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of Users.
+   */
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
 }
 
@@ -3799,6 +3780,30 @@ export type User$studySessionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.StudySessionScalarFieldEnum | Prisma.StudySessionScalarFieldEnum[]
+}
+
+/**
+ * User.tasks
+ */
+export type User$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Task
+   */
+  select?: Prisma.TaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Task
+   */
+  omit?: Prisma.TaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskInclude<ExtArgs> | null
+  where?: Prisma.TaskWhereInput
+  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
+  cursor?: Prisma.TaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
 }
 
 /**

@@ -151,7 +151,7 @@ export type DifficultyTagGroupByOutputType = {
   _max: DifficultyTagMaxAggregateOutputType | null
 }
 
-type GetDifficultyTagGroupByPayload<T extends DifficultyTagGroupByArgs> = Prisma.PrismaPromise<
+export type GetDifficultyTagGroupByPayload<T extends DifficultyTagGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<DifficultyTagGroupByOutputType, T['by']> &
       {
@@ -1233,6 +1233,11 @@ export type DifficultyTagFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` DifficultyTags.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of DifficultyTags.
+   */
   distinct?: Prisma.DifficultyTagScalarFieldEnum | Prisma.DifficultyTagScalarFieldEnum[]
 }
 

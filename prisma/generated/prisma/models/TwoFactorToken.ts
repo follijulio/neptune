@@ -151,7 +151,7 @@ export type TwoFactorTokenGroupByOutputType = {
   _max: TwoFactorTokenMaxAggregateOutputType | null
 }
 
-type GetTwoFactorTokenGroupByPayload<T extends TwoFactorTokenGroupByArgs> = Prisma.PrismaPromise<
+export type GetTwoFactorTokenGroupByPayload<T extends TwoFactorTokenGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TwoFactorTokenGroupByOutputType, T['by']> &
       {
@@ -932,6 +932,11 @@ export type TwoFactorTokenFindManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Skip the first `n` TwoFactorTokens.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of TwoFactorTokens.
+   */
   distinct?: Prisma.TwoFactorTokenScalarFieldEnum | Prisma.TwoFactorTokenScalarFieldEnum[]
 }
 

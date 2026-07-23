@@ -28,9 +28,38 @@ model User {
   studyDocuments        StudyDocument[]
   attempts              Attempt[]
   difficultyTags        DifficultyTag[]
-  xp                    Int                    @default(0)
-  level                 Int                    @default(1)
   studySessions         StudySession[]
+  tasks                 Task[]
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text 
+  category    String 
+  priority    String
+  date        DateTime?
+  order       Int       @default(0)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subtasks Subtask[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subtask {
+  id   String  @id @default(uuid())
+  text String
+  done Boolean @default(false)
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {

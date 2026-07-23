@@ -137,7 +137,7 @@ export type TwoFactorConfirmationGroupByOutputType = {
   _max: TwoFactorConfirmationMaxAggregateOutputType | null
 }
 
-type GetTwoFactorConfirmationGroupByPayload<T extends TwoFactorConfirmationGroupByArgs> = Prisma.PrismaPromise<
+export type GetTwoFactorConfirmationGroupByPayload<T extends TwoFactorConfirmationGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TwoFactorConfirmationGroupByOutputType, T['by']> &
       {
@@ -976,6 +976,11 @@ export type TwoFactorConfirmationFindManyArgs<ExtArgs extends runtime.Types.Exte
    * Skip the first `n` TwoFactorConfirmations.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of TwoFactorConfirmations.
+   */
   distinct?: Prisma.TwoFactorConfirmationScalarFieldEnum | Prisma.TwoFactorConfirmationScalarFieldEnum[]
 }
 

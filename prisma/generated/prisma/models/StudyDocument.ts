@@ -186,7 +186,7 @@ export type StudyDocumentGroupByOutputType = {
   _max: StudyDocumentMaxAggregateOutputType | null
 }
 
-type GetStudyDocumentGroupByPayload<T extends StudyDocumentGroupByArgs> = Prisma.PrismaPromise<
+export type GetStudyDocumentGroupByPayload<T extends StudyDocumentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StudyDocumentGroupByOutputType, T['by']> &
       {
@@ -1541,6 +1541,11 @@ export type StudyDocumentFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` StudyDocuments.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of StudyDocuments.
+   */
   distinct?: Prisma.StudyDocumentScalarFieldEnum | Prisma.StudyDocumentScalarFieldEnum[]
 }
 

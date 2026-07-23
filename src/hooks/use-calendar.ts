@@ -28,14 +28,29 @@ export type CalendarEvent = {
 export function useCalendar(initialEvents: CalendarEvent[] = []) {
   const router = useRouter();
 
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>(() =>
+    initialEvents.map((ev) => ({ ...ev, date: new Date(ev.date) })),
+  );
 
   useEffect(() => {
-    //! vai ficar dando erro mesmo, não sei como fazer isso sem erro...
+    const converted = initialEvents.map((ev) => ({
+      ...ev,
+      date: new Date(ev.date),
+    }));
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setEvents(initialEvents.map((ev) => ({ ...ev, date: new Date(ev.date) })));
-  }, [initialEvents]);
+    const isSame =
+      events.length === converted.length &&
+      events.every(
+        (e, i) =>
+          e.id === converted[i].id &&
+          new Date(e.date).getTime() === (converted[i].date as Date).getTime(),
+      );
+
+    if (isSame) return;
+
+    const t = setTimeout(() => setEvents(converted), 0);
+    return () => clearTimeout(t);
+  }, [initialEvents, events]);
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -71,9 +86,6 @@ export function useCalendar(initialEvents: CalendarEvent[] = []) {
       setEditingEvent(null);
       setFormState((prev) => ({
         ...prev,
-        //TODO: deixar o usuário escolher o horário, por enquanto é fixo
-        //?     tem um input no componente, não implementei de bobo
-        //TODO: puxar o input
         time: "14:00",
         descCount: 0,
         error: null,
@@ -160,8 +172,11 @@ export function useCalendar(initialEvents: CalendarEvent[] = []) {
       }
     },
     moveEvent: async (eventId: string, newDate: Date) => {
-      //? atualiza na interface, depois o banco, tem que ver uma jeito mais bonitinho de fazer isso...
-      //TODO: Pesquisar sobre otimização de performance para não precisar atualizar o banco de dados toda vez que arrastar um evento, talvez usar debonce ou algo do tipo.
+      //? atualiza na interface, depois o banco, 
+      //? tem que ver uma jeito mais bonitinho de fazer isso...
+      //TODO: Pesquisar sobre otimização de performance para
+      //TODO: não precisar atualizar o banco de dados toda vez
+      //TODO: que arrastar um evento, talvez usar debonce ou algo do tipo.
       const eventToMove = events.find((e) => e.id === eventId);
       if (!eventToMove) return;
 

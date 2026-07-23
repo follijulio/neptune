@@ -9,6 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Task'
+export type * from './models/Subtask'
 export type * from './models/VerificationToken'
 export type * from './models/Session'
 export type * from './models/Workload'

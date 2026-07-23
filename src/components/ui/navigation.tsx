@@ -65,6 +65,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Links", href: "/links", icon: <LuLink2 size={20} /> },
   { label: "Semestre", href: "/semester", icon: <LuGraduationCap size={20} /> },
   { label: "Pomodoro", href: "/pomodoro", icon: <LuTimer size={20} /> },
+  { label: "Kanban", href: "/kanban", icon: <LuHexagon size={20} /> },
   { label: "Configurações", href: "/settings", icon: <LuSettings size={20} /> },
 ];
 
@@ -259,9 +260,8 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
           style={{
             width: isCollapsed ? `${COLLAPSED_WIDTH}px` : `${sidebarWidth}px`,
           }}
-          className={`relative hidden shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] transition-[width] duration-300 ease-in-out lg:flex ${
-            isResizing ? "select-none" : ""
-          }`}
+          className={`relative hidden shrink-0 flex-col border-r border-[#1A1A1A] bg-[#000000] transition-[width] duration-300 ease-in-out lg:flex ${isResizing ? "select-none" : ""
+            }`}
         >
           <div
             className={`flex h-20 items-center border-b border-[#1A1A1A] transition-all duration-300 ${isCollapsed ? "justify-center" : "px-6"}`}
@@ -302,21 +302,18 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
                   ref={(el) => {
                     linkRefs.current[index] = el;
                   }}
-                  className={`relative z-10 mx-1 flex items-center rounded-lg py-3 text-sm font-medium transition-all duration-300 ${
-                    isCollapsed ? "justify-center px-3" : "px-4"
-                  } ${
-                    isActive
+                  className={`relative z-10 mx-1 flex items-center rounded-lg py-3 text-sm font-medium transition-all duration-300 ${isCollapsed ? "justify-center px-3" : "px-4"
+                    } ${isActive
                       ? "bg-[#1A1A1A] text-[#007AFF]"
                       : "text-zinc-400 hover:bg-[#121212] hover:text-white"
-                  }`}
+                    }`}
                 >
                   <div className="flex-shrink-0 text-lg">{item.icon}</div>
                   <span
-                    className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
-                      isCollapsed
+                    className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed
                         ? "ml-0 max-w-0 opacity-0"
                         : "ml-3 max-w-[200px] opacity-100"
-                    }`}
+                      }`}
                   >
                     {item.label}
                   </span>
@@ -375,9 +372,8 @@ const PrivateSidebar: React.FC<Omit<NavigationProps, "children">> = ({
           {!isCollapsed && (
             <div
               onMouseDown={() => setIsResizing(true)}
-              className={`absolute top-0 -right-0.5 z-50 h-full w-1 cursor-col-resize transition-colors duration-200 ${
-                isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
-              }`}
+              className={`absolute top-0 -right-0.5 z-50 h-full w-1 cursor-col-resize transition-colors duration-200 ${isResizing ? "bg-[#007AFF]" : "hover:bg-[#007AFF]/50"
+                }`}
             />
           )}
         </aside>
@@ -431,9 +427,8 @@ const MobileNav = () => {
               >
                 <Link
                   href={item.href}
-                  className={`flex w-full items-center py-2 ${
-                    isActive ? "font-semibold text-[#007AFF]" : "text-zinc-400"
-                  }`}
+                  className={`flex w-full items-center py-2 ${isActive ? "font-semibold text-[#007AFF]" : "text-zinc-400"
+                    }`}
                 >
                   {item.label}
                 </Link>
@@ -481,9 +476,8 @@ const SidebarUserMenu: React.FC<
     <Tooltip>
       <TooltipTrigger asChild>
         <DropdownMenuTrigger
-          className={`flex w-full items-center rounded-lg p-2 transition-all duration-300 outline-none hover:bg-[#1A1A1A] focus-visible:ring-2 focus-visible:ring-[#007AFF] ${
-            isCollapsed ? "justify-center" : "text-left"
-          }`}
+          className={`flex w-full items-center rounded-lg p-2 transition-all duration-300 outline-none hover:bg-[#1A1A1A] focus-visible:ring-2 focus-visible:ring-[#007AFF] ${isCollapsed ? "justify-center" : "text-left"
+            }`}
         >
           <Avatar className="h-8 w-8 shrink-0 border border-[#1A1A1A]">
             <AvatarImage src={profileImageUrl} alt="Perfil" />
@@ -493,11 +487,10 @@ const SidebarUserMenu: React.FC<
           </Avatar>
 
           <div
-            className={`flex flex-col overflow-hidden whitespace-nowrap transition-all duration-300 ${
-              isCollapsed
+            className={`flex flex-col overflow-hidden whitespace-nowrap transition-all duration-300 ${isCollapsed
                 ? "ml-0 max-w-0 opacity-0"
                 : "ml-3 max-w-[150px] flex-1 opacity-100"
-            }`}
+              }`}
           >
             <span className="truncate text-sm font-medium text-white">
               {userName ? `Olá, ${userName}!` : "Minha conta"}
@@ -506,9 +499,8 @@ const SidebarUserMenu: React.FC<
           </div>
 
           <div
-            className={`shrink-0 overflow-hidden transition-all duration-300 ${
-              isCollapsed ? "max-w-0 opacity-0" : "max-w-10 opacity-100"
-            }`}
+            className={`shrink-0 overflow-hidden transition-all duration-300 ${isCollapsed ? "max-w-0 opacity-0" : "max-w-10 opacity-100"
+              }`}
           >
             <LuSettings className="bg-black/40 text-zinc-400 transition-all duration-200 hover:scale-110 hover:text-white" />
           </div>
@@ -582,3 +574,6 @@ const LogoutMenuGroup = () => {
     </DropdownMenuGroup>
   );
 };
+
+
+

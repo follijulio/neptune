@@ -192,7 +192,7 @@ export type StudySessionGroupByOutputType = {
   _max: StudySessionMaxAggregateOutputType | null
 }
 
-type GetStudySessionGroupByPayload<T extends StudySessionGroupByArgs> = Prisma.PrismaPromise<
+export type GetStudySessionGroupByPayload<T extends StudySessionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<StudySessionGroupByOutputType, T['by']> &
       {
@@ -1166,6 +1166,11 @@ export type StudySessionFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Skip the first `n` StudySessions.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of StudySessions.
+   */
   distinct?: Prisma.StudySessionScalarFieldEnum | Prisma.StudySessionScalarFieldEnum[]
 }
 
